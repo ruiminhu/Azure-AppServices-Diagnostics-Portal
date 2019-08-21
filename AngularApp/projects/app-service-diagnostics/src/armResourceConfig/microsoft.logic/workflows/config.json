@@ -11,8 +11,8 @@
 	"isSearchEnabled": true,
 	"isApplicableForLiveChat": false,
 	"categories": [{
-			"id": "Public",
-			"name": "Overview",
+			"id": "Diagnostics",
+			"name": "Diagnostics",
 			"description": "Is your logic app experiencing problems or slowness? To get an overview about the most recent runs and their steps, troubleshoot, and identify possible improvements, select this category.",
 			"keywords": ["Overview", "Runs", "Performance", "Triggers"],
 			"color": "rgb(186, 211, 245)",

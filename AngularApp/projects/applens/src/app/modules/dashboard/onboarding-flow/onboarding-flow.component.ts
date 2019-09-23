@@ -117,8 +117,6 @@ export class OnboardingFlowComponent implements OnInit {
     this.modalPublishingButtonDisabled = false;
     this.showAlert = false;
 
-
-
     this.userName = Object.keys(this._adalService.userInfo.profile).length > 0 ? this._adalService.userInfo.profile.upn : '';
     console.log(Object.keys(this._adalService.userInfo.profile).length === 0);
     this.emailRecipients = this.userName.replace('@microsoft.com', '');

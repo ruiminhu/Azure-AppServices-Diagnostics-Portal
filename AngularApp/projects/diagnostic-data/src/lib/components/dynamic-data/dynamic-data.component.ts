@@ -53,7 +53,6 @@ export class DynamicDataComponent implements OnInit {
   @Input() detector: string = '';
   @Input() compilationPackage: CompilationProperties;
   @Input() isAnalysisView:boolean = false;
-  @Input() synchronizingZoom: boolean = true;
   @ViewChild('dynamicDataContainer', { read: ViewContainerRef }) dynamicDataContainer: ViewContainerRef;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
@@ -77,7 +76,6 @@ export class DynamicDataComponent implements OnInit {
       instance.detector = this.detector;
       instance.compilationPackage = this.compilationPackage;
       instance.isAnalysisView = this.isAnalysisView;
-      instance.synchronizingZoom = this.synchronizingZoom;
     });
   }
 

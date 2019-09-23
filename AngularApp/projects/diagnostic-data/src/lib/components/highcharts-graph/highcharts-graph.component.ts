@@ -5,7 +5,6 @@ import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import * as HC_customEvents from 'highcharts-custom-events';
 import AccessibilityModule from 'highcharts/modules/accessibility';
-import { HighchartsUtilities } from '../../utilities/highcharts-utilities';
 import { DetectorControlService } from '../../services/detector-control.service';
 
 HC_exporting(Highcharts);
@@ -13,8 +12,6 @@ AccessibilityModule(Highcharts);
 HC_customEvents(Highcharts);
 
 const moment = momentNs;
-
-declare let d3: any;
 
 @Component({
     selector: 'highcharts-graph',
@@ -27,7 +24,7 @@ export class HighchartsGraphComponent implements OnInit {
 
     @Input() HighchartData: any = [];
 
-    @Input() chartDescription: string="Chart description";
+    @Input() chartDescription: string = "";
 
     @Input() chartType: TimeSeriesType;
 
@@ -37,18 +34,12 @@ export class HighchartsGraphComponent implements OnInit {
 
     @Input() endTime: momentNs.Moment;
 
-    @Input() synchronizingZoom: boolean = true;
-
-    synchronizingZoom1: boolean = true;
-
     loading: boolean = true;
 
     constructor(private detectorControlService: DetectorControlService) {
-        this.synchronizingZoom1 = this.detectorControlService.synchronizingZoom;
     }
 
     ngOnInit() {
-
         this._setOptions();
         this._updateOptions();
 
@@ -56,8 +47,10 @@ export class HighchartsGraphComponent implements OnInit {
             this.loading = false;
         }, 100);
     }
+
     private _updateOptions() {
         if (this.chartType) {
+
             // stacking:
             // Undefined to disable
             // "Normal" to stack by value
@@ -76,7 +69,6 @@ export class HighchartsGraphComponent implements OnInit {
                     break;
                 case TimeSeriesType.BarGraph:
                     type = 'column';
-                    stacking = undefined;
                     break;
                 case TimeSeriesType.LineGraph:
                 default:
@@ -86,17 +78,14 @@ export class HighchartsGraphComponent implements OnInit {
 
             if (this.chartOptions && this.chartOptions["type"]) {
                 type = this.chartOptions["type"];
-                console.log("type", this.chartOptions["type"]);
             }
 
             if (this.chartOptions && this.chartOptions["stacking"]) {
                 stacking = this.chartOptions["stacking"];
-                console.log("stacking", this.chartOptions["stacking"]);
             }
 
             this.options.chart.type = type;
             this.options.plotOptions.series.stacking = stacking;
-
         }
 
         if (this.chartOptions) {
@@ -119,7 +108,7 @@ export class HighchartsGraphComponent implements OnInit {
             if (subItem === Object(subItem)) {
                 obj[key] = this._updateObject(subItem, replace);
             } else {
-                // Special handling to make graph option keys to both highchart formatting and nvd3 formatting
+                // Special handling for the key to override colors. In highchart library, the key should be "colors" instead of "colors"
                 if (key === "color" || key === "colors")
                 {
                     key = "colors";
@@ -133,15 +122,14 @@ export class HighchartsGraphComponent implements OnInit {
 
 
     private _setOptions() {
-        console.log("Description to set options", this.chartDescription);
-        let synchronizingZoom1 = this.detectorControlService.synchronizingZoom;
-     //   let description = this.chartOptions != undefined && this.chartOptions["description"] != undefined ? this.chartOptions["description"]: "Chart description";
         this.options = {
-            title: { text: '' },
+            title: {
+                text: ""
+            },
             accessibility: {
                 enabled: true,
                 describeSingleSeries: true,
-            //    description: `${this.chartDescription}`,
+                description: `${this.chartDescription}`,
                 keyboardNavigation: {
                     enabled: true,
                     mode: "normal",
@@ -152,16 +140,12 @@ export class HighchartsGraphComponent implements OnInit {
                 text: `${this.chartDescription}`,
             },
             chart: {
-                // styledMode: true,
                 reflow: true,
                 height: 200,
-                // 'line', 'area', 'column'
                 type: 'line',
                 zoomType: 'x',
                 resetZoomButton: {
                     position: {
-                        // align: 'left', // by default
-                        // verticalAlign: 'bottom', // by default
                         x: 0,
                         y: -10
                     }
@@ -201,7 +185,6 @@ export class HighchartsGraphComponent implements OnInit {
             },
             navigation: {
                 buttonOptions: {
-                    //    verticalAlign: 'bottom',
                     y: -10,
                     theme: {
                         'stroke-width': 0,
@@ -257,7 +240,9 @@ export class HighchartsGraphComponent implements OnInit {
                     description: `Time(UTC) from ${this.startTime} to ${this.endTime}`
                 },
                 type: 'datetime',
-                axisLabel: 'Time (UTC)',
+                title: {
+                    text: 'Time (UTC)',
+                },
                 tickSize: 10,
                 crosshair: true,
                 tickFormat: function (d: any) { return moment(d).utc().format('MM/DD HH:mm'); },
@@ -269,25 +254,9 @@ export class HighchartsGraphComponent implements OnInit {
                     week: '%Y<br/>%m-%d',
                     month: '%Y-%m',
                     year: '%Y'
-                },
-                events: {
-                    afterSetExtremes: function (event) {
-                        var xMin = event.min;
-                        var xMax = event.max;
-
-                        if (synchronizingZoom1) {
-                            for (let i = 0; i < Highcharts.charts.length; i = i + 1) {
-                                {
-                                    var ex = Highcharts.charts[i].xAxis[0].getExtremes();
-                                    if (ex.min != xMin || ex.max != xMax) Highcharts.charts[i].xAxis[0].setExtremes(xMin, xMax, true, false);
-                                }
-                            }
-                        }
-                    }
                 }
             },
             yAxis: {
-                axisLabel: '',
                 title: {
                     text: ''
                 },
@@ -296,10 +265,9 @@ export class HighchartsGraphComponent implements OnInit {
                     format: '{value:.2f}'
                 }
             },
-            series: this.HighchartData  //as Array<Highcharts.Series>,
+            series: this.HighchartData
         } as Highcharts.Options;
     }
-
 }
 
 export interface GraphPoint {

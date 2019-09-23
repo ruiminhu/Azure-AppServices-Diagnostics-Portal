@@ -72,7 +72,6 @@ export class Nvd3GraphComponent implements OnInit {
   private _setOptions() {
     this.options = {
       chart: {
-          styleMode: true,
         type: 'lineChart',
         height: 200,
         margin: {

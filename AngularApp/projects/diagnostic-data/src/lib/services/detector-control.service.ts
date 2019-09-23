@@ -45,8 +45,6 @@ export class DetectorControlService {
   // TODO: allow for this to be changed with dropdown
   private _internalView = true;
 
-  private _synchronizingZoom = true;
-
   public internalClient: boolean = false;
 
   private _error: string;
@@ -274,7 +272,6 @@ export class DetectorControlService {
 
 
   public toggleSynchronization() {
-      this._synchronizingZoom = !this._synchronizingZoom;
       this._refreshData();
   }
 
@@ -302,8 +299,6 @@ export class DetectorControlService {
   public get endTimeString(): string { return this.endTime.format(this.stringFormat); }
 
   public get isInternalView(): boolean { return this._internalView; }
-
-  public get synchronizingZoom(): boolean { return this._synchronizingZoom; }
 
   public get shouldRefresh(): boolean {
     const temp = this._shouldRefresh;

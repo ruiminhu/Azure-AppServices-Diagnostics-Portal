@@ -53,9 +53,6 @@
       <div class="control"  (keyup.enter) = "detectorControlService.refresh()" (click)="detectorControlService.refresh()" name = "Refresh" value = "Refresh" aria-label = "Refresh" tabindex="0" role = "button">
         <i class="fa fa-refresh"></i>
       </div>
-      <div class="control" [ngStyle]="{'background-color':detectorControlService.synchronizingZoom ? '#bdbdd7': 'white'}" (keyup.enter) = "detectorControlService.toggleSynchronization()" (click)="detectorControlService.toggleSynchronization()" name = "ToggleSynchronization" value = "ToggleSynchronization" aria-label = "ToggleSynchronization" tabindex="0" role = "button">
-        <i class="fa fa-magnet"></i>
-      </div>
     </div>
   </div>
 </div>

@@ -270,11 +270,6 @@ export class DetectorControlService {
     this._refreshData();
   }
 
-
-  public toggleSynchronization() {
-      this._refreshData();
-  }
-
   public setDetectorQueryParams(detectorQueryParams: string) {
     this.detectorQueryParams.next(detectorQueryParams);
   }

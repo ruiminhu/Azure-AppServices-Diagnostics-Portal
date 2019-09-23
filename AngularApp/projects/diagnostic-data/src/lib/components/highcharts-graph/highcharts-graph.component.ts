@@ -49,15 +49,15 @@ export class HighchartsGraphComponent implements OnInit {
     }
 
     private _updateOptions() {
-        if (this.chartType) {
 
+        let type: string = 'line';
+        let stacking = undefined;
+
+        if (this.chartType) {
             // stacking:
             // Undefined to disable
             // "Normal" to stack by value
             // "Stack" by "percent".
-
-            let type: string = 'line';
-            let stacking = undefined;
             switch (this.chartType as TimeSeriesType) {
                 case TimeSeriesType.StackedAreaGraph:
                     type = 'area';
@@ -75,18 +75,19 @@ export class HighchartsGraphComponent implements OnInit {
                     type = 'line';
                     break;
             }
-
-            if (this.chartOptions && this.chartOptions["type"]) {
-                type = this.chartOptions["type"];
-            }
-
-            if (this.chartOptions && this.chartOptions["stacking"]) {
-                stacking = this.chartOptions["stacking"];
-            }
-
-            this.options.chart.type = type;
-            this.options.plotOptions.series.stacking = stacking;
         }
+
+
+        if (this.chartOptions && this.chartOptions["type"]) {
+            type = this.chartOptions["type"];
+        }
+
+        if (this.chartOptions && this.chartOptions["stacking"]) {
+            stacking = this.chartOptions["stacking"];
+        }
+
+        this.options.chart.type = type;
+        this.options.plotOptions.series.stacking = stacking;
 
         if (this.chartOptions) {
             this._updateObject(this.options, this.chartOptions);

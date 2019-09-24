@@ -3,10 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TimeSeriesType } from '../../models/detector';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import * as HC_customEvents from 'highcharts-custom-events';
+import * as HC_customEvents_ from 'highcharts-custom-events';
 import AccessibilityModule from 'highcharts/modules/accessibility';
 import { DetectorControlService } from '../../services/detector-control.service';
 
+const HC_customEvents = HC_customEvents_;
 HC_exporting(Highcharts);
 AccessibilityModule(Highcharts);
 HC_customEvents(Highcharts);

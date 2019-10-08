@@ -128,6 +128,9 @@ export class HighchartsGraphComponent implements OnInit {
             title: {
                 text: ""
             },
+            credits: {
+                enabled: false
+            },
             accessibility: {
                 enabled: true,
                 describeSingleSeries: true,

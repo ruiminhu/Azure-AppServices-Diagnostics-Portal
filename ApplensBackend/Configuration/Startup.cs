@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
+using AppLensV3.Authorization;
+using System.Collections.Generic;
 
 namespace AppLensV3
 {
@@ -71,6 +74,25 @@ namespace AppLensV3
             {
                 Configuration.Bind("AzureAd", options);
             });
+            if (Configuration["ServerMode"] != "internal"){
+                services.AddHttpContextAccessor();
+                AuthorizationTokenService.Instance.Initialize(Configuration);
+            }
+            services.AddAuthorization(options => {
+                var applensAccess = new SecurityGroupConfig();
+                var applensTesters = new SecurityGroupConfig();
+                Configuration.Bind("ApplensAccess", applensAccess);
+                Configuration.Bind("ApplensTesters", applensTesters);
+
+                options.AddPolicy(applensAccess.GroupName, policy => {
+                   policy.Requirements.Add(new SecurityGroupRequirement(applensAccess.GroupName, applensAccess.GroupId));
+                });
+                options.AddPolicy(applensTesters.GroupName, policy => {
+                    policy.Requirements.Add(new SecurityGroupRequirement(applensTesters.GroupName, applensTesters.GroupId));
+                });
+            });
+
+            services.AddSingleton<IAuthorizationHandler, SecurityGroupHandler>();
 
             if (Configuration["ServerMode"] == "internal")
             {

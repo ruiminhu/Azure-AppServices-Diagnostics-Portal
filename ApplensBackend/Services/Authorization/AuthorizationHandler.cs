@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AppLensV3.Authorization
 {
@@ -56,8 +57,15 @@ namespace AppLensV3.Authorization
         private readonly int loggedInUserCacheClearIntervalInMs = 60 * 60 * 1000; // 1 hour
         private readonly int loggedInUserExpiryIntervalInSeconds = 6 * 60 * 60; // 6 hours
 
-        public SecurityGroupHandler(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        private IHostingEnvironment env;
+
+        public SecurityGroupHandler(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IHostingEnvironment env)
         {
+            // Initialization not needed if national cloud
+            if (env.IsEnvironment("NationalCloud") || env.IsEnvironment("NationalCloudDevelopment")){
+                return;
+            }
+            this.env = env;
             loggedInUsersCache = new Dictionary<string, Dictionary<string, long>>();
             var applensAccess = new SecurityGroupConfig();
             var applensTesters = new SecurityGroupConfig();
@@ -195,6 +203,11 @@ namespace AppLensV3.Authorization
         /// <returns>Authorization Status.</returns>
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, SecurityGroupRequirement requirement)
         {
+            // Not required in national cloud, so succeed the context always
+            if (this.env.IsEnvironment("NationalCloud") || this.env.IsEnvironment("NationalCloudDevelopment")){
+                context.Succeed(requirement);
+                return;
+            }
             HttpContext httpContext = _httpContextAccessor.HttpContext;
             bool isMember = false;
             string userId = null;

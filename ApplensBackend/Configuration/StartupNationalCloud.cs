@@ -60,7 +60,7 @@ namespace AppLensV3.Configuration
                 });
             });
 
-            services.AddSingleton<IAuthorizationHandler, SecurityGroupHandler>();
+            services.AddSingleton<IAuthorizationHandler, SecurityGroupHandlerNationalCloud>();
 
             if (env.IsEnvironment("NationalCloud"))
             {

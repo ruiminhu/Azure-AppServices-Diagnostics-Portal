@@ -21,7 +21,7 @@ export class DataTableComponent extends DataRenderBaseComponent implements After
     }
 
     if (this.renderingProperties.height != null && this.renderingProperties.height !== "") {
-      this.currentStyles = { 'height': this.renderingProperties.height };
+      this.currentStyles = { 'height': this.renderingProperties.height ,'overflow-y':'visible' };
     }
 
     if (this.renderingProperties.tableOptions != null) {
@@ -86,6 +86,10 @@ export class DataTableComponent extends DataRenderBaseComponent implements After
       }
 
       this.rows.push(rowObject);
+
+      if (this.renderingProperties.descriptionColumnName && this.rows.length > 0) {
+        this.selected.push(this.rows[0]);
+      }
 
       this.rowsClone = Object.assign([], this.rows);
     });

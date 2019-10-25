@@ -79,7 +79,8 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
         let resourceName = this.changeAnalysisService.getCurrentResourceName();
         let isAppService = this.changeAnalysisService.getAppService();
         if (rows.length > 0 && rows[0].length > 0) {
-            this.changeSetText = rows.length === 1 ? `1 change group detected` : `${rows.length} change groups have been detected`;
+            let batchChanges = this.getBatchChanges(data);
+            this.changeSetText = batchChanges.length === 1 ? `1 change detected` : `${batchChanges.length} changes have been detected`;
             this.changeSetText = resourceName != '' ? this.changeSetText + ` for ${resourceName}` : this.changeSetText;
             this.constructOrUpdateTimeline(data);
             if(!this.developmentMode) {
@@ -87,9 +88,9 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             }
             if(isAppService) {
                 // Convert UTC timestamp to user readable date
-                this.scanDate = rows[0][6] != '' ? 'Changes were last scanned on ' + moment(rows[0][6]).format("ddd, MMM D YYYY, h:mm:ss a") : this.noScanMsg + ' Please enable Change Analysis using Change Analysis Settings.';
+                this.scanDate = rows[0][6] != '' ? 'Changes were last scanned on ' + moment.utc(rows[0][6]).format("YYYY-MM-DD HH:mm") : this.noScanMsg + ' Please enable Change Analysis using Change Analysis Settings.';
             } else {
-                this.scanDate = rows[0][6] != '' ? 'Changes were last scanned on ' + moment(rows[0][6]).format("ddd, MMM D YYYY, h:mm:ss a") : 'No recent scans were performed on this resource.';
+                this.scanDate = rows[0][6] != '' ? 'Changes were last scanned on ' + moment.utc(rows[0][6]).format("YYYY-MM-DD HH:mm") : 'No recent scans were performed on this resource.';
             }
 
             if(this.isPublic) {
@@ -101,7 +102,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             } else {
                 this.scanDate = '';
             }
-             this.changeSetText = `No change groups have been detected`;
+             this.changeSetText = `No changes have been detected`;
              this.changeSetText = resourceName != '' ? this.changeSetText + ` for ${resourceName}` : this.changeSetText;
              this.checkInitialScanState();
              if(this.changesTimeline) {
@@ -137,7 +138,6 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             })
         });
         this.timeLineDataSet.add(updatedTimelineItems);
-        this.changesTimeline.setSelection(changeSets[0][0]);
     }
 
     private constructTimeline(data: DataTableResponseObject) {
@@ -164,13 +164,16 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
         let options = {
             maxHeight: 400,
             horizontalScroll: true,
-            verticalScroll: true
+            verticalScroll: true,
+            // Set the timeline to show dates in UTC.
+            moment: function (date) {
+                return moment.utc(date);
+              }
             };
 
         // Create a Timeline
         this.changesTimeline = new Timeline(container, this.timeLineDataSet, this.sourceGroups, options);
         this.changesTimeline.on('select', this.triggerChangeEvent);
-        this.changesTimeline.setSelection(changeSets[0][0]);
     }
 
     private initializeChangesView(data: DataTableResponseObject) {
@@ -184,14 +187,14 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
         let latestChangeSetId = data.rows[0][changeSetIdColumnIndex];
         let latestChangeSet = data.rows[0][inputsColumnIndex];
         this.selectedChangeSetId = latestChangeSetId;
-
+        // Send all changes row instead of latest row.
         if(latestChangeSet != null) {
             this.loadingChangesTable = true;
             this.changesTableError = '';
             this.changesDataSet = [{
                table:{
                     columns:[],
-                    rows: data.rows[0][7]
+                    rows: this.getBatchChanges(data)
                     },
                 renderingProperties: {
                     type: RenderingType.ChangesView,
@@ -250,7 +253,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             }
 
             this.diagnosticService.getDetector(this.detector, this.detectorControlService.startTimeString, this.detectorControlService.endTimeString,
-            this.detectorControlService.shouldRefresh, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) =>{
+            true, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) =>{
             this.changeSetsCache[changeSetId] = response.dataset;
             this.changesDataSet = this.changeSetsCache[changeSetId];
             this.initiatedBy = this.changeSetsLocalCopy.hasOwnProperty(changeSetId) ?  this.getInitiatedByUsers(this.changeSetsLocalCopy[changeSetId]) : [];
@@ -279,7 +282,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             queryParams += `&inpId=1&val=${encodeURIComponent(sub)}&inpId=2&val=${encodeURIComponent(resourceGroups)}&inpId=3&val=${encodeURIComponent(provider)}&inpId=4&val=${encodeURIComponent(resourceName)}`;
         }
         this.diagnosticService.getDetector(this.detector,  this.detectorControlService.startTimeString, this.detectorControlService.endTimeString,
-            this.detectorControlService.shouldRefresh, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
+            true, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
                 let dataset = response.dataset;
                 let table = dataset[0].table;
                 let rows = table.rows;
@@ -322,7 +325,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             queryParams += `&inpId=1&val=${encodeURIComponent(sub)}&inpId=2&val=${encodeURIComponent(resourceGroups)}&inpId=3&val=${encodeURIComponent(provider)}&inpId=4&val=${encodeURIComponent(resourceName)}`;
         }
         this.diagnosticService.getDetector(this.detector, this.detectorControlService.startTimeString, this.detectorControlService.endTimeString,
-            this.detectorControlService.shouldRefresh, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
+            true, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
                 let dataset = response.dataset;
                 let table = dataset[0].table;
                 let rows = table.rows;
@@ -374,7 +377,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             queryParams += `&inpId=1&val=${encodeURIComponent(sub)}&inpId=2&val=${encodeURIComponent(resourceGroups)}&inpId=3&val=${encodeURIComponent(provider)}&inpId=4&val=${encodeURIComponent(resourceName)}`;
         }
         this.diagnosticService.getDetector(this.detector, this.detectorControlService.startTimeString, this.detectorControlService.endTimeString,
-            this.detectorControlService.shouldRefresh, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
+            true, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) => {
                 let dataset = response.dataset;
                 let table = dataset[0].table;
                 let rows = table.rows;
@@ -481,7 +484,7 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             queryParams += `&inpId=1&val=${encodeURIComponent(sub)}&inpId=2&val=${encodeURIComponent(resourceGroups)}&inpId=3&val=${encodeURIComponent(provider)}&inpId=4&val=${encodeURIComponent(resourceName)}`;
         }
         this.diagnosticService.getDetector(this.detector, this.detectorControlService.startTimeString, this.detectorControlService.endTimeString,
-        this.detectorControlService.shouldRefresh, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) =>{
+        true, this.detectorControlService.isInternalView, queryParams).subscribe((response: DetectorResponse) =>{
             // Reload timeline with latest changes
             let newChangeRows = response.dataset[0]['table'];
             let newTimelineItems = [];
@@ -506,10 +509,15 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
                 this.constructTimeline(newChangeRows);
                 this.initializeChangesView(newChangeRows);
             }
-            let totalItems = this.timeLineDataSet.length;
-            this.changeSetText = totalItems + ' change groups have been detected';
-            // Convert UTC timestamp to user readable date
-            this.scanDate = 'Changes were last scanned on ' + moment(newChangeRows.rows[0][6]).format("ddd, MMM D YYYY, h:mm:ss a");
+            let totalItems = newChangeRows.rows.length;
+            if(totalItems > 0) {
+                let batchChanges = this.getBatchChanges(newChangeRows);
+                this.changeSetText = batchChanges.length + ' changes have been detected';
+                // Convert UTC timestamp to user readable date
+                this.scanDate = 'Changes were last scanned on ' + moment.utc(newChangeRows.rows[0][6]).format("YYYY-MM-DD HH:mm");
+            } else {
+                this.changeSetText = 'No changes detected';
+            }
             this.setDefaultScanStatus();
         }, (error: any) => {
             this.scanStatusMessage = "Unable to get scan results";
@@ -564,5 +572,16 @@ export class ChangesetsViewComponent extends DataRenderBaseComponent implements 
             return ["N/A"];
         }
         return [changeSet[initiatedByIndex]];
+    }
+
+    getBatchChanges(data: DataTableResponseObject): any[][] {
+        let changeDetails = [];
+        let columnIndex = DataTableUtilities.getColumnIndexByName(data, "Inputs");
+        data.rows.forEach(row => {
+            if (row[columnIndex] != null && row[columnIndex].length > 0) {
+                changeDetails = changeDetails.concat(row[columnIndex]);
+            }
+        });
+        return changeDetails;
     }
 }

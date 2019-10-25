@@ -105,6 +105,56 @@
             "azureCommImpactedServicesList": "",
             "pesId": "",
             "staticSelfHelpContent": ""
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.ContainerRegistry/registries",
+            "templateFileName": "ContainerRegistry",
+            "imgSrc": "assets/img/acr-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "registries",
+            "pesId": "16533",
+            "staticSelfHelpContent": ""
+        },
+		{
+            "service": "ResourceService",
+            "resourceType": "Microsoft.Automation/automationAccounts",
+            "templateFileName": "AzureAutomation",
+            "imgSrc": "assets/img/AAlogo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "AzureAutomation",
+            "pesId": "15607",
+            "staticSelfHelpContent": ""
+        },
+		{
+            "service": "ResourceService",
+            "resourceType": "Microsoft.MachineLearningServices/workspaces",
+            "templateFileName": "MachineLearningServices",
+            "imgSrc": "assets/img/MLlogo.jpg",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "MachineLearningServices",
+            "pesId": "",
+            "staticSelfHelpContent": ""
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.ContainerInstance/containerGroups",
+            "templateFileName": "ContainerInstance",
+            "imgSrc": "assets/img/acilogo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "containerGroups",
+            "pesId": "",
+            "staticSelfHelpContent": ""
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.BatchAI/workspaces",
+            "templateFileName": "BatchAI",
+            "imgSrc": "assets/img/batchailogo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "BatchAI",
+            "pesId": "",
+            "staticSelfHelpContent": ""
         }
     ]
 }

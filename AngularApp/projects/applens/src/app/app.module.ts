@@ -19,6 +19,9 @@ import { DiagnosticDataModule } from 'diagnostic-data';
 import { UnhandledExceptionHandlerService } from 'diagnostic-data';
 import {CustomMaterialModule} from './material-module';
 import { HighchartsChartModule } from 'highcharts-angular';
+import {UnauthorizedComponent} from './shared/components/unauthorized/unauthorized.component';
+import {AuthRequestFailedComponent} from './shared/components/auth-request-failed/auth-request-failed.component';
+import {TokenInvalidComponent} from './shared/components/tokeninvalid/tokeninvalid.component';
 
 @Injectable()
 export class ValidResourceResolver implements Resolve<void>{
@@ -86,6 +89,18 @@ export const Routes = RouterModule.forRoot([
     ]
   },
   {
+    path: 'unauthorized',
+    component: UnauthorizedComponent
+  },
+  {
+    path: 'authRequestFailed',
+    component: AuthRequestFailedComponent
+  },
+  {
+    path: 'tokeninvalid',
+    component: TokenInvalidComponent
+  },
+  {
     path: 'login',
     component: LoginComponent
   }
@@ -93,7 +108,10 @@ export const Routes = RouterModule.forRoot([
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UnauthorizedComponent,
+    AuthRequestFailedComponent,
+    TokenInvalidComponent
   ],
   imports: [
     BrowserModule,

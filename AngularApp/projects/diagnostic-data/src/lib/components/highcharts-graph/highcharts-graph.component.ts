@@ -259,16 +259,32 @@ export class HighchartsGraphComponent implements OnInit {
                     week: '%Y<br/>%m-%d',
                     month: '%Y-%m',
                     year: '%Y'
-                }
+                },
+                labels: {
+                    style: {
+                        whiteSpace: "nowrap"
+                    }
+                },
             },
             yAxis: {
+                softMin: 0,
+                crosshair: true,
+                accessibility: {
+                    description: `Y axis values`
+                },
                 title: {
-                    text: ''
+                    text: '',
+                    style: {
+                        whiteSpace: "nowrap"
+                    }
                 },
                 endOnTick: false,
                 labels: {
-                    format: '{value:.2f}'
-                }
+                    format: '{value:.2f}',
+                    style: {
+                        whiteSpace: "nowrap"
+                    }
+                },
             },
             series: this.HighchartData
         } as Highcharts.Options;

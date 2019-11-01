@@ -155,7 +155,7 @@ export class HighchartsGraphComponent implements OnInit {
                 text: `${this.chartDescription}`,
             },
             chart: {
-                reflow: false,
+                reflow: true,
                 height: 200,
                 display: 'block!important',
                 type: 'line',

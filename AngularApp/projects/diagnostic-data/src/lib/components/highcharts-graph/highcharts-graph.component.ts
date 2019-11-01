@@ -157,8 +157,10 @@ export class HighchartsGraphComponent implements OnInit {
             chart: {
                 reflow: false,
                 height: 200,
+                display: 'block!important',
                 type: 'line',
                 zoomType: 'x',
+                panKey: 'shift',
                 resetZoomButton: {
                     position: {
                         x: 0,
@@ -222,7 +224,7 @@ export class HighchartsGraphComponent implements OnInit {
                     height: 1
                 },
                 menuItemStyle: {
-                    padding: "0.2em 1em",
+                    padding: "0.1em 1em",
                 }
             },
             exporting: {
@@ -279,6 +281,7 @@ export class HighchartsGraphComponent implements OnInit {
                 },
             },
             yAxis: {
+                tickAmount: 4,
                 softMin: 0,
                 crosshair: true,
                 accessibility: {

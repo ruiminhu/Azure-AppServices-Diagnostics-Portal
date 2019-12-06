@@ -29,6 +29,12 @@ namespace AppLensV3
         private static object lockObject = new object();
         private static bool targetSupportApiTestSlot;
         private string _endpoint;
+        private const string APP_SETTING_AAD_AUTHORITY = "Observer:authority";
+        private const string APP_SETTING_OBSERVER_ENDPOINT = "Observer:endpoint";
+        private const string APP_SETTING_OBSERVER_AAD_CLIENTID = "Observer:clientId";
+        private const string APP_SETTING_OBSERVER_AAD_CLIENT_SECRET = "Observer:clientSecret";
+        private const string APP_SETTING_OBSERVER_AAD_RESOURCEID = "Observer:resourceId";
+        private const string DEFAULT_PUBLIC_AZURE_AAD_AUTHORITY = "https://login.microsoftonline.com/microsoft.onmicrosoft.com";
 
         private IConfiguration _configuration;
 
@@ -44,24 +50,25 @@ namespace AppLensV3
             {
                 if (string.IsNullOrWhiteSpace(_endpoint))
                 {
-                    _endpoint = _configuration.GetValue<string>("Observer:endpoint", null);
+                    _endpoint = _configuration.GetValue<string>(APP_SETTING_OBSERVER_ENDPOINT, null);
                 }
 
                 return _endpoint;
             }
         }
 
-        private AuthenticationContext AuthContext {
+        private AuthenticationContext AuthContext
+        {
             get
             {
                 if (_authContext == null)
                 {
-                    _authContext = new AuthenticationContext("https://login.microsoftonline.com/microsoft.onmicrosoft.com", TokenCache.DefaultShared);
+                    _authContext = new AuthenticationContext(_configuration.GetValue(APP_SETTING_AAD_AUTHORITY, DEFAULT_PUBLIC_AZURE_AAD_AUTHORITY), TokenCache.DefaultShared);
                 }
 
                 return _authContext;
             }
-        } 
+        }
 
         private ClientCredential AADCredentials
         {
@@ -69,25 +76,12 @@ namespace AppLensV3
             {
                 if (_aadCredentials == null)
                 {
-                    var clientId = _configuration["Observer:clientId"];
-                    var clientSecret = _configuration["Observer:clientSecret"];
+                    var clientId = _configuration[APP_SETTING_OBSERVER_AAD_CLIENTID];
+                    var clientSecret = _configuration[APP_SETTING_OBSERVER_AAD_CLIENT_SECRET];
 
                     _aadCredentials = new ClientCredential(clientId, clientSecret);
                 }
                 return _aadCredentials;
-            }
-        }
-
-        private string SupportObserverResourceUri
-        {
-            get
-            {
-                if (_supportObserverResourceUri == null)
-                {
-                    _supportObserverResourceUri = _configuration["Observer:resourceId"];
-                }
-
-                return _supportObserverResourceUri;
             }
         }
 
@@ -269,7 +263,7 @@ namespace AppLensV3
 
         private async Task<string> GetSupportObserverAccessToken()
         {
-            var authResult = await AuthContext.AcquireTokenAsync(SupportObserverResourceUri, AADCredentials);
+            var authResult = await AuthContext.AcquireTokenAsync(_configuration[APP_SETTING_OBSERVER_AAD_RESOURCEID], AADCredentials);
             return "Bearer " + authResult.AccessToken;
         }
     }

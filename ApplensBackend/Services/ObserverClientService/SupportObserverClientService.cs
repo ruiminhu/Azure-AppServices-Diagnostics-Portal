@@ -28,6 +28,7 @@ namespace AppLensV3
         private static string _supportObserverResourceUri;
         private static object lockObject = new object();
         private static bool targetSupportApiTestSlot;
+        private string _endpoint;
 
         private IConfiguration _configuration;
 
@@ -41,17 +42,12 @@ namespace AppLensV3
         private string SupportObserverApiEndpoint {
             get
             {
-                bool.TryParse(_configuration["Observer:targetSupportApiTestSlot"], out targetSupportApiTestSlot);
+                if (string.IsNullOrWhiteSpace(_endpoint))
+                {
+                    _endpoint = _configuration.GetValue<string>("Observer:endpoint", null);
+                }
 
-                //Add condition for Debugger.IsAttached so that we never mistakenly target Support Api test slot in production
-                if (Debugger.IsAttached && targetSupportApiTestSlot)
-                {
-                    return "https://wawsobserver-prod-staging.azurewebsites.net/api/";
-                }
-                else
-                {
-                    return "https://wawsobserver-prod.azurewebsites.net/api/";
-                }
+                return _endpoint;
             }
         }
 

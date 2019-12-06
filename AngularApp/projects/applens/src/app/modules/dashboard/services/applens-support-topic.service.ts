@@ -7,6 +7,7 @@ import { CacheService } from '../../../shared/services/cache.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError, mergeMap, map } from 'rxjs/operators';
 import { forkJoin, Observable, of } from 'rxjs';
+import 'rxjs/add/observable/of';
 import { HttpMethod } from '../../../shared/models/http';
 
 
@@ -160,6 +161,8 @@ export class ApplensSupportTopicService {
     constructor(private _diagnosticApiService: ApplensDiagnosticService, private _resourceService: ResourceService, private _http: HttpClient, private _cacheService: CacheService) {
     }
 
+    public supportTopicId: string;
+
     public getSupportTopics(): Observable<any> {
         let pesId = this._resourceService.pesId;
         return this._diagnosticApiService.getSupportTopics(pesId);
@@ -221,7 +224,7 @@ export class ApplensSupportTopicService {
     }
 
     getSelfHelpContentDocument(): Observable<any>{
-        return null;
+        return Observable.of(null);
     }
 
 

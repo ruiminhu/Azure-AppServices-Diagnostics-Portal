@@ -6,6 +6,7 @@ import { ArmResource } from '../models/arm';
 import { ArmService } from '../../shared/services/arm.service';
 import { ArmResourceConfig, ResourceDescriptor, ResourceDescriptorGroups } from '../../shared/models/arm/armResourceConfig';
 import { GenericArmConfigService } from '../../shared/services/generic-arm-config.service';
+import { PortalReferrerMap } from '../../shared/models/portal-referrer-map';
 
 @Injectable()
 export class ResourceService {
@@ -37,7 +38,14 @@ export class ResourceService {
     }
   }
 
+  public getIbizaBladeToDetectorMapings():Observable<PortalReferrerMap[]> {
+    return Observable.of(null);
+  }
+
   public getPesId(): Observable<string>{
+    if (this.armResourceConfig){
+      return Observable.of(this.armResourceConfig.pesId);
+    }
     return Observable.of(null);
   }
 

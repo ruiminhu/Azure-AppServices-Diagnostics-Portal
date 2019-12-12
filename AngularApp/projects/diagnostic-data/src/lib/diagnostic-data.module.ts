@@ -78,6 +78,9 @@ import { CustomMaterialModule } from './material-module';
 import { DetectorListAnalysisComponent } from './components/detector-list-analysis/detector-list-analysis.component';
 import { AppDependenciesComponent } from './components/app-dependencies/app-dependencies.component';
 import { FabNavModule } from './components/fab-nav/fab-nav.module';
+import { FabIconModule, FabChoiceGroupModule, FabSearchBoxModule, FabDropdownModule } from '@angular-react/fabric';
+// import { FabSummaryCardComponent } from './components/fab-summary-card/fab-summary-card.component';
+import { SummaryCardsComponent } from './components/summary-cards/summary-cards.component';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -90,6 +93,10 @@ import { FabNavModule } from './components/fab-nav/fab-nav.module';
     MonacoEditorModule.forRoot(),
     CustomMaterialModule,
     FabNavModule,
+    FabIconModule,
+    FabChoiceGroupModule,
+    FabSearchBoxModule,
+    FabDropdownModule
     // BrowserAnimationsModule
   ],
   providers: [
@@ -110,7 +117,8 @@ import { FabNavModule } from './components/fab-nav/fab-nav.module';
     ChangesViewComponent,
     DetectorListAnalysisComponent,
     AppDependenciesComponent,
-    AppInsightsMarkdownComponent
+    AppInsightsMarkdownComponent,
+    SummaryCardsComponent
   ],
   exports: [
     FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent,

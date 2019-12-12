@@ -7,9 +7,11 @@
 </div> -->
 <div class="category-container">
   <div>
-    <h3 class="category-title">Availability and performance</h3>
-    <p class="category-description">Explore this overview to discover any application or platform issues that may affect
-      your app's high availability. You can also drill down on an area by selecting a topic in the side navigation</p>
+    <!-- <h3 class="category-title">Availability and performance</h3> -->
+    <h3 class="category-title">{{category.name}}</h3>
+    <!-- <p class="category-description">Explore this overview to discover any application or platform issues that may affect
+      your app's high availability. You can also drill down on an area by selecting a topic in the side navigation</p> -->
+    <p class="category-description">{{category.description}}</p>
   </div>
 
   <div style="margin: 15px 0px">
@@ -18,13 +20,16 @@
     <span class="fa status-icon fa-info-circle" style="margin-left: 5px;"></span>
   </div>
 
-  <div class="search-box">
+  <div class="search-box" style="margin-bottom: 25px;">
     <fab-search-box placeholder="Search"></fab-search-box>
   </div>
 
-  <health-check-v3></health-check-v3>
-  <p style="font-size: 12px;">Are you looking for something else ?</p>
-  <div class="search-box">
-    <fab-search-box placeholder="Search"></fab-search-box>
+  <!-- <health-check-v3></health-check-v3> -->
+  <!-- <detector-container detector="testForSummaryCard"></detector-container> -->
+  <!-- <detector-container detector="diagnostictools" [hideDetectorControl]="true"></detector-container> -->
+  <div style="margin-left: -20px;">
+    <detector-container [detector]="categoryId" [hideDetectorControl]="true"></detector-container>
   </div>
+  <!-- <support-bot [startingKey]="startingKey"></support-bot> -->
+  <!-- <p style="font-size: 12px;">Are you looking for something else ?</p> -->
 </div>

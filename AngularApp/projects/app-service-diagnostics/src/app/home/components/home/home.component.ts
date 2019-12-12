@@ -1,5 +1,4 @@
-import { DetectorControlService, FeatureNavigationService } from 'diagnostic-data';
-import { HttpResponse } from '@angular/common/http';
+import { DetectorControlService, FeatureNavigationService, DetectorResponse } from 'diagnostic-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../../../shared-v2/models/category';
@@ -13,22 +12,8 @@ import { ArmService } from '../../../shared/services/arm.service';
 import { AuthService } from '../../../startup/services/auth.service';
 import { TelemetryService } from 'diagnostic-data';
 import { PortalKustoTelemetryService } from '../../../shared/services/portal-kusto-telemetry.service';
-import { FabDropdownComponent } from '@angular-react/fabric';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import {
-    ICalendarStrings,
-    IContextualMenuProps,
-    ISelection,
-    Selection,
-    DropdownMenuItemType,
-    IDropdownOption,
-    ICheckboxProps,
-    IPersonaProps,
-    IPeoplePickerProps,
-    IIconProps
-} from 'office-ui-fabric-react';
-// import { FabPeoplePickerComponent } from '@angular-react/fabric/public-api';
-import { from } from 'rxjs';
+import { DiagnosticService } from 'diagnostic-data';
 
 @Component({
     selector: 'home',
@@ -39,133 +24,6 @@ export class HomeComponent implements OnInit {
     logEvent(...args: any[]) {
         console.log(args);
     }
-
-    selectedItem?: IDropdownOption;
-    options: FabDropdownComponent['options'] = [
-        { key: 'A', text: 'Option a' },
-        { key: 'B', text: 'Option b' },
-        { key: 'C', text: 'Option c' },
-        { key: 'D', text: 'Option d' },
-        { key: 'divider_1', text: '-', itemType: DropdownMenuItemType.Divider },
-        { key: 'E', text: 'Option e' },
-        { key: 'F', text: 'Option f' },
-        { key: 'G', text: 'Option g' },
-    ];
-
-
-    strings: ICalendarStrings = {
-        months: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December',
-        ],
-
-        shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-
-        days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-
-        shortDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-
-        goToToday: 'Go to today',
-        weekNumberFormatString: 'Week number {0}',
-      };
-
-      detailItems = [
-        { field1: 'f1content1', field2: 'f2content1' },
-        { field1: 'f1content2', field2: 'f2content2' },
-        { field1: 'f1content3', field2: 'f2content3' },
-        { field1: 'f1content4' },
-        { field2: 'f2content5' },
-      ];
-
-      onNewClicked() {
-        console.log('New clicked');
-      }
-
-      onCopyClicked() {
-        console.log('Copy clicked');
-      }
-
-      onSaveAsClicked() {
-        console.log('Save as clicked');
-      }
-
-      onSaveAsFirstClicked() {
-        console.log('Save as 1 clicked');
-      }
-
-      onSaveAsSecondClicked() {
-        console.log('Save as 2 clicked');
-      }
-
-      customItemCount = 1;
-
-      onCustomItemClick(item: any) {
-        this.customItemCount++;
-        console.log('custom item clicked', item);
-      }
-
-      onColumnHeaderClicked(event: any) {
-        console.log('Column header clicked', event);
-      }
-
-
-
-    disabled = true;
-    dialogHidden = true;
-    sampleContentCounter = 0;
-    secondsCounter = 0;
-    sampleContent2 = '0 Seconds Passed';
-    sampleContent3 = '';
-    selectedComboBoxKey: string = "None";
-    selectedComboBoxValue: string = "None";
-    selectedDate: Date;
-
-    //   comboBoxOptions: IComboBoxOption[] = [
-    //     { key: 'A', text: 'See option A' },
-    //     { key: 'B', text: 'See option B' },
-    //   ];
-
-    onSelectDate(event) {
-        this.selectedDate = event.date;
-    }
-
-    comboChange(event) {
-        this.selectedComboBoxKey = event.option.key;
-        this.selectedComboBoxValue = event.option.text;
-    }
-
-    get sampleContent() {
-        return `Button clicked ${this.sampleContentCounter} times.`;
-    }
-
-    toggle() {
-        this.disabled = !this.disabled;
-    }
-
-    toggleDialog() {
-        this.dialogHidden = !this.dialogHidden;
-        this.sampleContent3 = '';
-    }
-
-    click() {
-        this.sampleContentCounter += 1;
-    }
-
-    clickSave() {
-        this.sampleContent3 = 'Saved...';
-    }
-
-
 
     resourceName: string;
     categories: Category[];
@@ -185,16 +43,7 @@ export class HomeComponent implements OnInit {
 
     constructor(private _resourceService: ResourceService, private _categoryService: CategoryService, private _notificationService: NotificationService, private _router: Router,
         private _detectorControlService: DetectorControlService, private _featureService: FeatureService, private _logger: LoggingV2Service, private _authService: AuthService,
-        private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService, private kustologgingService: PortalKustoTelemetryService) {
-
-        const i = setInterval(() => {
-            this.secondsCounter += 1;
-            this.sampleContent2 = `${this.secondsCounter} Seconds Passed`;
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval(i);
-        }, 12000);
+        private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService, private kustologgingService: PortalKustoTelemetryService, private _diagnosticService: DiagnosticService) {
 
         if (_resourceService.armResourceConfig && _resourceService.armResourceConfig.homePageText
             && _resourceService.armResourceConfig.homePageText.title && _resourceService.armResourceConfig.homePageText.title.length > 1
@@ -244,7 +93,8 @@ export class HomeComponent implements OnInit {
         this.kustologgingService.logEvent("kusto telemetry service logging", {});
 
         initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
-    }
+        
+    };
 
     onSearchBoxFocus(event: any): void {
         this.searchBoxFocus = true;
@@ -272,17 +122,17 @@ export class HomeComponent implements OnInit {
         this.searchResultCount = count;
     }
 
-    onSearchLostFocus() {
-        if (this.searchValue === '') {
-            this.searchResultCount = 0;
-        }
-    }
+    // onSearchLostFocus() {
+    //     if (this.searchValue === '') {
+    //         this.searchResultCount = 0;
+    //     }
+    // }
 
-    onFocusClear() {
-        if (this.searchValue === '') {
-            this.clearSearch();
-        }
-    }
+    // onFocusClear() {
+    //     if (this.searchValue === '') {
+    //         this.clearSearch();
+    //     }
+    // }
 
     private _updateRouteBasedOnAdditionalParameters(route: string, additionalParameters: any): string {
         if (additionalParameters.featurePath) {

@@ -7,7 +7,7 @@ import { DetectorResponse, Rendering, RenderingType } from '../../models/detecto
 import { DetectorControlService } from '../../services/detector-control.service';
 import { TelemetryEventNames } from '../../services/telemetry/telemetry.common';
 import { TelemetryService } from '../../services/telemetry/telemetry.service';
-import { CompilationProperties} from '../../models/compilation-properties';
+import { CompilationProperties } from '../../models/compilation-properties';
 @Component({
   selector: 'detector-view',
   templateUrl: './detector-view.component.html',
@@ -26,8 +26,6 @@ export class DetectorViewComponent implements OnInit {
   detectorDataLocalCopy: DetectorResponse;
   errorState: any;
   isPublic: boolean;
-
-  hideDetectorHeader: boolean = false;
 
   buttonViewVisible: boolean = false;
   buttonViewActiveComponent: string;
@@ -68,8 +66,9 @@ export class DetectorViewComponent implements OnInit {
   @Input() script: string = '';
   @Input() detector: string = '';
   @Input() compilationPackage: CompilationProperties;
-  @Input() analysisMode:boolean = false;
+  @Input() analysisMode: boolean = false;
   @Input() isAnalysisView: boolean = false;
+  @Input() hideDetectorHeader: boolean = false;
   feedbackButtonLabel: string = 'Send Feedback';
 
   constructor(@Inject(DIAGNOSTIC_DATA_CONFIG) config: DiagnosticDataConfig, private telemetryService: TelemetryService,
@@ -110,7 +109,7 @@ export class DetectorViewComponent implements OnInit {
         this.feedbackDetector = this.isSystemInvoker ? this.feedbackDetector : data.metadata.id;
         let subject = encodeURIComponent(`Detector Feedback for ${this.feedbackDetector}`);
         let body = encodeURIComponent('Current site: ' + window.location.href + '\n' + 'Please provide feedback here:');
-        this.emailToApplensTeam  = `mailto:applensdisc@microsoft.com?subject=${subject}&body=${body}`;
+        this.emailToApplensTeam = `mailto:applensdisc@microsoft.com?subject=${subject}&body=${body}`;
 
         if (!this.isSystemInvoker && data.metadata && data.metadata.author) {
           this.authorInfo = data.metadata.author;
@@ -134,8 +133,7 @@ export class DetectorViewComponent implements OnInit {
 
         this.logInsights(data);
 
-        this.hideDetectorHeader = data.dataset.findIndex(set => (<Rendering>set.renderingProperties).type === RenderingType.Cards) >= 0;
-
+        // this.hideDetectorHeader = data.dataset.findIndex(set => (<Rendering>set.renderingProperties).type === RenderingType.Cards) >= 0;
       }
     });
   }

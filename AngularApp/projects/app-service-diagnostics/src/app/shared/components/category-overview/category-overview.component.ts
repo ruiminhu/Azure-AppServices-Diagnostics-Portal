@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CategoryService } from '../../../shared-v2/services/category.service';
+import { Category } from '../../../shared-v2/models/category';
 import { InputRendererOptions, JsxRenderFunc, ReactWrapperComponent } from '@angular-react/core';
 import { IPanelHeaderRenderer, IPanelProps } from 'office-ui-fabric-react/lib/Panel';
 import { Message, TextMessage} from '../../../supportbot/models/message';
@@ -11,7 +13,6 @@ import { PanelType, IPanelStyles } from 'office-ui-fabric-react';
 import { GenieChatFlow } from '../../../supportbot/message-flow/v2-flows/genie-chat.flow';
 import {Globals} from '../../../globals';
 //  import {} from 'office-ui-fabric-core/lib';
-
 //  createInputJsxRenderer, createRenderPropHandler
 
 
@@ -23,7 +24,9 @@ import {Globals} from '../../../globals';
 })
 //extends Renderable
 export class CategoryOverviewComponent implements OnInit {
-
+  categoryId: string = "";
+  category: Category;
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _categoryService: CategoryService) {
     @ViewChild('ms-Panel-scrollableContent', { static: false }) myScrollContainer: ElementRef;
 
     messages: Message[] = [];
@@ -91,6 +94,16 @@ export class CategoryOverviewComponent implements OnInit {
                   //  this.scrollToBottom();
                 }, 200);
             }
+
+
+  ngOnInit() {
+    this.categoryId = this._activatedRoute.parent.snapshot.params.category;
+    this._categoryService.categories.subscribe(categorys => {
+      this.category = categorys.find(category => this.categoryId === category.id);
+    });
+    console.log("routes", this._activatedRoute.parent);
+    console.log("categoryId", this.categoryId);
+ 
 
             setTimeout(function () {
                 self.showTypingMessage = false;
@@ -259,5 +272,4 @@ export class CategoryOverviewComponent implements OnInit {
         console.log("routes", this._activatedRoute.parent);
         console.log("categoryId", this.categoryId);
     }
-
 }

@@ -14,6 +14,7 @@ import { TelemetryService } from 'diagnostic-data';
 import { PortalKustoTelemetryService } from '../../../shared/services/portal-kusto-telemetry.service';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { DiagnosticService } from 'diagnostic-data';
+import { ISearchBoxProps } from 'office-ui-fabric-react';
 
 @Component({
     selector: 'home',
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
     logEvent(...args: any[]) {
         console.log(args);
     }
-
+    iconProps: ISearchBoxProps['iconProps'] = {iconName: 'Filter'};
     resourceName: string;
     categories: Category[];
     searchValue = '';

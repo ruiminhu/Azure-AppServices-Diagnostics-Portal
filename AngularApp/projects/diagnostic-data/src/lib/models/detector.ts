@@ -104,7 +104,8 @@ export enum RenderingType {
     ChangesView,
     ApplicationInsightsView,
     DependencyGraph,
-    SummaryCard = 22
+    DownTime,
+    SummaryCard
 }
 
 export enum TimeSeriesType {

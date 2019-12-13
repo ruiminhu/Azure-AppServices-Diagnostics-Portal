@@ -8,6 +8,7 @@ import { DetectorControlService } from '../../services/detector-control.service'
 import { TelemetryEventNames } from '../../services/telemetry/telemetry.common';
 import { TelemetryService } from '../../services/telemetry/telemetry.service';
 import { CompilationProperties } from '../../models/compilation-properties';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'detector-view',
   templateUrl: './detector-view.component.html',

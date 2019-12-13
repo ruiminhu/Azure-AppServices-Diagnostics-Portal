@@ -15,6 +15,23 @@ import { PortalKustoTelemetryService } from '../../../shared/services/portal-kus
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { DiagnosticService } from 'diagnostic-data';
 import { ISearchBoxProps } from 'office-ui-fabric-react';
+import { FabDropdownComponent } from '@angular-react/fabric';
+// import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import {
+    ICalendarStrings,
+    IContextualMenuProps,
+    ISelection,
+    Selection,
+    DropdownMenuItemType,
+    IDropdownOption,
+    ICheckboxProps,
+    IPersonaProps,
+    IPeoplePickerProps,
+    IIconProps
+} from 'office-ui-fabric-react';
+// import { FabPeoplePickerComponent } from '@angular-react/fabric/public-api';
+import { from } from 'rxjs';
+
 
 @Component({
     selector: 'home',
@@ -92,6 +109,7 @@ export class HomeComponent implements OnInit {
 
         this.logService.logEvent("telemetry service logging", {});
         this.kustologgingService.logEvent("kusto telemetry service logging", {});
+
 
         initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
         

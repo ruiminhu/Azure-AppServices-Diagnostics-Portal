@@ -137,6 +137,7 @@ export class DetectorViewComponent implements OnInit {
         // this.hideDetectorHeader = data.dataset.findIndex(set => (<Rendering>set.renderingProperties).type === RenderingType.Cards) >= 0;
       }
     });
+    console.log("local copy and error state", this.detectorDataLocalCopy, this.errorState);
   }
 
   toggleButtonView(feature: string) {

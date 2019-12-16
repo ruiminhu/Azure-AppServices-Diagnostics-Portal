@@ -130,7 +130,7 @@ export class TimeSeriesGraphComponent extends DataRenderBaseComponent implements
 
                 lastTimeStamp = timestamp;
 
-                if (row[columnIndex] != null) {
+                if (columnIndex > -1 && row[columnIndex] != null) {
                     const point: TablePoint = <TablePoint>{
                         timestamp: timestamp,
                         value: parseFloat(row[columnIndex]),

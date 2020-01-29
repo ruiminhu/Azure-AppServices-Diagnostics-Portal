@@ -3,6 +3,7 @@ import 'nvd3';
 import { DetectorControlService } from './services/detector-control.service';
 import { DiagnosticService } from './services/diagnostic.service';
 import { GenericSupportTopicService } from './services/generic-support-topic.service';
+import { GenericContentService } from './services/generic-content.service';
 import { TelemetryService } from './services/telemetry/telemetry.service';
 import { NvD3Module } from 'ng2-nvd3';
 import { MarkdownModule } from 'ngx-markdown';
@@ -79,6 +80,12 @@ import { DetectorListAnalysisComponent } from './components/detector-list-analys
 import { AppDependenciesComponent } from './components/app-dependencies/app-dependencies.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { HighchartsGraphComponent } from './components/highcharts-graph/highcharts-graph.component';
+import { CXPChatService } from './services/cxp-chat.service';
+import { CxpChatLauncherComponent } from './components/cxp-chat-launcher/cxp-chat-launcher.component';
+import { AppInsightsEnablementComponent } from './components/app-insights-enablement/app-insights-enablement.component';
+import { ConnectAppInsightsComponent } from './components/connect-app-insights/connect-app-insights.component';
+import {DetectorSearchComponent} from './components/detector-search/detector-search.component';
+import {WebSearchComponent} from './components/web-search/web-search.component';
 
 @NgModule({
   imports: [
@@ -96,7 +103,7 @@ import { HighchartsGraphComponent } from './components/highcharts-graph/highchar
   ],
   declarations: [
     Nvd3GraphComponent, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent,
-    DataRenderBaseComponent, DataContainerComponent, TimeSeriesInstanceGraphComponent, DetectorViewComponent,
+    DataRenderBaseComponent, DataContainerComponent, TimeSeriesInstanceGraphComponent, DetectorViewComponent, DetectorSearchComponent,
     DataSummaryComponent, EmailComponent, InsightsComponent, LoaderViewComponent, DynamicInsightComponent,
     MarkdownViewComponent, DetectorListComponent, DetectorOrderPipe, StarRatingComponent, StarRatingFeedbackComponent,
     DropdownComponent, StatusIconComponent, DetectorControlComponent, DetectorContainerComponent, InternalPipe,
@@ -110,10 +117,14 @@ import { HighchartsGraphComponent } from './components/highcharts-graph/highchar
     DetectorListAnalysisComponent,
     AppDependenciesComponent,
     AppInsightsMarkdownComponent,
-    HighchartsGraphComponent
+    HighchartsGraphComponent,
+    CxpChatLauncherComponent,
+    AppInsightsEnablementComponent,
+    ConnectAppInsightsComponent,
+    WebSearchComponent
   ],
   exports: [
-    FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent,
+    FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent, DetectorSearchComponent,
     DataSummaryComponent, LoaderViewComponent, StatusIconComponent, DetectorControlComponent,
     DetectorContainerComponent, InternalPipe, CommAlertComponent, GuageControlComponent, SolutionComponent,
     FormComponent, VerticalDisplayListComponent, VerticalDisplayListItemComponent, SolutionTypeTagComponent, DataContainerComponent,
@@ -121,7 +132,11 @@ import { HighchartsGraphComponent } from './components/highcharts-graph/highchar
     ChangesetsViewComponent,
     ChangesViewComponent,
     DetectorListAnalysisComponent,
-    AppInsightsMarkdownComponent
+    AppInsightsMarkdownComponent,
+    CxpChatLauncherComponent,
+    AppInsightsEnablementComponent,
+    ConnectAppInsightsComponent,
+    WebSearchComponent
   ],
 })
 export class DiagnosticDataModule {
@@ -131,7 +146,9 @@ export class DiagnosticDataModule {
       providers: [
         DiagnosticService,
         GenericSupportTopicService,
+        GenericContentService,
         { provide: DIAGNOSTIC_DATA_CONFIG, useValue: config },
+        CXPChatService,
         KustoTelemetryService,
         AppInsightsTelemetryService,
         TelemetryService,

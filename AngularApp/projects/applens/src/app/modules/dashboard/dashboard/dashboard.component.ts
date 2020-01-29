@@ -13,6 +13,7 @@ import { SearchService } from '../services/search.service';
 import { v4 as uuid } from 'uuid';
 import { environment } from '../../../../environments/environment';
 import {DiagnosticApiService} from '../../../shared/services/diagnostic-api.service';
+import { ObserverService } from '../../../shared/services/observer.service';
 
 @Component({
   selector: 'dashboard',
@@ -39,7 +40,7 @@ export class DashboardComponent implements OnDestroy {
 
   constructor(public resourceService: ResourceService, private _detectorControlService: DetectorControlService,
     private _router: Router, private _activatedRoute: ActivatedRoute, private _navigator: FeatureNavigationService,
-    private _diagnosticService: ApplensDiagnosticService, private _adalService: AdalService, public ngxSmartModalService: NgxSmartModalService, private startupService: StartupService, public _searchService: SearchService, private _diagnosticApiService: DiagnosticApiService) {
+    private _diagnosticService: ApplensDiagnosticService, private _adalService: AdalService, public ngxSmartModalService: NgxSmartModalService, private startupService: StartupService, public _searchService: SearchService, private _diagnosticApiService: DiagnosticApiService, private _observerService: ObserverService) {
     this.contentHeight = (window.innerHeight - 50) + 'px';
 
     this.navigateSub = this._navigator.OnDetectorNavigate.subscribe((detector: string) => {
@@ -73,7 +74,9 @@ export class DashboardComponent implements OnDestroy {
         this._searchService.searchTerm = this._activatedRoute.snapshot.queryParams['searchTerm'];
         routeParams['searchTerm'] = this._activatedRoute.snapshot.queryParams['searchTerm'];
       }
-      this._router.navigate([], { queryParams: routeParams, relativeTo: this._activatedRoute });
+
+
+      this._router.navigate([], { queryParams: routeParams, queryParamsHandling: 'merge', relativeTo: this._activatedRoute });
     }
 
     if((this.showUserInformation = environment.adal.enabled)){
@@ -82,7 +85,7 @@ export class DashboardComponent implements OnDestroy {
       this._diagnosticService.getUserPhoto(this.userId).subscribe(image => {
         this.userPhotoSource = image;
       });
-  
+
       this._diagnosticService.getUserInfo(this.userId).subscribe((userInfo: UserInfo) => {
         this.userName = userInfo.givenName;
         this.displayName = userInfo.displayName;
@@ -104,7 +107,12 @@ export class DashboardComponent implements OnDestroy {
         else if (serviceInputs.resourceType.toString() === 'Microsoft.Web/sites')
         {
             this._diagnosticApiService.GeomasterServiceAddress = this.resource["GeomasterServiceAddress"];
+            this._diagnosticApiService.Location = this.resource["WebSpace"];
             this.observerLink = "https://wawsobserver.azurewebsites.windows.net/sites/"+ this.resource.SiteName;
+
+            if (resource['IsXenon']) {
+                this.resourceService.imgSrc = this.resourceService.altIcons['Xenon'];
+            }
         }
 
         this.keys = Object.keys(this.resource);
@@ -145,6 +153,19 @@ export class DashboardComponent implements OnDestroy {
   }
 
   openResourceInfoModal() {
+    if (this.keys.indexOf('VnetName') == -1)
+    {
+      this._observerService.getSiteRequestDetails(this.resource.SiteName, this.resource.StampName).subscribe(siteInfo => {
+        this.resource['VnetName'] = siteInfo.details.vnetname;
+        this.keys.push('VnetName');
+
+        if (this.resource['IsLinux'])
+        {
+          this.resource['LinuxFxVersion'] = siteInfo.details.linuxfxversion;
+          this.keys.push('LinuxFxVersion');
+        }
+      });
+    }
     this.ngxSmartModalService.getModal('resourceInfoModal').open();
   }
 
@@ -166,4 +187,3 @@ export class FormatResourceNamePipe implements PipeTransform {
         return displayedResourceName;
     }
 }
-

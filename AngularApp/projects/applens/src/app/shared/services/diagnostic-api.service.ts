@@ -16,6 +16,7 @@ export class DiagnosticApiService {
 
   public readonly localDiagnosticApi = "http://localhost:5000/";
   public GeomasterServiceAddress: string = null;
+  public GeomasterName: string = null;
   public Location: string = null;
 
   constructor(private _httpClient: HttpClient, private _cacheService: CacheService,
@@ -255,6 +256,13 @@ export class DiagnosticApiService {
 
     if (this.GeomasterServiceAddress)
       headers = headers.set("x-ms-geomaster-hostname", this.GeomasterServiceAddress);
+
+    if (this.GeomasterName)
+    headers = headers.set("x-ms-geomaster-name", this.GeomasterName);
+
+    if (emailRecipients !== "") {
+      headers = headers.set('x-ms-emailRecipients', emailRecipients);
+    }
 
     if (path) {
       headers = headers.set('x-ms-path-query', path);

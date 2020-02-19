@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { DIAGNOSTIC_DATA_CONFIG, DiagnosticDataConfig } from '../../config/diagnostic-data-config';
 import { DetectorResponse, Rendering, RenderingType, DetectorMetaData, DetectorType, DiagnosticData } from '../../models/detector';
 import { DetectorControlService } from '../../services/detector-control.service';
@@ -102,11 +102,6 @@ export class DetectorViewComponent implements OnInit {
     this.detectorResponseSubject.subscribe((data: DetectorResponse) => {
       let metadata: DetectorMetaData = data? data.metadata: null;
       this.detectorDataLocalCopy = data;
-      if (metadata && (metadata.type == DetectorType.Analysis) && this.isAnalysisView){
-        // Create a copy of the cached response because we are modifying it
-        this.detectorDataLocalCopy = JSON.parse(JSON.stringify(data));
-        this.detectorDataLocalCopy.dataset = this.detectorDataLocalCopy.dataset.filter((ds: DiagnosticData) => (ds.renderingProperties.type !== RenderingType.SearchComponent));
-      }
       if (data) {
         this.detectorEventProperties = {
           'StartTime': String(this.startTime),
@@ -336,4 +331,17 @@ export class DetectorViewComponent implements OnInit {
     }
   }
 
+}
+
+@Pipe({
+  name: 'renderfilter',
+  pure: false
+})
+export class RenderFilterPipe implements PipeTransform {
+  transform(items: DiagnosticData[], isAnalysisView: any): any {
+      if (!items || !isAnalysisView) {
+          return items;
+      }
+      return items.filter(item => !((item.renderingProperties.type === RenderingType.SearchComponent) && isAnalysisView));
+  }
 }

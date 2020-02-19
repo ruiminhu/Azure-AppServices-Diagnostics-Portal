@@ -342,6 +342,9 @@ export class RenderFilterPipe implements PipeTransform {
       if (!items || !isAnalysisView) {
           return items;
       }
-      return items.filter(item => !((item.renderingProperties.type === RenderingType.SearchComponent) && isAnalysisView));
+      if (isAnalysisView)
+      return items.filter(item => item.renderingProperties.type !== RenderingType.SearchComponent);
+      else
+      return items;
   }
 }

@@ -43,7 +43,7 @@
     <hr>
   </div>
 
-  <div *ngFor="let data of detectorDataLocalCopy.dataset" class="dynamic-data-container">
+  <div *ngFor="let data of detectorDataLocalCopy.dataset | renderfilter:isAnalysisView" class="dynamic-data-container">
     <dynamic-data [isAnalysisView]="isAnalysisView" [diagnosticData]="data" [startTime]="startTime" [endTime]="endTime" [detectorEventProperties]="detectorEventProperties"
     [developmentMode]="developmentMode" [executionScript]="script" [detector]="detector" [compilationPackage]="compilationPackage"></dynamic-data>
   </div>
@@ -52,6 +52,8 @@
 <data-container *ngIf="!isAnalysisView && supportDocumentRendered" [title]="'Recommended Docs'">
   <markdown *ngIf="supportDocumentContent.length>0" #markdownDiv [data]="supportDocumentContent"></markdown>
 </data-container>
+
+<cxp-chat-launcher *ngIf="showChatButton()" [trackingId] = "cxpChatTrackingId" [chatUrl] = "cxpChatUrl" ></cxp-chat-launcher>
 
 <loader-view style="margin-top:300px" *ngIf="!detectorDataLocalCopy && !errorState" message="Loading Detector..."></loader-view>
 

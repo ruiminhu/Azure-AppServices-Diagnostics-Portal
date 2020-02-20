@@ -23,7 +23,8 @@ import { TabDevelopComponent } from './tabs/tab-develop/tab-develop.component';
 import { ApplensDiagnosticService } from './services/applens-diagnostic.service';
 import { ApplensCommsService } from './services/applens-comms.service';
 import { ApplensSupportTopicService } from './services/applens-support-topic.service';
-import { DiagnosticService, DiagnosticDataModule, CommsService, DetectorControlService, GenericSupportTopicService } from 'diagnostic-data';
+import { ApplensContentService } from './services/applens-content.service';
+import { DiagnosticService, DiagnosticDataModule, CommsService, DetectorControlService, GenericSupportTopicService, GenericContentService } from 'diagnostic-data';
 import { CollapsibleMenuModule } from '../../collapsible-menu/collapsible-menu.module';
 import { ObserverService } from '../../shared/services/observer.service';
 import { TabDataSourcesComponent } from './tabs/tab-data-sources/tab-data-sources.component';
@@ -51,6 +52,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { Sort } from '../../shared/pipes/sort.pipe';
 import { SearchService } from './services/search.service';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { ConfigurationComponent } from './configuration/configuration.component';
 
 @Injectable()
 export class InitResolver implements Resolve<Observable<boolean>>{
@@ -221,6 +223,10 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
             {
               path: 'search',
               component: SearchResultsComponent
+            },
+            {
+                path: 'kustoConfig',
+                component: ConfigurationComponent
             }
         ]
     },
@@ -248,6 +254,7 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         SearchService,
         ApplensCommsService,
         ApplensSupportTopicService,
+        ApplensContentService,
         InitResolver,
         {
             provide: ResourceService,
@@ -256,6 +263,7 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         },
         { provide: DiagnosticService, useExisting: ApplensDiagnosticService },
         { provide: GenericSupportTopicService, useExisting: ApplensSupportTopicService},
+        { provide: GenericContentService, useExisting: ApplensContentService},
         { provide: CommsService, useExisting: ApplensCommsService },
         { provide: DiagnosticSiteService, useExisting: ResourceService },
         { provide: SolutionService, useExisting: GenericSolutionService }
@@ -264,6 +272,6 @@ export const DashboardModuleRoutes: ModuleWithProviders = RouterModule.forChild(
         SearchMenuPipe, TabDataComponent, TabDevelopComponent, TabCommonComponent, TabDataSourcesComponent, TabMonitoringComponent,
         TabMonitoringDevelopComponent, TabAnalyticsDevelopComponent, TabAnalyticsDashboardComponent, GistComponent, TabGistCommonComponent,
         TabGistDevelopComponent, TabChangelistComponent, GistChangelistComponent, TabAnalysisComponent, CategoryPageComponent, SupportTopicPageComponent,
-        SelfHelpContentComponent, UserProfileComponent, FormatResourceNamePipe, Sort, SearchResultsComponent]
+        SelfHelpContentComponent, UserProfileComponent, FormatResourceNamePipe, Sort, SearchResultsComponent, ConfigurationComponent]
 })
 export class DashboardModule { }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { SharedV2Module } from '../shared-v2/shared-v2.module';
-import { GenericSupportTopicService} from 'diagnostic-data';
+import { GenericSupportTopicService, GenericContentService} from 'diagnostic-data';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryChatComponent } from './components/category-chat/category-chat.component';
 import { CategoryTileComponent } from './components/category-tile/category-tile.component';
@@ -21,7 +21,9 @@ import { GenericAnalysisComponent } from '../shared/components/generic-analysis/
 import { DiagnosticsSettingsComponent } from './components/diagnostics-settings/diagnostics-settings.component';
 import { SupportTopicService } from '../shared-v2/services/support-topic.service';
 import { MarkdownModule } from 'ngx-markdown';
+import { CXPChatService } from 'diagnostic-data' ;
 import { PortalReferrerResolverComponent } from '../shared/components/portal-referrer-resolver/portal-referrer-resolver.component';
+import { CXPChatCallerService } from '../shared-v2/services/cxp-chat-caller.service';
 
 export const HomeRoutes = RouterModule.forChild([
   {
@@ -193,8 +195,10 @@ export const HomeRoutes = RouterModule.forChild([
     MarkdownModule.forRoot()
   ],
   declarations: [HomeComponent, CategoryChatComponent, CategoryTileComponent, SearchResultsComponent, SupportTopicRedirectComponent, DiagnosticsSettingsComponent],
-  providers: [CategoryTabResolver, CategoryChatResolver, TimeControlResolver,
-    { provide: GenericSupportTopicService, useExisting: SupportTopicService}
+  providers: [CategoryTabResolver, CategoryChatResolver, TimeControlResolver, ContentService,
+    { provide: GenericSupportTopicService, useExisting: SupportTopicService},
+    { provide: GenericContentService, useExisting: ContentService}, 
+    { provide: CXPChatService, useExisting: CXPChatCallerService},
   ]
 })
 export class HomeModule { }

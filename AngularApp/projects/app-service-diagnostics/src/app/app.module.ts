@@ -1,6 +1,6 @@
 import {
     CommsService, DiagnosticDataModule, DiagnosticService, DiagnosticSiteService,
-    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService
+    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService, BackendCtrlQueryService
 } from 'diagnostic-data';
 import { SiteService } from 'projects/app-service-diagnostics/src/app/shared/services/site.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,6 +33,7 @@ import { PortalSettingsService } from './shared/services/settings.service';
 import { AppInsightsService } from './shared/services/appinsights/appinsights.service';
 import { AppInsightsQueryService } from './../../../diagnostic-data/src/lib/services/appinsights.service';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { BackendCtrlService } from './shared/services/backend-ctrl.service';
 
 @NgModule({
   imports: [
@@ -69,7 +70,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
     { provide: DiagnosticService,
       useFactory: (_localBackendService: LocalBackendService, _genericApiService: GenericApiService) => environment.useApplensBackend ? _localBackendService : _genericApiService,
       deps: [LocalBackendService, GenericApiService] },
-    { provide: CommsService, useExisting: GenericCommsService },
+    { provide: CommsService, useExisting: GenericCommsService },    
     { provide: AppInsightsQueryService, useExisting: AppInsightsService },
     { provide: DiagnosticSiteService, useExisting: SiteService },
     {
@@ -77,7 +78,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
       useClass: UnhandledExceptionHandlerService
     },
     { provide: SolutionService, useExisting: GenericSolutionService },
-    { provide: SettingsService, useExisting: PortalSettingsService}
+    { provide: SettingsService, useExisting: PortalSettingsService},
+    { provide: BackendCtrlQueryService, useExisting: BackendCtrlService}
   ],
   bootstrap: [AppComponent]
 })

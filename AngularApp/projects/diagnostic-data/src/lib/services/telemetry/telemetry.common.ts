@@ -29,10 +29,19 @@ export const TelemetryEventNames = {
     SearchQueryResults: 'SearchQueryResults',
     SearchResultClicked: 'SearchResultClicked',
     SearchResultFeedback: 'SearchResultFeedback',
+    WebQueryResults: 'WebQueryResults',
+    WebQueryResultClicked: 'WebQueryResultClicked',
     AuthorSelectSearchTerm: 'AuthorSelectSearchTerm',
     AuthorCreateSearchTerm: 'AuthorCreateSearchTerm',
     AuthorRemoveSearchTerm: 'AuthorRemoveSearchTerm',
-    DependencyGraphClick: 'DependencyGraphClick'
+    DependencyGraphClick: 'DependencyGraphClick',
+    GetCXPChatAvailability: 'GetCXPChatAvailability',
+    BuildCXPChatUrl: 'BuildCXPChatUrl',
+    GetCXPChatURL: 'GetCXPChatURL',
+    CXPChatUserAction: 'CXPChatUserAction',
+    CXPChatEligibilityCheck: 'CXPChatEligibilityCheck',
+    AppInsightsConnectionError: 'AppInsightsConnectionError',
+    AppInsightsConnected: 'AppInsightsConnected'
 };
 
 export interface ITelemetryProvider {

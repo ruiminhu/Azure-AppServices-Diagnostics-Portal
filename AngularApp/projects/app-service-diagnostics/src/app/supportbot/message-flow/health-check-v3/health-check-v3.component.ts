@@ -31,10 +31,10 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
   healthCheckpoints: any[];
   selectedCategoryIndex: number = 0;
   healthCheckResultForLogging: string[] = [];
+  resourceId:string = "";
 
   currentSite: Site;
-  options:IChoiceGroupOption[] = [];
-  showChoiceGroup: boolean = false;
+
   constructor(private _route: ActivatedRoute, private _diagnosticService: DiagnosticService, public detectorControlService: DetectorControlService, private _logger: BotLoggingService, private _siteService: SiteService,
     private _router: Router) {
     this.showLoadingMessage = true;
@@ -42,6 +42,7 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
 
     this._siteService.currentSite.subscribe(site => {
       const checkpoints: any[] = [];
+      this.resourceId = site.id;
 
       checkpoints.push({
         category: 'availability',
@@ -86,19 +87,15 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
       }
       this.healthCheckpoints = checkpoints;
       this.healthCheckpointsSubject.next(checkpoints);
-      this.healthCheckpoints.forEach((healthCheckPoint,index) => {
-        const optionItem:IChoiceGroupOption = {key:String(index),text:healthCheckPoint.title};
-        this.options.push(optionItem);
-      })
     });
   }
 
   ngOnInit(): void {
 
-    this.subscriptionId = this._route.parent.snapshot.params['subscriptionid'];
-    this.resourceGroup = this._route.parent.snapshot.params['resourcegroup'];
-    this.siteName = this._route.parent.snapshot.params['resourcename'];
-    this.slotName = this._route.parent.snapshot.params['slot'] ? this._route.parent.snapshot.params['slot'] : '';
+    this.subscriptionId = this._route.snapshot.params['subscriptionid'];
+    this.resourceGroup = this._route.snapshot.params['resourcegroup'];
+    this.siteName = this._route.snapshot.params['resourcename'];
+    this.slotName = this._route.snapshot.params['slot'] ? this._route.snapshot.params['slot'] : '';
 
     this._loadData();
   }
@@ -152,9 +149,5 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
     const slot = this.slotName && this.slotName != '' ? `/slots/${this.slotName}` : '';
     this._router.navigateByUrl(`resource/subscriptions/${this.subscriptionId}/resourcegroups/${this.resourceGroup}/providers/microsoft.web/sites/${this.siteName}${slot}/${href}`);
     this.logFullReportClick(title);
-  }
-  setCategoryIndex(event:any) {
-    const categoryIndex = event.option.key;
-    this.selectedCategoryIndex = categoryIndex;
   }
 }

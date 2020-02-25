@@ -25,7 +25,7 @@ export class FeatureService {
     this._authService.getStartupInfo().subscribe(startupInfo => {
       this._diagnosticApiService.getDetectors().subscribe(detectors => {
         this._detectors = detectors;
-        console.log("detectors in feature services", detectors);
+        // console.log("detectors in feature services", detectors);
         detectors.forEach(detector => {
           if ((detector.category && detector.category.length > 0) ||
             (detector.description && detector.description.length > 0)) {
@@ -127,7 +127,7 @@ export class FeatureService {
     else {
       categoryId = currentCategoryId;
     }
-    console.log("category in feature service",this.categories,name,categoryId,currentCategoryId);
+    // console.log("category in feature service",this.categories,name,categoryId,currentCategoryId);
     return categoryId;
 
   }

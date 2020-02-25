@@ -10,6 +10,7 @@ import { TelemetryService } from '../../services/telemetry/telemetry.service';
 import { CompilationProperties} from '../../models/compilation-properties';
 import {GenericSupportTopicService} from '../../services/generic-support-topic.service';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { VersionTestService } from 'projects/app-service-diagnostics/src/app/fabric-ui/version-test.service';
 
 @Component({
   selector: 'detector-view',
@@ -79,21 +80,28 @@ export class DetectorViewComponent implements OnInit {
   @Input() isCategoryOverview:boolean = false;
   feedbackButtonLabel: string = 'Send Feedback';
   hideDetectorControl: boolean = false;
-
+  private isLegacy:boolean;
   constructor(@Inject(DIAGNOSTIC_DATA_CONFIG) config: DiagnosticDataConfig, private telemetryService: TelemetryService,
-    private detectorControlService: DetectorControlService, private _supportTopicService: GenericSupportTopicService, protected _route: ActivatedRoute) {
+    private detectorControlService: DetectorControlService, private _supportTopicService: GenericSupportTopicService, protected _route: ActivatedRoute,private versionTestService:VersionTestService) {
     this.isPublic = config && config.isPublic;
     this.feedbackButtonLabel = this.isPublic ? 'Send Feedback' : 'Rate Detector';
   }
 
   ngOnInit() {
+    this.isLegacy = this.versionTestService.getIsLegcy();
     this.loadDetector();
     this.errorSubject.subscribe((data: any) => {
       this.errorState = data;
     });
 
     // If it is using the new route, don't show those buttons
-    this.hideDetectorControl = this._route.snapshot.parent.url.findIndex((x: UrlSegment) => x.path === 'categories') > -1;
+    // this.hideDetectorControl = this._route.snapshot.parent.url.findIndex((x: UrlSegment) => x.path === 'categories') > -1;
+    //Remove after A/B Test
+    if (this.isLegacy) {
+      this.hideDetectorControl = false;
+    } else {
+      this.hideDetectorControl = this._route.snapshot.parent.url.findIndex((x: UrlSegment) => x.path === 'categories') > -1;
+    }
 
     // The detector name can be retrieved from  url column of application insight resource pageviews table.
     if (!this.insideDetectorList) {

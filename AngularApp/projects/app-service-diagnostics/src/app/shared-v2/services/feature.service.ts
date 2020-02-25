@@ -10,6 +10,7 @@ import { SiteService } from '../../shared/services/site.service';
 import { CategoryService } from '../../shared-v2/services/category.service';
 import { PortalActionService } from '../../shared/services/portal-action.service';
 import { StartupInfo } from '../../shared/models/portal';
+import { VersionTestService } from '../../fabric-ui/version-test.service';
 
 @Injectable()
 export class FeatureService {
@@ -19,8 +20,10 @@ export class FeatureService {
   protected _features: Feature[] = [];
   protected _featureDisplayOrder = [];
   private categories: Category[] = [];
+  protected isLegacy:boolean;
   constructor(protected _diagnosticApiService: DiagnosticService, protected _contentService: ContentService, protected _router: Router, protected _authService: AuthService,
-    protected _logger: LoggingV2Service, protected _siteService: SiteService, protected _categoryService: CategoryService, protected _activatedRoute: ActivatedRoute,protected _portalActionService:PortalActionService) {
+    protected _logger: LoggingV2Service, protected _siteService: SiteService, protected _categoryService: CategoryService, protected _activatedRoute: ActivatedRoute,protected _portalActionService:PortalActionService,protected versionTestService:VersionTestService) {
+    this.isLegacy = this.versionTestService.getIsLegcy();
     this._categoryService.categories.subscribe(categories => this.categories = categories);
     this._authService.getStartupInfo().subscribe(startupInfo => {
       this._diagnosticApiService.getDetectors().subscribe(detectors => {
@@ -38,7 +41,13 @@ export class FeatureService {
                 featureType: FeatureTypes.Detector,
                 name: detector.name,
                 clickAction: this._createFeatureAction(detector.name, detector.category, () => {
-                  this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Detector);
+                  //Remove after A/B test
+                  if (this.isLegacy) {
+                    this._router.navigateByUrl(`resource${startupInfo.resourceId}/detectors/${detector.id}`);
+                  } else {
+                    this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Detector);
+                  }
+                  // this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Detector);
                 })
               });
             } else {
@@ -49,7 +58,12 @@ export class FeatureService {
                 featureType: FeatureTypes.Detector,
                 name: detector.name,
                 clickAction: this._createFeatureAction(detector.name, detector.category, () => {
-                  this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Analysis);
+                  if (this.isLegacy) {
+                    this._router.navigateByUrl(`resource${startupInfo.resourceId}/analysis/${detector.id}`);
+                  } else {
+                    this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Analysis);
+                  }
+                  // this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Analysis);
                 })
               });
             }
@@ -97,9 +111,17 @@ export class FeatureService {
 
     searchValue = searchValue.toLowerCase();
     return this._features.filter(feature => {
-      return feature.name.toLowerCase().indexOf(searchValue) != -1
+      //Remove after A/B Test
+      if (this.isLegacy) {
+        return feature.name.toLowerCase().indexOf(searchValue) != -1
+        || (feature.category && feature.category.toLowerCase().indexOf(searchValue) != -1)
+      || (feature.description && feature.description.toLowerCase().indexOf(searchValue) != -1);
+      } else {
+        return feature.name.toLowerCase().indexOf(searchValue) != -1
         || (feature.category && feature.category.toLowerCase().indexOf(searchValue) != -1);
       // || (feature.description && feature.description.toLowerCase().indexOf(searchValue) != -1);
+      }
+      
     });
   }
   getCategoryIdByhDetectorId(detectorId: string): string {

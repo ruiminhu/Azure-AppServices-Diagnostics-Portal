@@ -529,8 +529,7 @@ export const HomeRoutes = RouterModule.forChild([
             MetricsPerInstanceAppServicePlanResolver,
             AdvanceApplicationRestartResolver,
             SecurityScanningResolver,
-            { provide: GenericSupportTopicService, useExisting: SupportTopicService },
-            VersionTestService
+            { provide: GenericSupportTopicService, useExisting: SupportTopicService }
         ],
     // exports: [GeniePanelComponent]
 })

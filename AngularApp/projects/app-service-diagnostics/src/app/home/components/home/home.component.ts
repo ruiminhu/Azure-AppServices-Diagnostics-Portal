@@ -199,9 +199,9 @@ export class HomeComponent implements OnInit {
       this.searchResultCount = 0;
   }
 
-  updateSearchValue(searchValue:{newValue:string}) {
+  updateSearchValue(searchValue:string) {
       console.log("fab-search-box",searchValue);
-      this.searchValue = searchValue.newValue;
+      this.searchValue = searchValue;
 
       if (this.searchLogTimout) {
           clearTimeout(this.searchLogTimout);

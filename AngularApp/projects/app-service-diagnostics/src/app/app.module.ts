@@ -54,6 +54,7 @@ import { SupportTopicService } from './shared-v2/services/support-topic.service'
 import { ResourceResolver } from './home/resolvers/resource.resolver';
 import { ResourcesModule } from './resources/resources.module';
 import { WebSitesModule } from './resources/web-sites/web-sites.module';
+import { VersionTestService } from './fabric-ui/version-test.service';
 // import {
 //   FabBreadcrumbModule,
 //   FabButtonModule,
@@ -208,7 +209,8 @@ import { WebSitesModule } from './resources/web-sites/web-sites.module';
     LoggingV2Service,
     LiveChatService,
     SupportTopicService,
-    ResourceResolver
+    ResourceResolver,
+    VersionTestService
   ],
   bootstrap: [AppComponent]
 })

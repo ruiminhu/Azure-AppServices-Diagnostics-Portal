@@ -9,7 +9,7 @@ export class VersionTestService {
   constructor(private _activatedRoute: ActivatedRoute) {
     const subscriptionId: string = this._activatedRoute.root.firstChild.firstChild.snapshot.params['subscriptionid'];
     // this.useLegcy = VersioningHelper.isV2Subscription(subId);
-    this.useLegcy = DemoSubscriptions.betaSubscriptions.findIndex(item => subscriptionId.toLowerCase() === item.toLowerCase()) > -1;
+    this.useLegcy = DemoSubscriptions.betaSubscriptions.findIndex(item => subscriptionId.toLowerCase() === item.toLowerCase()) === -1;
   }
   public getIsLegcy() {
     return this.useLegcy;

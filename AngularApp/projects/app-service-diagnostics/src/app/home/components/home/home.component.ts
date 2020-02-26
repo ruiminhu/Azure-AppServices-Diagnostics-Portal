@@ -26,16 +26,16 @@ import { DemoSubscriptions } from "../../../betaSubscriptions";
 // import { FabSearchBoxModule } from '@angular-react/fabric';
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import {
-  ICalendarStrings,
-  IContextualMenuProps,
-  ISelection,
-  Selection,
-  DropdownMenuItemType,
-  IDropdownOption,
-  ICheckboxProps,
-  IPersonaProps,
-  IPeoplePickerProps,
-  IIconProps
+    ICalendarStrings,
+    IContextualMenuProps,
+    ISelection,
+    Selection,
+    DropdownMenuItemType,
+    IDropdownOption,
+    ICheckboxProps,
+    IPersonaProps,
+    IPeoplePickerProps,
+    IIconProps
 } from 'office-ui-fabric-react';
 // import { FabPeoplePickerComponent } from '@angular-react/fabric/public-api';
 import { from } from 'rxjs';
@@ -44,9 +44,9 @@ import { VersionTestService } from '../../../fabric-ui/version-test.service';
 
 
 @Component({
-  selector: 'home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
     useLegacy: boolean = true;
@@ -63,16 +63,16 @@ export class HomeComponent implements OnInit {
     providerRegisterUrl: string;
     get inputAriaLabel(): string {
         return this.searchValue !== '' ?
-          `${this.searchResultCount} Result` + (this.searchResultCount !== 1 ? 's' : '') :
-          '';
-      }
+            `${this.searchResultCount} Result` + (this.searchResultCount !== 1 ? 's' : '') :
+            '';
+    }
 
     get isIE_Browser(): boolean {
-      return /msie\s|trident\//i.test(window.navigator.userAgent);
+        return /msie\s|trident\//i.test(window.navigator.userAgent);
     }
 
     get isPublicAzure(): boolean {
-      return ((window.location != window.parent.location) ? document.referrer : document.location.href).includes("azure.com");
+        return ((window.location != window.parent.location) ? document.referrer : document.location.href).includes("azure.com");
     }
 
     constructor(private _resourceService: ResourceService, private _categoryService: CategoryService, private _notificationService: NotificationService, private _router: Router,
@@ -83,9 +83,7 @@ export class HomeComponent implements OnInit {
         // this.useLegacy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subscriptionId.toLowerCase() === item.toLowerCase()) > -1;
         this.useLegacy = this.versionTestService.getIsLegcy();
         // this.useLegacy = false;
-      //  this.useLegacy = true;
-
-        //  !VersioningHelper.isV2Subscription(this.subscriptionId);
+        //  this.useLegacy = true;
 
         if (_resourceService.armResourceConfig && _resourceService.armResourceConfig.homePageText
             && _resourceService.armResourceConfig.homePageText.title && _resourceService.armResourceConfig.homePageText.title.length > 1
@@ -137,130 +135,129 @@ export class HomeComponent implements OnInit {
             };
         }
 
-    if (_resourceService.armResourceConfig) {
-      this._categoryService.initCategoriesForArmResource(_resourceService.resource.id);
-    }
-
-    this._categoryService.categories.subscribe(categories => this.categories = categories);
-
-    this._authService.getStartupInfo().subscribe(startupInfo => {
-        if (startupInfo.additionalParameters && Object.keys(startupInfo.additionalParameters).length > 0) {
-          let path = 'resource' + startupInfo.resourceId.toLowerCase();
-          path = this._updateRouteBasedOnAdditionalParameters(path, startupInfo.additionalParameters);
-          if (path) {
-            this._router.navigateByUrl(path);
-          }
+        if (_resourceService.armResourceConfig) {
+            this._categoryService.initCategoriesForArmResource(_resourceService.resource.id);
         }
-      });
 
-    // this.globals.removeMsgFromLocalStorage();
-  }
+        this._categoryService.categories.subscribe(categories => this.categories = categories);
 
+        this._authService.getStartupInfo().subscribe(startupInfo => {
+            if (startupInfo.additionalParameters && Object.keys(startupInfo.additionalParameters).length > 0) {
+                let path = 'resource' + startupInfo.resourceId.toLowerCase();
+                path = this._updateRouteBasedOnAdditionalParameters(path, startupInfo.additionalParameters);
+                if (path) {
+                    this._router.navigateByUrl(path);
+                }
+            }
+        });
 
-  ngOnInit() {
-    this.resourceName = this._resourceService.resource.name;
-    this.providerRegisterUrl = `/subscriptions/${this.subscriptionId}/providers/Microsoft.ChangeAnalysis/register`;
-    if (!this._detectorControlService.startTime) {
-      this._detectorControlService.setDefault();
+        // this.globals.removeMsgFromLocalStorage();
     }
 
-    if (this._resourceService.resource.type === 'Microsoft.Web/sites') {
-      // Register Change Analysis Resource Provider.
-      this.armService.postResourceFullResponse(this.providerRegisterUrl, {}, true, '2018-05-01').subscribe((response: HttpResponse<{}>) => {
-        let eventProps = {
-          url: this.providerRegisterUrl
+
+    ngOnInit() {
+        this.resourceName = this._resourceService.resource.name;
+        this.providerRegisterUrl = `/subscriptions/${this.subscriptionId}/providers/Microsoft.ChangeAnalysis/register`;
+        if (!this._detectorControlService.startTime) {
+            this._detectorControlService.setDefault();
+        }
+
+        if (this._resourceService.resource.type === 'Microsoft.Web/sites') {
+            // Register Change Analysis Resource Provider.
+            this.armService.postResourceFullResponse(this.providerRegisterUrl, {}, true, '2018-05-01').subscribe((response: HttpResponse<{}>) => {
+                let eventProps = {
+                    url: this.providerRegisterUrl
+                };
+                this.kustologgingService.logEvent("Change Analysis Resource Provider registered", eventProps);
+            }, (error: any) => {
+                this.logHTTPError(error, 'registerResourceProvider');
+            });
+        }
+
+        if (!this._detectorControlService.startTime) {
+            this._detectorControlService.setDefault();
+        }
+
+        this.logService.logEvent("telemetry service logging", {});
+        this.kustologgingService.logEvent("kusto telemetry service logging", {});
+
+
+        initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
+
+    };
+
+
+    onSearchBoxFocus(event: any): void {
+        this.searchBoxFocus = true;
+    }
+
+    clearSearch() {
+        this.searchBoxFocus = false;
+        this.searchValue = '';
+        this.searchResultCount = 0;
+    }
+
+    updateSearchValue(searchValue: string) {
+        this.searchValue = searchValue;
+
+        if (this.searchLogTimout) {
+            clearTimeout(this.searchLogTimout);
+        }
+
+        this.searchLogTimout = setTimeout(() => {
+            this._logSearch();
+        }, 5000);
+    }
+
+    onResultCount(count: number) {
+        this.searchResultCount = count;
+    }
+
+    onSearchLostFocus() {
+        if (this.searchValue === '') {
+            this.searchResultCount = 0;
+        }
+    }
+
+    onFocusClear() {
+        if (this.searchValue === '') {
+            this.clearSearch();
+        }
+    }
+
+    private _updateRouteBasedOnAdditionalParameters(route: string, additionalParameters: any): string {
+        if (additionalParameters.featurePath) {
+            let featurePath: string = additionalParameters.featurePath;
+            featurePath = featurePath.startsWith('/') ? featurePath.replace('/', '') : featurePath;
+
+            return `${route}/${featurePath}`;
+        }
+
+        return null;
+    }
+
+    private _logSearch() {
+        this._logger.LogSearch(this.searchValue);
+    }
+
+    private logHTTPError(error: any, methodName: string): void {
+        let errorLoggingProps = {
+            errorMsg: error.message ? error.message : 'Server Error',
+            statusCode: error.status ? error.status : 500
         };
-        this.kustologgingService.logEvent("Change Analysis Resource Provider registered", eventProps);
-      }, (error: any) => {
-        this.logHTTPError(error, 'registerResourceProvider');
-      });
+        this.kustologgingService.logTrace('HTTP error in ' + methodName, errorLoggingProps);
     }
 
-    if (!this._detectorControlService.startTime) {
-      this._detectorControlService.setDefault();
+    openAvaAndPerf() {
+        const category = this.categories.find(category => category.name === "Availability and Performance");
+        if (category) {
+            this._portalService.openBladeDiagnoseCategoryBlade(category.id);
+        }
     }
 
-    this.logService.logEvent("telemetry service logging", {});
-    this.kustologgingService.logEvent("kusto telemetry service logging", {});
-
-
-    initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
-
-  };
-
-
-  onSearchBoxFocus(event: any): void {
-      this.searchBoxFocus = true;
-  }
-
-  clearSearch() {
-      this.searchBoxFocus = false;
-      this.searchValue = '';
-      this.searchResultCount = 0;
-  }
-
-  updateSearchValue(searchValue:string) {
-      console.log("fab-search-box",searchValue);
-      this.searchValue = searchValue;
-
-      if (this.searchLogTimout) {
-          clearTimeout(this.searchLogTimout);
-      }
-
-      this.searchLogTimout = setTimeout(() => {
-          this._logSearch();
-      }, 5000);
-  }
-
-  onResultCount(count: number) {
-      this.searchResultCount = count;
-  }
-
-  onSearchLostFocus() {
-      if (this.searchValue === '') {
-          this.searchResultCount = 0;
-      }
-  }
-
-  onFocusClear() {
-      if (this.searchValue === '') {
-          this.clearSearch();
-      }
-  }
-
-  private _updateRouteBasedOnAdditionalParameters(route: string, additionalParameters: any): string {
-    if (additionalParameters.featurePath) {
-      let featurePath: string = additionalParameters.featurePath;
-      featurePath = featurePath.startsWith('/') ? featurePath.replace('/', '') : featurePath;
-
-      return `${route}/${featurePath}`;
+    openGeniePanel() {
+        this.globals.openGeniePanel = true;
+        console.log(this.globals.openGeniePanel);
     }
-
-    return null;
-}
-
-private _logSearch() {
-  this._logger.LogSearch(this.searchValue);
-}
-
-private logHTTPError(error: any, methodName: string): void {
-  let errorLoggingProps = {
-    errorMsg: error.message ? error.message : 'Server Error',
-    statusCode: error.status ? error.status : 500
-  };
-  this.kustologgingService.logTrace('HTTP error in ' + methodName, errorLoggingProps);
-}
-
-  openAvaAndPerf() {
-      const category = this.categories.find(category => category.name === "Availability and Performance");
-      if(category) {
-        this._portalService.openBladeDiagnoseCategoryBlade(category.id);
-      }
-    }
-
-  openGeniePanel() {
-    this.globals.openGeniePanel = true;
-    console.log(this.globals.openGeniePanel);
-  }
 }
 

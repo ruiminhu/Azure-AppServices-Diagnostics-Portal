@@ -30,6 +30,7 @@ import { SummaryCardsComponent } from '../summary-cards/summary-cards.component'
 import { DropdownV4Component } from 'projects/app-service-diagnostics/src/app/fabric-ui/components/dropdown-v4/dropdown-v4.component';
 import { VersionTestService } from 'projects/app-service-diagnostics/src/app/fabric-ui/version-test.service';
 import { InsightsV4Component } from 'projects/app-service-diagnostics/src/app/fabric-ui/insights-v4/insights-v4.component';
+import { CardSelectionV4Component } from 'projects/app-service-diagnostics/src/app/fabric-ui/components/card-selection-v4/card-selection-v4.component';
 @Component({
   selector: 'dynamic-data',
   templateUrl: './dynamic-data.component.html',
@@ -38,7 +39,8 @@ import { InsightsV4Component } from 'projects/app-service-diagnostics/src/app/fa
     TimeSeriesGraphComponent, DataTableComponent, DataSummaryComponent, EmailComponent,
     InsightsComponent, TimeSeriesInstanceGraphComponent, DynamicInsightComponent, MarkdownViewComponent,
     DetectorListComponent, DropdownComponent, CardSelectionComponent, SolutionComponent, GuageControlComponent, FormComponent,
-    ChangeAnalysisOnboardingComponent, ChangesetsViewComponent, AppDependenciesComponent, AppInsightsMarkdownComponent, SummaryCardsComponent, DropdownV4Component, InsightsV4Component
+    ChangeAnalysisOnboardingComponent, ChangesetsViewComponent, AppDependenciesComponent, AppInsightsMarkdownComponent, SummaryCardsComponent, DropdownV4Component, InsightsV4Component,
+    CardSelectionV4Component
   ]
 })
 export class DynamicDataComponent implements OnInit {
@@ -106,7 +108,7 @@ export class DynamicDataComponent implements OnInit {
       case RenderingType.DropDown:
         return this.isLegacy ? DropdownComponent : DropdownV4Component;
       case RenderingType.Cards:
-        return CardSelectionComponent;
+        return this.isLegacy ? CardSelectionComponent : CardSelectionV4Component;
       case RenderingType.Solution:
         return SolutionComponent;
       case RenderingType.Guage:

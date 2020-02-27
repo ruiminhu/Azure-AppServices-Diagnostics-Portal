@@ -9,8 +9,6 @@ export class VersionService {
   constructor() {}
   
   public getIsLegcy():boolean {
-    return null;
+    return this.useLegcy;
   }
-
-  public updateSubId(){  }
 }

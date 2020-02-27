@@ -573,7 +573,6 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._portalActionService.openBladeAdvancedAppRestartBladeForCurrentSite();
             } else {
-              this._versionTestService.updateSubId();
               this.navigateTo(resourceId,ToolIds.AdvancedAppRestart);
             }
           })

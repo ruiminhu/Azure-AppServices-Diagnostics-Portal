@@ -77,18 +77,11 @@ export class HomeComponent implements OnInit {
 
     constructor(private _resourceService: ResourceService, private _categoryService: CategoryService, private _notificationService: NotificationService, private _router: Router,
         private _detectorControlService: DetectorControlService, private _featureService: FeatureService, private _logger: LoggingV2Service, private _authService: AuthService,
-<<<<<<< HEAD
-        private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService, private kustologgingService: PortalKustoTelemetryService, private _diagnosticService: DiagnosticService, private _portalService: PortalActionService, private globals: Globals) {
-
-        this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
-        this.useLegacy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subscriptionId.toLowerCase() === item.toLowerCase()) < 0;
-=======
         private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService, private kustologgingService: PortalKustoTelemetryService, private _diagnosticService: DiagnosticService, private _portalService: PortalActionService,private globals:Globals,private versionTestService:VersionTestService) {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
         // this.useLegacy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subscriptionId.toLowerCase() === item.toLowerCase()) > -1;
         this.useLegacy = this.versionTestService.getIsLegcy();
->>>>>>> xiaoxu/uirevamp
         // this.useLegacy = false;
         //  this.useLegacy = true;
 

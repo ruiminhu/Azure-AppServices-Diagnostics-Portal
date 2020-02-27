@@ -30,6 +30,7 @@ import { SummaryCardsComponent } from '../summary-cards/summary-cards.component'
 import { InsightsV4Component } from '../insights-v4/insights-v4.component';
 import { DropdownV4Component } from '../dropdown-v4/dropdown-v4.component';
 import { CardSelectionV4Component } from '../card-selection-v4/card-selection-v4.component';
+import { VersionService } from '../../services/version.service';
 // import { VersionTestService } from 'projects/app-service-diagnostics/src/app/fabric-ui/version-test.service';
 
 @Component({
@@ -61,11 +62,10 @@ export class DynamicDataComponent implements OnInit {
   @Input() isAnalysisView: boolean = false;
   @ViewChild('dynamicDataContainer', { read: ViewContainerRef, static: true }) dynamicDataContainer: ViewContainerRef;
   private isLegacy: boolean;
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private componentFactoryResolver: ComponentFactoryResolver,private versionService:VersionService) { }
 
   ngOnInit(): void {
-    // this.isLegacy = this.versionTestService.getIsLegcy();
-    this.isLegacy = true;
+    this.isLegacy = this.versionService.getIsLegcy();
     this.dataBehaviorSubject.subscribe((diagnosticData: DiagnosticData) => {
       const component = this._findInputComponent((<Rendering>diagnosticData.renderingProperties).type);
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);

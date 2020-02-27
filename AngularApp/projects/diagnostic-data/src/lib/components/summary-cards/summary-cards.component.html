@@ -2,7 +2,7 @@
   <div class="card-container" 
         *ngFor="let summaryCard of summaryCards;let i = index" 
         (click)="onClickCard(summaryCard)"
-        [ngClass]="{'card-container-hover':clickable[i]}"
+        [ngClass]="{'card-container-hover':summaryCard.isClickable}"
     >
       <h3 class="card-title">{{summaryCard.title}}</h3>
       <p class="card-message">

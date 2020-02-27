@@ -9,7 +9,8 @@ import { ButtonActionType } from './models/message-enums';
 export class MessageProcessor {
     private _messageFlowProviders: IMessageFlowProvider[];
     private _messageGroups: MessageGroup[] = [];
-    private _startingKey: string = 'startup';
+    //private _startingKey: string = 'startup';
+    private _startingKey: string = 'welcome';
     private _currentKey: string;
     private _currentMessageGroup: MessageGroup;
     private _currentMessageIterator: number;
@@ -38,6 +39,7 @@ export class MessageProcessor {
     }
 
     public setCurrentKey(key: string) {
+        console.log("current message group", this._messageGroups);
         this._currentKey = key;
         this._currentMessageIterator = 0;
         this._currentMessageGroup = this._getMessageGroupByKey(this._currentKey);

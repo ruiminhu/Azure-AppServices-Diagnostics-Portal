@@ -9,20 +9,7 @@ import { TextMessageComponent } from '../../../supportbot/common/text-message/te
 import { LoadingMessageComponent } from '../../../supportbot/common/loading-message/loading-message.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { WebSitesService } from '../../../resources/web-sites/services/web-sites.service';
-
-import {
-    PanelType,
-    IPanelStyles,
-    ICalendarStrings,
-    IContextualMenuProps,
-    ISelection,
-    Selection,
-    DropdownMenuItemType,
-    IDropdownOption,
-    ICheckboxProps,
-    IPersonaProps,
-    IPeoplePickerProps
-} from 'office-ui-fabric-react';
+import { PanelType } from 'office-ui-fabric-react';
 import { Globals } from '../../../globals';
 import { GenieGlobals } from 'diagnostic-data';
 import { AuthService } from '../../../startup/services/auth.service';
@@ -46,8 +33,6 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     showTypingMessage: boolean;
     chatContainerHeight: number;
     loading: boolean = true;
-    // navigationContent: InputRendererOptions<IPanelProps>;
-    //  navigationContent: RenderPropContext<IPanelProps>;
     navigationContent: (() => HTMLElement);
     renderFooter: (() => HTMLElement);
     isLightDismiss: boolean = true;

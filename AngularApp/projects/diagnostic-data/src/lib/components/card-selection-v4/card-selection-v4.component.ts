@@ -1,12 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataRenderBaseComponent } from 'projects/diagnostic-data/src/lib/components/data-render-base/data-render-base.component';
-import { DiagnosticService } from 'projects/diagnostic-data/src/lib/services/diagnostic.service';
-import { TelemetryService } from 'projects/diagnostic-data/src/lib/services/telemetry/telemetry.service';
-import { DIAGNOSTIC_DATA_CONFIG, DiagnosticDataConfig } from 'projects/diagnostic-data/src/lib/config/diagnostic-data-config';
-import { FeatureNavigationService } from 'projects/diagnostic-data/src/lib/services/feature-navigation.service';
-import { DiagnosticData } from 'projects/diagnostic-data/src/lib/models/detector';
-import { TelemetryEventNames } from 'projects/diagnostic-data/src/lib/services/telemetry/telemetry.common';
+import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
+import { DiagnosticService } from '../../services/diagnostic.service';
+import { TelemetryService } from '../../services/telemetry/telemetry.service';
+import { DIAGNOSTIC_DATA_CONFIG, DiagnosticDataConfig } from '../../config/diagnostic-data-config';
+import { FeatureNavigationService } from '../../services/feature-navigation.service';
+import { DiagnosticData } from '../../models/detector';
+import { TelemetryEventNames } from '../../services/telemetry/telemetry.common';
+
 
 
 export class CardSelection {

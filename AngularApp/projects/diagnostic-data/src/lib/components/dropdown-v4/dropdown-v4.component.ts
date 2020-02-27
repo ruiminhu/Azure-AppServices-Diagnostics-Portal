@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IDropdownOption } from 'office-ui-fabric-react';
-import { DataRenderBaseComponent } from 'projects/diagnostic-data/src/lib/components/data-render-base/data-render-base.component';
-import { Rendering, DiagnosticData, DataTableResponseObject } from 'projects/diagnostic-data/src/lib/models/detector';
+import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
+import { Rendering, DiagnosticData, DataTableResponseObject } from '../../models/detector';
 
 enum DropdownType {
   Legacy,

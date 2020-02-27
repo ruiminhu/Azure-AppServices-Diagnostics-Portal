@@ -84,6 +84,9 @@ import { FabNavModule } from './components/fab-nav/fab-nav.module';
 import { FabIconModule, FabChoiceGroupModule, FabSearchBoxModule, FabDropdownModule } from '@angular-react/fabric';
 // import { FabSummaryCardComponent } from './components/fab-summary-card/fab-summary-card.component';
 import { SummaryCardsComponent } from './components/summary-cards/summary-cards.component';
+import { InsightsV4Component } from './components/insights-v4/insights-v4.component';
+import { CardSelectionV4Component } from './components/card-selection-v4/card-selection-v4.component';
+import { DropdownV4Component } from './components/dropdown-v4/dropdown-v4.component';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -121,7 +124,10 @@ import { SummaryCardsComponent } from './components/summary-cards/summary-cards.
     AppDependenciesComponent,
     AppInsightsMarkdownComponent,
     HighchartsGraphComponent,
-    SummaryCardsComponent
+    SummaryCardsComponent,
+    InsightsV4Component,
+    CardSelectionV4Component,
+    DropdownV4Component
   ],
   exports: [
     FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent,

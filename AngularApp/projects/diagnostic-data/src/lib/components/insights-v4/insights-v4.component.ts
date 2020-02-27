@@ -1,21 +1,23 @@
-import { Component, OnInit, ViewChild, Renderer2, OnDestroy } from '@angular/core';
-import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
-import { Rendering, RenderingType, DiagnosticData, InsightsRendering, HealthStatus } from '../../models/detector';
-import { Insight, InsightUtils } from '../../models/insight';
-import { DiagnosticService } from '../../services/diagnostic.service';
-import { TelemetryService } from '../../services/telemetry/telemetry.service';
-import { TelemetryEventNames } from '../../services/telemetry/telemetry.common';
-import { MarkdownComponent } from 'ngx-markdown'
-import { Router } from '@angular/router';
-import { LinkInterceptorService } from '../../services/link-interceptor.service';
+import { Component, OnDestroy, ViewChild, Renderer2 } from "@angular/core";
+import { Router } from "@angular/router";
+import { MarkdownComponent } from "ngx-markdown";
+import { DataRenderBaseComponent } from "../data-render-base/data-render-base.component";
+import { RenderingType, InsightsRendering, HealthStatus, DiagnosticData } from "../../models/detector";
+import { Insight, InsightUtils } from "../../models/insight";
+import { TelemetryService } from "../../services/telemetry/telemetry.service";
+import { LinkInterceptorService } from "../../services/link-interceptor.service";
+import { TelemetryEventNames } from "../../services/telemetry/telemetry.common";
+
+
+
 
 
 @Component({
-  templateUrl: './insights.component.html',
-  styleUrls: ['./insights.component.scss']
+  selector: 'insights-v4',
+  templateUrl: './insights-v4.component.html',
+  styleUrls: ['./insights-v4.component.scss']
 })
-export class InsightsComponent extends DataRenderBaseComponent implements OnDestroy {
-
+export class InsightsV4Component extends DataRenderBaseComponent implements OnDestroy {
   @ViewChild(MarkdownComponent, { static: false })
   public set markdown(v: MarkdownComponent) {
     this.markdownDiv = v;
@@ -94,4 +96,5 @@ export class InsightsComponent extends DataRenderBaseComponent implements OnDest
       this.listenObj();
     }
   }
+
 }

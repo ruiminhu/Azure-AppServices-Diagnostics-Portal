@@ -1,6 +1,6 @@
 import {
     CommsService, DiagnosticDataModule, DiagnosticService, DiagnosticSiteService,
-    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService, GenieGlobals
+    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService, GenieGlobals,VersionService
 } from 'diagnostic-data';
 import { SiteService } from 'projects/app-service-diagnostics/src/app/shared/services/site.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -54,6 +54,7 @@ import { SupportTopicService } from './shared-v2/services/support-topic.service'
 import { ResourceResolver } from './home/resolvers/resource.resolver';
 import { ResourcesModule } from './resources/resources.module';
 import { WebSitesModule } from './resources/web-sites/web-sites.module';
+import { VersionTestService } from './fabric-ui/version-test.service';
 // import {
 //   FabBreadcrumbModule,
 //   FabButtonModule,
@@ -208,7 +209,8 @@ import { WebSitesModule } from './resources/web-sites/web-sites.module';
     LoggingV2Service,
     LiveChatService,
     SupportTopicService,
-    ResourceResolver
+    ResourceResolver,
+    { provide: VersionService,useExisting: VersionTestService},
   ],
   bootstrap: [AppComponent]
 })

@@ -4,6 +4,7 @@ import { DetectorControlService } from '../../services/detector-control.service'
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { DetectorResponse, RenderingType } from '../../models/detector';
 import { BehaviorSubject } from 'rxjs';
+import { VersionService } from '../../services/version.service';
 
 @Component({
   selector: 'detector-container',
@@ -28,12 +29,19 @@ export class DetectorContainerComponent implements OnInit {
   @Input() analysisMode:boolean = false;
   @Input() isAnalysisView:boolean = false;
   isCategoryOverview:boolean = false;
-
+  private isLegacy:boolean
   constructor(private _route: ActivatedRoute, private _diagnosticService: DiagnosticService,
-    public detectorControlService: DetectorControlService) { }
+    public detectorControlService: DetectorControlService,private versionService:VersionService) { }
 
   ngOnInit() {
-    this.hideTimerPicker= this.hideDetectorControl || this._route.snapshot.parent.url.findIndex((x: UrlSegment) => x.path === "categories") > -1;
+    this.isLegacy = this.versionService.getIsLegcy();
+    //Remove after A/B Test
+    if (this.isLegacy) {
+      this.hideTimerPicker = false;
+    } else {
+      this.hideTimerPicker= this.hideDetectorControl || this._route.snapshot.parent.url.findIndex((x: UrlSegment) => x.path === "categories") > -1;
+    }
+    
     this.detectorControlService.update.subscribe(isValidUpdate => {
       if (isValidUpdate && this.detectorName) {
         this.refresh();
@@ -74,7 +82,14 @@ export class DetectorContainerComponent implements OnInit {
   shouldHideTimePicker(response: DetectorResponse) {
     if (response && response.dataset && response.dataset.length > 0) {
       const cardRenderingIndex = response.dataset.findIndex(data => data.renderingProperties.type == RenderingType.Cards);
-      this.hideDetectorControl = cardRenderingIndex >= 0 || this.hideDetectorControl;
+
+      //Remove after A/B Test
+      if (this.isLegacy) {
+        this.hideDetectorControl = cardRenderingIndex >= 0;
+      } else {
+        this.hideDetectorControl = cardRenderingIndex >= 0 || this.hideDetectorControl;
+      }
+      
     }
   }
 }

@@ -4,7 +4,7 @@ import { DetectorControlService } from '../../services/detector-control.service'
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { DetectorResponse, RenderingType } from '../../models/detector';
 import { BehaviorSubject } from 'rxjs';
-import { VersionTestService } from 'projects/app-service-diagnostics/src/app/fabric-ui/version-test.service';
+import { VersionService } from '../../services/version.service';
 
 @Component({
   selector: 'detector-container',
@@ -31,10 +31,10 @@ export class DetectorContainerComponent implements OnInit {
   isCategoryOverview:boolean = false;
   private isLegacy:boolean
   constructor(private _route: ActivatedRoute, private _diagnosticService: DiagnosticService,
-    public detectorControlService: DetectorControlService,private versionTestService:VersionTestService) { }
+    public detectorControlService: DetectorControlService,private versionService:VersionService) { }
 
   ngOnInit() {
-    this.isLegacy = this.versionTestService.getIsLegcy();
+    this.isLegacy = this.versionService.getIsLegcy();
     //Remove after A/B Test
     if (this.isLegacy) {
       this.hideTimerPicker = false;

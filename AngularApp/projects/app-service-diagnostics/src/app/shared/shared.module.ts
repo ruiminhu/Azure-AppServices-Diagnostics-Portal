@@ -95,7 +95,7 @@ import { PortalReferrerResolverComponent } from './components/portal-referrer-re
 import { ConfigureStorageAccountComponent } from './components/daas/configure-storage-account/configure-storage-account.component';
 // import { SupportBotModule } from '../supportbot/supportbot.module';
 import { GeniePanelComponent } from '../fabric-ui/components/genie-panel/genie-panel.component';
-import { FabNavModule } from 'diagnostic-data';
+// import { FabNavModule } from 'diagnostic-data';
 import {
     FabBreadcrumbModule,
     FabButtonModule,
@@ -275,8 +275,8 @@ import { DetectorTimePickerComponent } from '../fabric-ui/components/detector-ti
         FabPeoplePickerModule,
         FabTagPickerModule,
         FabProgressIndicatorModule,
-        FabNavModule,
-        FabContextualMenuModule,
+        // FabNavModule,
+        FabContextualMenuModule
     ],
     exports: [
         CommonModule,

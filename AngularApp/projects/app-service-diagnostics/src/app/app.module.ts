@@ -1,6 +1,6 @@
 import {
     CommsService, DiagnosticDataModule, DiagnosticService, DiagnosticSiteService,
-    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService, GenieGlobals
+    PUBLIC_DEV_CONFIGURATION, PUBLIC_PROD_CONFIGURATION, SolutionService, SettingsService, GenieGlobals,VersionService
 } from 'diagnostic-data';
 import { SiteService } from 'projects/app-service-diagnostics/src/app/shared/services/site.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -210,7 +210,7 @@ import { VersionTestService } from './fabric-ui/version-test.service';
     LiveChatService,
     SupportTopicService,
     ResourceResolver,
-    VersionTestService
+    { provide: VersionService,useExisting: VersionTestService},
   ],
   bootstrap: [AppComponent]
 })

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { VersioningHelper } from '../shared/utilities/versioningHelper';
 import { DemoSubscriptions } from '../betaSubscriptions';
 
 const subscriptionIdStr = "subscription-id";
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class VersionTestService {
   private useLegcy: boolean;
   private subId:string;
@@ -18,17 +19,18 @@ export class VersionTestService {
       subIdByRoute = null;
     }
     
-    let subscriptionId : string;
+    // let subscriptionId : string;
     if (subIdByRoute && subIdByRoute.length > 0) {
-      subscriptionId = subIdByRoute;
+      // subscriptionId = subIdByRoute;
       //subId only from route;
-      this.subId = subscriptionId;
+      this.subId = subIdByRoute;
     } else {
-      subscriptionId = subIdByStorage;
+      this.subId = subIdByStorage;
     }
-    localStorage.setItem(subscriptionIdStr,subscriptionId);
+    localStorage.setItem(subscriptionIdStr,this.subId);
     // this.useLegcy = VersioningHelper.isV2Subscription(subId);
-    this.useLegcy = DemoSubscriptions.betaSubscriptions.findIndex(item => subscriptionId.toLowerCase() === item.toLowerCase()) === -1;
+    this.useLegcy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subId.toLowerCase() === item.toLowerCase()) === -1;
+    console.log("versionTest Service",this.subId,this.useLegcy);
   }
   public getIsLegcy() {
     return this.useLegcy;

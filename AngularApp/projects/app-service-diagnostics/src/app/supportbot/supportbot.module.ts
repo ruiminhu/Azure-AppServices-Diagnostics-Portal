@@ -89,15 +89,15 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
         LoadingMessageComponent
     ],
     providers: [
-        // StartupMessages,
-        // MainMenuMessageFlow,
-        // HealthCheckMessageFlow,
-        // FeedbackMessageFlow,
-        // CpuAnalysisChatFlow,
-        // MessageProcessor,
-        // AvailabilityPerformanceFlow,
-        // LinuxAvailabilityPerformanceFlow,
-        // GenericCategoryFlow,
+        StartupMessages,
+        MainMenuMessageFlow,
+        HealthCheckMessageFlow,
+        FeedbackMessageFlow,
+        CpuAnalysisChatFlow,
+        MessageProcessor,
+        AvailabilityPerformanceFlow,
+        LinuxAvailabilityPerformanceFlow,
+        GenericCategoryFlow,
         // GenieChatFlow
     ]
 })

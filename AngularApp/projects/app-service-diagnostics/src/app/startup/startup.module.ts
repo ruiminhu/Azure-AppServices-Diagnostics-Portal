@@ -14,6 +14,8 @@ import { MessageProcessor } from '../supportbot/message-processor.service';
 import { GenericCategoryFlow } from '../supportbot/message-flow/v2-flows/generic-category.flow';
 import { GenieChatFlow } from '../supportbot/message-flow/v2-flows/genie-chat.flow';
 import { AvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/availability-performance.flow';
+import { CpuAnalysisChatFlow } from '../supportbot/message-flow/cpu-analysis-chat/cpu-analysis-chat-flow';
+import { LinuxAvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/linux-availability-performance.flow';
 
 @NgModule({
   imports: [
@@ -35,10 +37,10 @@ export class StartupModule {
             MainMenuMessageFlow,
             HealthCheckMessageFlow,
             FeedbackMessageFlow,
-            // CpuAnalysisChatFlow,
+            CpuAnalysisChatFlow,
             MessageProcessor,
             AvailabilityPerformanceFlow,
-            // LinuxAvailabilityPerformanceFlow,
+            LinuxAvailabilityPerformanceFlow,
             GenericCategoryFlow,
              GenieChatFlow
         ]

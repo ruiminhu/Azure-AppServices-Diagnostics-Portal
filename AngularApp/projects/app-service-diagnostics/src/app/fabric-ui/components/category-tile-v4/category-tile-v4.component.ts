@@ -22,7 +22,7 @@ export class CategoryTileV4Component implements OnInit {
   constructor(private _portalService: PortalActionService, private _router: Router, private _activatedRoute: ActivatedRoute, private _notificationService: NotificationService, private _logger: LoggingV2Service, private _diagnosticService: DiagnosticService, private _resourceService: ResourceService) { }
 
   ngOnInit() {
-    this.categoryImgPath = this.generateImagePath(this.category.name);
+    this.categoryImgPath = this.generateImagePath(this.category.id);
     this.keywords = this.category.keywords.join(", ");
   }
 

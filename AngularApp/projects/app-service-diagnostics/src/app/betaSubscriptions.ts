@@ -15,6 +15,6 @@ export class DemoSubscriptions {
         'da511dea-6e00-4728-93ff-6302ad7fe284',   // Nazeef's Sub
         '15c0f6ba-acb7-4f9a-aed0-7249c140b4f3', //Finbar' sub
      //   'c1972e9d-b3c7-4de4-acb3-681773b28ced', // Cindy's sub: Private Test Sub Xipeng,
-        'caae90fd-95a3-4641-a523-b66894f4654c', // Xiaoxu's sub
+        // 'caae90fd-95a3-4641-a523-b66894f4654c', // Xiaoxu's sub
     ];
 }

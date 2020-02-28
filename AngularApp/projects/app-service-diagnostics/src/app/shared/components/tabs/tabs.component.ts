@@ -3,6 +3,8 @@ import { INavigationItem } from '../../models/inavigationitem';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CustomReuseStrategy } from '../../../app-route-reusestrategy.service';
 import { filter } from 'rxjs/operators';
+import { VersionTestService } from '../../../fabric-ui/version-test.service';
+import { AuthService } from '../../../startup/services/auth.service';
 
 @Component({
   selector: 'tabs',
@@ -12,12 +14,16 @@ import { filter } from 'rxjs/operators';
 export class TabsComponent implements OnInit {
 
   public navigationItems: INavigationItem[];
-
-  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _routeReuseStrategy: CustomReuseStrategy) {
+  public isLegacy:boolean;
+  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _routeReuseStrategy: CustomReuseStrategy,private _versionTestService:VersionTestService,private _authService: AuthService) {
     this.navigationItems = [];
   }
 
   ngOnInit() {
+    this._authService.getStartupInfo().subscribe(startupInfo => {
+      this.isLegacy = this._versionTestService.getIsLegcyByResourceId(startupInfo.resourceId);
+    });
+    // this.isLegacy = this._versionTestService.getIsLegcy();
     this._router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
 
       const navigationTitleStr: string = 'navigationTitle';
@@ -62,6 +68,11 @@ export class TabsComponent implements OnInit {
       }
     });
   }
+
+  // ngAfterViewInit() {
+  //   this.isLegacy = this._versionTestService.getIsLegcy();
+  //   console.log("tab component",this.isLegacy);
+  // }
 
   getAnalysisTabIfAnalysisDetector(url: string) {
     if (url.indexOf("/analysis/") >=0 && url.indexOf("/detectors/") >= 0 && url.indexOf("/legacy/") === -1) {

@@ -15,7 +15,7 @@
 
   <div id="app-content" class="panel-body">
     <notification></notification>
-    <div id="body-content" class="tab-content container-fluid">
+    <div class="tab-content container-fluid" [ngStyle]="{'padding':isLegacy === false ? '0px' : '15px auto'}">
       <ng-content></ng-content>
     </div>
   </div>

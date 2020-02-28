@@ -20,9 +20,11 @@
        </div>
       </div>
       <div class="panel-content" style="margin-top: 60px;" #scrollMe>
+        <!-- Remove style after A/B Test,except margin-left -->
         <div [style.height.px]="chatContainerHeight" style="overflow-y: auto; display: inline-block; height: 78vh;"
           class="ms-Panel-scrollableContent scroll-bottom">
-          <div class="row animated fadeIn chat-message-container" *ngFor="let item of messages" style="margin-left:0px">
+          <div class="animated fadeIn chat-message-container" *ngFor="let item of messages" style="margin-left:0px;margin-top: 10px;margin-right: 10px;
+          content: ' ';clear: both;">
           <dynamic-component-genie [componentData]="item" (onViewUpdate)="updateView($event)"
               (onComplete)="updateStatus($event)"></dynamic-component-genie>
           </div>

@@ -9,6 +9,6 @@ export class VersionService {
   constructor() {}
   
   public getIsLegcy():boolean {
-    return this.useLegcy;
+    return true;
   }
 }

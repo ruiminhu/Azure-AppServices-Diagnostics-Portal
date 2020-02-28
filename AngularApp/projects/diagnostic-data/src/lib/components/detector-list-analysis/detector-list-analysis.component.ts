@@ -513,12 +513,14 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     getPendingDetectorCount(): number {
         let pendingCount = 0;
        // console.log("detectorviewmodels", this.detectorViewModels);
-        this.detectorViewModels.forEach((metaData, index) => {
-            if (this.detectorViewModels[index].loadingStatus == LoadingStatus.Loading) {
-                ++pendingCount;
-            }
-        });
-
+       if (this.detectorViewModels)
+       {
+            this.detectorViewModels.forEach((metaData, index) => {
+                if (this.detectorViewModels[index].loadingStatus == LoadingStatus.Loading) {
+                    ++pendingCount;
+                }
+            });
+       }
         return pendingCount;
     }
 

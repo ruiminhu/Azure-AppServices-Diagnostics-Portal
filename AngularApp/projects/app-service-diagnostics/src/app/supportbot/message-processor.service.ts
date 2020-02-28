@@ -9,14 +9,13 @@ import { ButtonActionType } from './models/message-enums';
 export class MessageProcessor {
     private _messageFlowProviders: IMessageFlowProvider[];
     private _messageGroups: MessageGroup[] = [];
-    //private _startingKey: string = 'startup';
-    private _startingKey: string = 'welcome';
+    private _startingKey: string = 'startup';
     private _currentKey: string;
     private _currentMessageGroup: MessageGroup;
     private _currentMessageIterator: number;
 
     constructor(private _injector: Injector) {
-      //  this._messageGroups = MessageFlowFactory.getMessageGroups();
+        //this._messageGroups = MessageFlowFactory.getMessageGroups();
 
         this._messageFlowProviders = MessageFlowFactory.getMessageFlowProviders().map(provider => {
             return this._injector.get(provider);
@@ -26,11 +25,12 @@ export class MessageProcessor {
         this._messageFlowProviders.forEach(provider => {
             messageGroups = messageGroups.concat(provider.GetMessageFlowList());
             provider.SubscribeToAdditionalMessageFlowLists().subscribe(newMessageGroups => {
-                this._messageGroups = this._messageGroups.concat(newMessageGroups);
+                this._messageGroups.concat(newMessageGroups);
             });
         });
 
         this._messageGroups = messageGroups;
+
         this.setCurrentKey(this._startingKey);
 
         // this._currentKey = this._startingKey;
@@ -39,7 +39,6 @@ export class MessageProcessor {
     }
 
     public setCurrentKey(key: string) {
-        console.log("current message group", this._messageGroups);
         this._currentKey = key;
         this._currentMessageIterator = 0;
         this._currentMessageGroup = this._getMessageGroupByKey(this._currentKey);
@@ -55,17 +54,10 @@ export class MessageProcessor {
     }
 
     public getNextMessage(event: any): Message {
+
         if (event && event.hasOwnProperty('type') && event.hasOwnProperty('next_key')) {
             if (event['type'] === ButtonActionType.SwitchToOtherMessageGroup) {
 
-                this._currentMessageIterator = 0;
-                this._currentKey = event['next_key'];
-
-                this._currentMessageGroup = this._getMessageGroupByKey(this._currentKey);
-            }
-        }
-        else if (event && event.hasOwnProperty('hasResult') && event.hasOwnProperty('next_key')) {
-            if (event['next_key'] !== "") {
                 this._currentMessageIterator = 0;
                 this._currentKey = event['next_key'];
 

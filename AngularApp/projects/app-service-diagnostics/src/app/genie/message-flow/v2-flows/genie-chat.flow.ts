@@ -11,13 +11,11 @@ import { CategoryMenuMessage } from '../category-menu/category-menu.component';
 import { DetectorSummaryMessage } from '../detector-summary/detector-summary.component';
 import { DynamicAnalysisMessage } from '../dynamic-analysis/dynamic-analysis.component';
 import { DocumentSearchMessage } from '../document-search/document-search.component';
-import { FeedbackMessage } from '../feedback/feedbackmessageflow';
 import { GenieFeedbackMessage } from '../genie-feedback/geniefeedbackmessageflow'
 import { map } from 'rxjs/operators';
 import { GenericArmConfigService } from '../../../shared/services/generic-arm-config.service';
 import { ResourceService } from '../../../shared-v2/services/resource.service';
-import { DynamicAnalysisResultsComponent, DynamicAnalysisResultsMessage } from '../dynamic-analysis-results/dynamic-analysis-results.component';
- import { Globals } from '../../../globals';
+import { Globals } from '../../../globals';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../startup/services/auth.service';
 import { StartupInfo } from '../../../shared/models/portal';
@@ -198,8 +196,7 @@ export class GenieChatFlow extends IMessageFlowProvider {
 
       const feedbackGroup: MessageGroup = new MessageGroup(feedback, [], () => mainMenuId);
       feedbackGroup.messages.push(new TextMessage('genie-Please help me improve by providing some feedback. What was my most/least helpful feature? What features would you like to see?', MessageSender.System, 500));
-      feedbackGroup.messages.push(new FeedbackMessage([], 'Submit and Show Tile Menu', 'Feedback', category.name));
-      feedbackGroup.messages.push(new TextMessage('genie-Thank you!'));
+     feedbackGroup.messages.push(new TextMessage('genie-Thank you!'));
       feedbackGroup.messages.push(new TextMessage(`genie-Feel free to continue to explore the tools within ${category.name}`));
 
       const showAllTiles: MessageGroup = new MessageGroup(showTiles, [], () => mainMenuId);

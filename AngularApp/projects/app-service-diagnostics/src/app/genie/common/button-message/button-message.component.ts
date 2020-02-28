@@ -6,16 +6,13 @@ import { BotLoggingService } from '../../../shared/services/logging/bot.logging.
 import { ButtonActionType, MessageSender } from '../../models/message-enums';
 import { CategoryChatStateService } from '../../../shared-v2/services/category-chat-state.service';
  import { Globals } from '../../../globals';
-// import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
-import { FeedbackMessage } from '../../message-flow/feedback/feedbackmessageflow';
-import { MessageProcessor } from '../../message-processor.service';
+//import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
 
 @Component({
-    templateUrl: 'feedback-button-message.component.html'
+    templateUrl: 'button-message.component.html'
 })
-export class FeedbackButtonMessageComponent implements OnInit, AfterViewInit, IChatMessageComponent {
+export class ButtonMessageComponent implements OnInit, AfterViewInit, IChatMessageComponent {
 
-    buttonListTitle: string="";
     buttonList: { title: string, type: ButtonActionType, next_key: string }[] = [];
     showComponent: boolean = true;
     isFeedbackButtonGroup: boolean = false;
@@ -25,11 +22,10 @@ export class FeedbackButtonMessageComponent implements OnInit, AfterViewInit, IC
     @Output() onViewUpdate = new EventEmitter();
     @Output() onComplete = new EventEmitter<{ status: boolean, data?: any }>();
 
-    constructor(protected _messageProcessor: MessageProcessor, protected injector: Injector, protected _logger: BotLoggingService,protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
+    constructor(protected injector: Injector, protected _logger: BotLoggingService,protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
     }
 
     ngOnInit(): void {
-        this.buttonListTitle = this.injector.get('buttonListTitle');
         const buttons = <{ title: string, type: ButtonActionType, next_key: string }[]>this.injector.get('buttonList', []);
         buttons.forEach(button => {
             if (button.type === ButtonActionType.GetFeedback)
@@ -52,9 +48,7 @@ export class FeedbackButtonMessageComponent implements OnInit, AfterViewInit, IC
     }
 
     ngAfterViewInit(): void {
-        let updateData = { status: true, data: "view-loaded" };
-        console.log("emit updateData", updateData);
-        this.onViewUpdate.emit(updateData);
+        this.onViewUpdate.emit();
     }
 
     onClick(item: any) {
@@ -64,18 +58,6 @@ export class FeedbackButtonMessageComponent implements OnInit, AfterViewInit, IC
         if (item.type === ButtonActionType.GetFeedback)
         {
             console.log("Feedback button onclick", item);
-            if (item.title.toLowerCase() === "yes")
-            {
-              this._messageProcessor.setCurrentKey('feedback-helpful');
-             }
-            else
-            {
-                this._messageProcessor.setCurrentKey('feedback-not-helpful');
-                console.log("Feedback button no onclick", item);
-               //  this.globals.messages.push(new TextMessage('Sorry to hear! Could you let us know how we can improve?', MessageSender.System, 500));
-            //     this.globals.messages.push(new FeedbackMessage([], 'Submit and Show Tile Menu', 'Feedback', "Availbiliy and Performance"));
-            // }
-        }
         this.onComplete.emit({ status: true, data: item });
     }
 }

@@ -23,8 +23,8 @@
         <div [style.height.px]="chatContainerHeight" style="overflow-y: auto; display: inline-block; height: 78vh;"
           class="ms-Panel-scrollableContent scroll-bottom">
           <div class="row animated fadeIn chat-message-container" *ngFor="let item of messages" style="margin-left:0px">
-          <dynamic-component [componentData]="item" (onViewUpdate)="updateView($event)"
-              (onComplete)="updateStatus($event)"></dynamic-component>
+          <dynamic-component-genie [componentData]="item" (onViewUpdate)="updateView($event)"
+              (onComplete)="updateStatus($event)"></dynamic-component-genie>
           </div>
           <!-- <div class="row animated fadeIn chat-message-container" [hidden]="!showTypingMessage" style="margin-top:10px">
               <loading-message></loading-message>

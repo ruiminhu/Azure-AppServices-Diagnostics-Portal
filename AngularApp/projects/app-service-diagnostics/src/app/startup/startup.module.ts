@@ -9,10 +9,11 @@ import { StartupMessages } from '../supportbot/message-flow/startup/startupmessa
 import { MainMenuMessageFlow } from '../supportbot/message-flow/main-menu/mainmenumessageflow';
 import { HealthCheckMessageFlow } from '../supportbot/message-flow/health-check/healthcheckmessageflow';
 import { FeedbackMessageFlow } from '../supportbot/message-flow/feedback/feedbackmessageflow';
-import { Geniefeedbackmessageflow } from '../supportbot/message-flow/genie-feedback/geniefeedbackmessageflow';
+import { Geniefeedbackmessageflow } from '../genie/message-flow/genie-feedback/geniefeedbackmessageflow';
 import { MessageProcessor } from '../supportbot/message-processor.service';
+import { GenieMessageProcessor } from '../genie/message-processor.service';
 import { GenericCategoryFlow } from '../supportbot/message-flow/v2-flows/generic-category.flow';
-import { GenieChatFlow } from '../supportbot/message-flow/v2-flows/genie-chat.flow';
+import { GenieChatFlow } from '../genie/message-flow/v2-flows/genie-chat.flow';
 import { AvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/availability-performance.flow';
 import { CpuAnalysisChatFlow } from '../supportbot/message-flow/cpu-analysis-chat/cpu-analysis-chat-flow';
 import { LinuxAvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/linux-availability-performance.flow';
@@ -37,8 +38,11 @@ export class StartupModule {
             MainMenuMessageFlow,
             HealthCheckMessageFlow,
             FeedbackMessageFlow,
+            Geniefeedbackmessageflow,
+            // GenieFeedbackMessageFlow,
             CpuAnalysisChatFlow,
             MessageProcessor,
+            GenieMessageProcessor,
             AvailabilityPerformanceFlow,
             LinuxAvailabilityPerformanceFlow,
             GenericCategoryFlow,

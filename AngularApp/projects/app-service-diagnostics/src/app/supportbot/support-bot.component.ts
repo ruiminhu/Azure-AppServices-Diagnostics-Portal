@@ -10,7 +10,7 @@ import { MessageProcessor } from './message-processor.service';
 export class SupportBotComponent implements OnInit {
     @ViewChild('scrollMe', { static: false }) myScrollContainer: ElementRef;
 
-messages: Message[];
+    messages: Message[];
     showTypingMessage: boolean;
     chatContainerHeight: number;
 
@@ -30,8 +30,6 @@ messages: Message[];
         this.chatContainerHeight = window.innerHeight - 60;
 
         this.getMessage();
-
-        console.log("this.messages after init", this.messages);
     }
 
     scrollToBottom(event?: any): void {
@@ -45,12 +43,9 @@ messages: Message[];
         const self = this;
         const message = this._messageProcessor.getNextMessage(event);
 
-        console.log("message in support bot", message);
         if (message) {
 
-            console.log("message not empty", message);
             if (message.messageDelayInMs >= 2000) {
-                console.log("1st settimeout");
                 this.showTypingMessage = true;
 
                 // To show the typing message icon, we need to scroll the page to the bottom.
@@ -62,7 +57,6 @@ messages: Message[];
             setTimeout(function () {
                 self.showTypingMessage = false;
                 self.messages.push(message);
-                console.log("2nd settimeout");
             }, message.messageDelayInMs);
         }
     }

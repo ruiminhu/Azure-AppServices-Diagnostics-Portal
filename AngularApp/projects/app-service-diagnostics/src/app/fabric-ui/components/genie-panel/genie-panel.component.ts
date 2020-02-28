@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
-import { GenieChatFlow } from '../../../supportbot/message-flow/v2-flows/genie-chat.flow';
-import { Message, TextMessage } from '../../../supportbot/models/message';
-import { MessageProcessor } from '../../../supportbot/message-processor.service';
+import { GenieChatFlow } from '../../../genie/message-flow/v2-flows/genie-chat.flow';
+import { Message, TextMessage } from '../../../genie/models/message';
+import { GenieMessageProcessor } from '../../../genie/message-processor.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { WebSitesService } from '../../../resources/web-sites/services/web-sites.service';
 import { PanelType } from 'office-ui-fabric-react';
@@ -31,7 +31,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     width: string = "1200px";
     disableChat: boolean = false;
 
-    constructor(private _resourceService: WebSitesService, private _authService: AuthService, private _route: Router, private _genieChatFlow: GenieChatFlow, private _messageProcessor: MessageProcessor, public globals: GenieGlobals) {
+    constructor(private _resourceService: WebSitesService, private _authService: AuthService, private _route: Router, private _genieChatFlow: GenieChatFlow, private _messageProcessor: GenieMessageProcessor, public globals: GenieGlobals) {
         this.panelStyles = {
             root: {
                 width: 585,
@@ -60,11 +60,6 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         };
     }
 
-    getHistoryMessage(): void {
-        this.messages = JSON.parse(JSON.stringify(this.globals.messages))
-        //  this.messages = {...this.globals.messages};
-    }
-
     ngOnDestroy() {
         console.log("Genie destroyed");
     }
@@ -89,7 +84,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     scrollToBottom(event?: any): void {
         try {
             this.myScrollContainer.nativeElement.childNodes[0].scrollTop = this.myScrollContainer.nativeElement.childNodes[0].scrollHeight;
-        } catch (err) { 
+        } catch (err) {
             console.log("scrolltobottom error", err);
         }
     }

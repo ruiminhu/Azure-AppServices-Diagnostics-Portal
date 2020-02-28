@@ -136,7 +136,7 @@ import {
     FabProgressIndicatorModule,
     FabContextualMenuModule
 } from '@angular-react/fabric';
-import { DynamicComponent } from '../supportbot/dynamic-component/dynamic.component';
+import { GenieDynamicComponent} from '../genie/dynamic-component/dynamic.component';
 import { CategorySummaryComponent } from '../fabric-ui/components/category-summary/category-summary.component';
 import { CategoryOverviewComponent } from '../fabric-ui/components/category-overview/category-overview.component';
 import { CategoryNavComponent } from '../home/components/category-nav/category-nav.component';
@@ -215,7 +215,7 @@ import { DetectorTimePickerComponent } from '../fabric-ui/components/detector-ti
         PortalReferrerResolverComponent,
         ConfigureStorageAccountComponent,
         GeniePanelComponent,
-        DynamicComponent,
+        GenieDynamicComponent,
         CategorySummaryComponent,
         CategoryOverviewComponent,
         CategoryNavComponent,
@@ -333,7 +333,7 @@ import { DetectorTimePickerComponent } from '../fabric-ui/components/detector-ti
         GenericCommsComponent,
         GenericAnalysisComponent,
         GeniePanelComponent,
-        DynamicComponent,
+        GenieDynamicComponent,
         CategorySummaryComponent,
         CategoryOverviewComponent,
         CategoryNavComponent,

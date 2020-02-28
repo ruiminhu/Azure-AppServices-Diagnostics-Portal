@@ -79,7 +79,7 @@ export class LoggingService {
 
                         if (resourceEnvelope && resourceEnvelope.properties) {
                             this.platform = SiteExtensions.operatingSystem(resourceEnvelope.properties) === OperatingSystem.windows ? 'windows' : 'linux';
-                            this._appType = resourceEnvelope.properties.kind.toLowerCase().indexOf('functionapp') >= 0 ? 'functionapp' : 'webapp';
+                            this._appType = resourceEnvelope.properties.kind && resourceEnvelope.properties.kind.toLowerCase().indexOf('functionapp') >= 0 ? 'functionapp' : 'webapp';
                         }
 
                         this.LogStartUpInfo(this._startUpInfo);

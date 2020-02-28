@@ -9,8 +9,6 @@ import { BotLoggingService } from '../../../shared/services/logging/bot.logging.
 import { MessageSender, ButtonActionType } from '../../models/message-enums';
 import { ButtonMessageComponent } from '../../common/button-message/button-message.component';
 import { CategoryChatStateService } from '../../../shared-v2/services/category-chat-state.service';
- import { Globals } from '../../../globals';
-//import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
 
 @Component({
     templateUrl: 'feedback.component.html'
@@ -20,8 +18,8 @@ export class FeedbackComponent extends ButtonMessageComponent {
     showComponent: boolean;
     feedbackMessage: string;
 
-    constructor(protected _injector: Injector, private _msgProcessor: MessageProcessor, protected _logger: BotLoggingService, protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
-        super(_injector, _logger, globals, _chatState);
+    constructor(protected _injector: Injector, private _msgProcessor: MessageProcessor, protected _logger: BotLoggingService, @Optional() protected _chatState?: CategoryChatStateService) {
+        super(_injector, _logger, _chatState);
         this.showComponent = true;
         this.feedbackMessage = '';
     }

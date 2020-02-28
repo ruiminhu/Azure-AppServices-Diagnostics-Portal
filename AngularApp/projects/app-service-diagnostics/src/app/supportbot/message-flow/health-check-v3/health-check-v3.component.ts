@@ -6,7 +6,6 @@ import { BotLoggingService } from 'projects/app-service-diagnostics/src/app/shar
 import { SiteService } from 'projects/app-service-diagnostics/src/app/shared/services/site.service';
 import { HealthStatus, LoadingStatus, DiagnosticService, DetectorControlService, DetectorResponse, Insight, InsightUtils } from 'diagnostic-data';
 import { IChatMessageComponent } from '../../interfaces/ichatmessagecomponent';
-import { IChoiceGroupOption } from 'office-ui-fabric-react';
 
 @Component({
   selector: 'health-check-v3',
@@ -31,7 +30,6 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
   healthCheckpoints: any[];
   selectedCategoryIndex: number = 0;
   healthCheckResultForLogging: string[] = [];
-  resourceId:string = "";
 
   currentSite: Site;
 
@@ -42,7 +40,6 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
 
     this._siteService.currentSite.subscribe(site => {
       const checkpoints: any[] = [];
-      this.resourceId = site.id;
 
       checkpoints.push({
         category: 'availability',
@@ -150,4 +147,5 @@ export class HealthCheckV3Component implements OnInit, AfterViewInit, IChatMessa
     this._router.navigateByUrl(`resource/subscriptions/${this.subscriptionId}/resourcegroups/${this.resourceGroup}/providers/microsoft.web/sites/${this.siteName}${slot}/${href}`);
     this.logFullReportClick(title);
   }
+
 }

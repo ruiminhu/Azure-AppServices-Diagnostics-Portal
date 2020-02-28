@@ -4,7 +4,6 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import { ButtonMessageComponent } from '../common/button-message/button-message.component';
-import { FeedbackButtonMessageComponent } from '../common/feedback-button-message/feedback-button-message.component';
 import { GraphMessageComponent } from '../common/graph-message/graph-message.component';
 import {
     ProblemStatementMessageComponent
@@ -18,15 +17,8 @@ import {
 import {
     DocumentSearchResultsComponent
 } from '../message-flow/document-search-results/document-search-results.component';
-import {
-    DynamicAnalysisComponent
-} from '../message-flow/dynamic-analysis/dynamic-analysis.component';
-import {
-    DynamicAnalysisResultsComponent
-} from '../message-flow/dynamic-analysis-results/dynamic-analysis-results.component';
 import { DocumentSearchComponent } from '../message-flow/document-search/document-search.component';
 import { FeedbackComponent } from '../message-flow/feedback/feedback.component';
-import { GenieFeedbackComponent } from '../message-flow/genie-feedback/genie-feedback.component';
 import { HealthCheckComponent } from '../message-flow/health-check/health-check.component';
 import { MainMenuComponent } from '../message-flow/main-menu/main-menu.component';
 import {
@@ -38,9 +30,9 @@ import { HealthCheckV3Component } from '../message-flow/health-check-v3/health-c
 
 @Component({
     selector: 'dynamic-component',
-    entryComponents: [TextMessageComponent, MainMenuComponent, ButtonMessageComponent, FeedbackButtonMessageComponent, HealthCheckComponent, HealthCheckV3Component, FeedbackComponent,
-        GenieFeedbackComponent, SolutionsMessageComponent, GraphMessageComponent, ProblemStatementMessageComponent, TalkToAgentMessageComponent, CategoryMenuComponent,
-        DetectorSummaryComponent, DocumentSearchComponent, DocumentSearchResultsComponent, DynamicAnalysisComponent, DynamicAnalysisResultsComponent],
+    entryComponents: [TextMessageComponent, MainMenuComponent, ButtonMessageComponent, HealthCheckComponent, HealthCheckV3Component, FeedbackComponent,
+        SolutionsMessageComponent, GraphMessageComponent, ProblemStatementMessageComponent, TalkToAgentMessageComponent, CategoryMenuComponent,
+        DetectorSummaryComponent, DocumentSearchComponent, DocumentSearchResultsComponent],
     template: `
     <div #dynamicComponentContainer></div>
   `,
@@ -53,7 +45,7 @@ export class DynamicComponent {
     @Output() onViewUpdate = new EventEmitter<any>();
     @Output() onComplete = new EventEmitter<any>();
     viewUpdateSubscription: Subscription;
-    
+
     @Input() set componentData(message: Message) {
         if (!message) {
             return;
@@ -61,9 +53,6 @@ export class DynamicComponent {
 
         const inputProviders = Object.keys(message.parameters).map((inputName) => ({ provide: inputName, useValue: message.parameters[inputName] }));
         const resolvedInputs = ReflectiveInjector.resolve(inputProviders);
-
-        console.log("inputProviders", inputProviders);
-        console.log("resolvedInputs", resolvedInputs);
 
         // Create injector out of the data we want to pass down and this components injector
         const injector = ReflectiveInjector.fromResolvedProviders(resolvedInputs, this.dynamicComponentContainer.parentInjector);
@@ -73,11 +62,8 @@ export class DynamicComponent {
         // Create the component using the factory and the injector
         const component = factory.create(injector);
 
-        console.log("Create component", component);
-
         // Insert the component into the dom container
         this.dynamicComponentContainer.insert(component.hostView);
-        console.log("*****hostview", component.hostView);
 
         // Destroy the old component
         if (this.currentComponent) {
@@ -88,7 +74,7 @@ export class DynamicComponent {
 
         // Subscribe to view Update event from Messages and emit out View Update Event
         this.viewUpdateSubscription = this.currentComponent.instance.onViewUpdate.subscribe((response: any) => {
-            this.onViewUpdate.emit(response);
+            this.onViewUpdate.emit();
         });
 
         // Subscribe to Complete events from Messages
@@ -99,8 +85,8 @@ export class DynamicComponent {
             takeUntil(this.onComplete)
         ).subscribe((response: { status: boolean, data?: any }) => {
             if (response.status === true) {
-                console.log("status from dynamic component", response.data);
                 this.onComplete.emit(response.data);
+
                 this.viewUpdateSubscription.unsubscribe();
 
                 // Throw ObjectUnsubscribed error if these subjects are still used

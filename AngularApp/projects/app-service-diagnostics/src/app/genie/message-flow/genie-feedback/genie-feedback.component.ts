@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { IChatMessageComponent } from '../../interfaces/ichatmessagecomponent';
-import { MessageProcessor } from '../../message-processor.service';
+import { GenieMessageProcessor } from '../../message-processor.service';
 import { TextMessage } from '../../models/message';
 import { BotLoggingService } from '../../../shared/services/logging/bot.logging.service';
 import { MessageSender, ButtonActionType } from '../../models/message-enums';
@@ -29,7 +29,7 @@ export class GenieFeedbackComponent extends ButtonMessageComponent {
     dismissSubject: Subject<void> = new Subject<void>();
     showComponent: boolean;
     feedbackMessage: string;
-    constructor(protected telemetryService: TelemetryService, protected _injector: Injector, private _msgProcessor: MessageProcessor, protected _logger: BotLoggingService, protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
+    constructor(protected telemetryService: TelemetryService, protected _injector: Injector, private _msgProcessor: GenieMessageProcessor, protected _logger: BotLoggingService, protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
         super(_injector, _logger, globals, _chatState);
         this.showComponent = true;
         this.feedbackMessage = '';

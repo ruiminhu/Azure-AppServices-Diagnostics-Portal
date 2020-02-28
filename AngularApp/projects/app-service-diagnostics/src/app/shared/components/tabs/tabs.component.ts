@@ -20,8 +20,9 @@ export class TabsComponent implements OnInit {
   }
 
   ngOnInit() {
+    let resourceType = this._authService.resourceType;
     this._authService.getStartupInfo().subscribe(startupInfo => {
-      this.isLegacy = this._versionTestService.getIsLegcyByResourceId(startupInfo.resourceId);
+      this.isLegacy = this._versionTestService.getIsLegcyByResourceId(startupInfo.resourceId, resourceType);
     });
     // this.isLegacy = this._versionTestService.getIsLegcy();
     this._router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,9 +7,7 @@ import { Injectable } from '@angular/core';
 export class VersionService {
   private useLegcy: boolean;
   private subId:string;
-  constructor() {}
+  public isLegacySub:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   
-  public getIsLegcy():boolean {
-    return true;
-  }
+  constructor() {}
 }

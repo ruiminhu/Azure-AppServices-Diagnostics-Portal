@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
         // this.useLegacy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subscriptionId.toLowerCase() === item.toLowerCase()) > -1;
-        this.useLegacy = this.versionTestService.getIsLegcy();
+        this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy)
         // this.useLegacy = false;
         //  this.useLegacy = true;
 

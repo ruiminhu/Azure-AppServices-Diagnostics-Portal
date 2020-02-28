@@ -34,7 +34,7 @@ export class DetectorContainerComponent implements OnInit {
     public detectorControlService: DetectorControlService,private versionService:VersionService) { }
 
   ngOnInit() {
-    this.isLegacy = this.versionService.getIsLegcy();
+    this.versionService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
     //Remove after A/B Test
     if (this.isLegacy) {
       this.hideTimerPicker = false;

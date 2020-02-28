@@ -65,7 +65,7 @@ export class DynamicDataComponent implements OnInit {
   constructor(private componentFactoryResolver: ComponentFactoryResolver,private versionService:VersionService) { }
 
   ngOnInit(): void {
-    this.isLegacy = this.versionService.getIsLegcy();
+    this.versionService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
     this.dataBehaviorSubject.subscribe((diagnosticData: DiagnosticData) => {
       const component = this._findInputComponent((<Rendering>diagnosticData.renderingProperties).type);
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);

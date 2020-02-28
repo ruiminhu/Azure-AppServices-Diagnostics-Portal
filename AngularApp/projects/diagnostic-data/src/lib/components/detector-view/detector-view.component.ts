@@ -88,7 +88,7 @@ export class DetectorViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isLegacy = this.versionService.getIsLegcy();
+    this.versionService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
     this.loadDetector();
     this.errorSubject.subscribe((data: any) => {
       this.errorState = data;

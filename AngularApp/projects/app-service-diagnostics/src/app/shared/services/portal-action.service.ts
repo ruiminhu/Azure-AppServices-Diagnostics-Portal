@@ -19,7 +19,7 @@ export class PortalActionService {
     private isLegacy:boolean;
     constructor(private _windowService: WindowService, private _portalService: PortalService, private _armService: ArmService,
         private _authService: AuthService,private _versionTestService:VersionTestService) {
-        this.isLegacy = this._versionTestService.getIsLegcy();
+        this._versionTestService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
         this._authService.getStartupInfo().pipe(
             mergeMap((startUpInfo: StartupInfo) => {
                 return this._armService.getResource<Site>(startUpInfo.resourceId);

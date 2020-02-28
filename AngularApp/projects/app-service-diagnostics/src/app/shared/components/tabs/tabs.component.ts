@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, forwardRef, Inject } from '@angular/core';
 import { INavigationItem } from '../../models/inavigationitem';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CustomReuseStrategy } from '../../../app-route-reusestrategy.service';
@@ -17,13 +17,14 @@ export class TabsComponent implements OnInit {
   public isLegacy:boolean;
   constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _routeReuseStrategy: CustomReuseStrategy,private _versionTestService:VersionTestService,private _authService: AuthService) {
     this.navigationItems = [];
+    this._versionTestService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
   }
 
   ngOnInit() {
-    let resourceType = this._authService.resourceType;
-    this._authService.getStartupInfo().subscribe(startupInfo => {
-      this.isLegacy = this._versionTestService.getIsLegcyByResourceId(startupInfo.resourceId, resourceType);
-    });
+    // let resourceType = this._authService.resourceType;
+    // this._authService.getStartupInfo().subscribe(startupInfo => {
+    //   this.isLegacy = this._versionTestService.getIsLegcyByResourceId(startupInfo.resourceId, resourceType);
+    // });
     // this.isLegacy = this._versionTestService.getIsLegcy();
     this._router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
 

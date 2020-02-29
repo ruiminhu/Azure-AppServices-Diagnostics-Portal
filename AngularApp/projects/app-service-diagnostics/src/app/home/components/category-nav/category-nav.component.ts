@@ -134,12 +134,20 @@ export class CategoryNavComponent implements OnInit {
     detectorList: CollapsibleMenuItem[] = [];
     orphanDetectorList: CollapsibleMenuItem[] = [];
     orphanDetectorList1: CollapsibleMenuItem[] = [];
-
+    currentDetectorId: string = null;
     private getCurrentRoutePath() {
         this.currentRoutePath = this._activatedRoute.firstChild.snapshot.url.map(urlSegment => urlSegment.path);
     }
     ngOnInit() {
         //    this.orphanDetectorList1 = this._detectorCategorization.getlist(this.category.id);
+        if (this._activatedRoute.firstChild.snapshot.params['detectorName']) {
+            this.currentDetectorId = this._activatedRoute.firstChild.snapshot.params['detectorName'];
+        } else if(this._activatedRoute.firstChild.snapshot.params['analysisId']) {
+            this.currentDetectorId = this._activatedRoute.firstChild.snapshot.params['analysisId'];
+        } else {
+            this.currentDetectorId = null;
+        }
+
         this.hasUncategorizedDetectors = false;
         console.log("init category-nav");
         this._route.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
@@ -293,7 +301,8 @@ export class CategoryNavComponent implements OnInit {
                                 //return this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${detector.id}`;
 
                                 // return this.currentRoutePath && this.currentRoutePath.join('/').includes(detector.id);
-                                return this._route.url.includes(detector.id);
+                                // return this._route.url.includes(detector.id);
+                                return this.currentDetectorId === detector.id;
                             };
 
                             let icon = this.getIconImagePath(detector.id);

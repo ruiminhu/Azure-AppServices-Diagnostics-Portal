@@ -601,7 +601,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                 categoryName = viewModel.model.metadata.category.replace(/\s/g, '');
             }
             else {
-                categoryName = this._router.url.split('/')[11];
+                categoryName = this._router.url.split('/')[11] ? this._router.url.split('/')[11] : "availabilityandperformance";
                 console.log("uncatgorized category name", categoryName);
             }
 
@@ -622,11 +622,11 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                     this.logEvent(TelemetryEventNames.SearchResultClicked, { searchId: this.searchId, detectorId: detectorId, rank: 0, title: clickDetectorEventProperties.ChildDetectorName, status: clickDetectorEventProperties.Status, ts: Math.floor((new Date()).getTime() / 1000).toString() });
                     console.log("detectorlist current router", this._router.url, this.resourceId);
 
-                    let dest1 = `resource${this.resourceId}/categories/${categoryName}/detectors/${detectorId}`;
+                    let dest1 = `resource${this.resourceId}/categories/${categoryName}/analysis/${detectorId}`;
                     //     let dest = `../../categories/ConfigurationAndManagement/detectors/${detectorId}`;
                     //let dest = `../../categories/${categoryName}/detectors/${detectorId}`;
                     console.log("navigate to", dest1);
-
+                    
                     // This router is different for genie and case submission flow
                     //  this._router.navigate([`../analysis/${this.analysisId}/search/detectors/${detectorId}`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', preserveFragment: true, queryParams: { searchTerm: this.searchTerm } });
                     // ConfigurationAndManagement

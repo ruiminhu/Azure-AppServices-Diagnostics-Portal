@@ -302,9 +302,6 @@ export class CategoryNavComponent implements OnInit {
                         console.log("navigate to", dest1);
                         
                         this._route.navigate([dest1]); 
-                        // this._route.navigate(segments, navigationExtras).then(() => {
-                        //     console.log("navigated", segments, navigationExtras);
-                        // });
 
 
                             };

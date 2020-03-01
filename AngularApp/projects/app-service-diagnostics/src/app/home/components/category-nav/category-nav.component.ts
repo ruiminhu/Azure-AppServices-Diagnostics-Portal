@@ -137,7 +137,6 @@ export class CategoryNavComponent implements OnInit {
         this.currentRoutePath = this._activatedRoute.firstChild.snapshot.url.map(urlSegment => urlSegment.path);
     }
     ngOnInit() {
-        //    this.orphanDetectorList1 = this._detectorCategorization.getlist(this.category.id);
         if (this._activatedRoute.firstChild.snapshot.params['detectorName']) {
             this.currentDetectorId = this._activatedRoute.firstChild.snapshot.params['detectorName'];
         } else if(this._activatedRoute.firstChild.snapshot.params['analysisId']) {
@@ -161,15 +160,9 @@ export class CategoryNavComponent implements OnInit {
             item: {
                 title: 'Proactive Tools',
                 tools: this.siteFeatureService.proactiveTools.map(tool => {
-                    //   if (this.filterStack(tool))
-                    //   {
-
-                    //   }
                     let isSelected = () => {
                         return this._route.url.includes("/" + tool.item.id);
                     };
-                    // let imageIndex = 0;
-                    // let icon = `${this.imageRootPath}/${imageIndex}.png`;
                     let icon = this.getIconImagePath(tool.item.id);
                     return new CollapsibleMenuItem(tool.item.name, tool.item.clickAction, isSelected, icon);
                 })
@@ -188,8 +181,6 @@ export class CategoryNavComponent implements OnInit {
                     let isSelected = () => {
                         return this._route.url.includes("/" + tool.item.id);
                     };
-                    // let imageIndex = 1;
-                    // let icon = `${this.imageRootPath}/${imageIndex}.png`;
                     let icon = this.getIconImagePath(tool.item.id);
                     return new CollapsibleMenuItem(tool.item.name, tool.item.clickAction, isSelected, icon);
                 })
@@ -208,9 +199,6 @@ export class CategoryNavComponent implements OnInit {
                     let isSelected = () => {
                         return this._route.url.includes("/" + tool.item.id);
                     };
-                    // let imageIndex = 2;
-                    // let icon = `${this.imageRootPath}/${imageIndex}.png`;
-                    // let icon = `${this.imageRootPath}/${tool.item.id}`;
                     let icon = this.getIconImagePath(tool.item.id);
                     return new CollapsibleMenuItem(tool.item.name, tool.item.clickAction, isSelected, icon);
                 })
@@ -229,8 +217,6 @@ export class CategoryNavComponent implements OnInit {
                     let isSelected = () => {
                         return this._route.url.includes("/" + tool.item.id);
                     };
-                    // let imageIndex = 3;
-                    // let icon = `${this.imageRootPath}/${imageIndex}.png`;
                     let icon = this.getIconImagePath(tool.item.id);
                     return new CollapsibleMenuItem(tool.item.name, tool.item.clickAction, isSelected, icon);
                 })
@@ -253,33 +239,9 @@ export class CategoryNavComponent implements OnInit {
             this._authService.getStartupInfo().subscribe(startupInfo => {
                 this.resourceId = startupInfo.resourceId;
                 this.baseUrl = `resource${this.resourceId}/categories/${this.category.id}/`;
-                this.groups = [{
-                    links: [{
-                        name: 'Overview',
-                        key: 'overview',
-                        icon: 'globe',
-                        onClick: (e) => {
-                            // e.preventDefault();
-                            //   this._route.navigateByUrl(`resource${this.resourceId}/categories/${this.category.id}/`);
-                            //    this._route.navigate([`resource${this.resourceId}/categories/${this.category.id}/`]);
-                            this._route.navigate([`./overview`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge' });
-                        },
-                    }]
-                },
-                {
-                    name: 'Diagnostic Reports',
-                    key: 'diagnosticreport',
-                    isExpanded: true,
-                    // onClick: (e) => {
-                    //     e.preventDefault();
-                    //    // this._route.navigateByUrl(`resource${this.resourceId}/categories/${this.category.id}/`);
-                    //     this._route.navigate([`resource${this.resourceId}/categories/${this.category.id}/`]);
-                    // },
-                    links: []
-                },
-                ];
             });
 
+            // Get all the detector list under this category
             this._diagnosticApiService.getDetectors().subscribe(detectors => {
                 this.detectorDataLocalCopy = detectors;
                 detectors.forEach((detector, index) => {
@@ -291,22 +253,14 @@ export class CategoryNavComponent implements OnInit {
                                 routePath = "analysis";
                             }
                             let onClick = () => {
-                                //   this._telemetryService.logEvent(TelemetryEventNames.SideNavigationItemClicked, { "elementId": element.id });
                                 this.navigateTo(`${routePath}/${detector.id}`);
                             };
 
                             let isSelected = () => {
-                                //return this.currentRoutePath && this.currentRoutePath.join('/') === `detectors/${detector.id}`;
-
-                                // return this.currentRoutePath && this.currentRoutePath.join('/').includes(detector.id);
-                                // return this._route.url.includes(detector.id);
                                 return this.currentDetectorId === detector.id;
                             };
 
                             let icon = this.getIconImagePath(detector.id);
-                            // let icon = `${this.imageRootPath}/${detector.name}.svg`;
-                            // let imageIndex = index % 4;
-                            // let icon = `${this.imageRootPath}/${imageIndex}.png`;
                             let menuItem = new CollapsibleMenuItem(detector.name, onClick, isSelected, icon);
 
                             this.detectorList.push(menuItem);
@@ -318,7 +272,6 @@ export class CategoryNavComponent implements OnInit {
 
             this._route.events.subscribe((evt) => {
                 if (evt instanceof NavigationEnd) {
-
                     let itemId = "";
                     let routePath: any = "detectors";
                     if (evt.url.includes("detectors/")) {
@@ -338,15 +291,25 @@ export class CategoryNavComponent implements OnInit {
                                 return this._route.url.includes(item.id);
                             };
                             let icon = this.getIconImagePath(item.id);
-                            // let icon = `${this.imageRootPath}/${item.name}.svg`;
-                            // let imageIndex = 2;
-                            // let icon = `${this.imageRootPath}/${imageIndex}.png`;
                             let onClick = () => {
                                 //   this._telemetryService.logEvent(TelemetryEventNames.SideNavigationItemClicked, { "elementId": element.id });
-                                this.navigateTo(`${routePath}/${item.id}`);
+                              //  this.navigateTo(`${routePath}/${item.id}`);
+
+                                
+                        let dest1 = `resource${this.resourceId}/categories/${this.categoryId}/${routePath}/${item.id}`;
+                        //     let dest = `../../categories/ConfigurationAndManagement/detectors/${detectorId}`;
+                        //let dest = `../../categories/${categoryName}/detectors/${detectorId}`;
+                        console.log("navigate to", dest1);
+                        
+                        this._route.navigate([dest1]); 
+                        // this._route.navigate(segments, navigationExtras).then(() => {
+                        //     console.log("navigated", segments, navigationExtras);
+                        // });
+
+
                             };
                             let orphanMenuItem = new CollapsibleMenuItem(item.name, onClick, isSelected, icon);
-                            //this.orphanDetectorList.push(orphanMenuItem);
+   
                             if (!this.orphanDetectorList.find((item1 => item1.label === orphanMenuItem.label))) {
                                 this._detectorCategorization.detectorlistCategories[this.category.id].push(orphanMenuItem);
                             }
@@ -355,8 +318,6 @@ export class CategoryNavComponent implements OnInit {
                             console.log("orphanlist", this._detectorCategorization.detectorlistCategories);
                             // this._detectorCategorization.pushDetectorToCategory(orphanMenuItem, this.category.id);
                         }
-
-                        //        this.orphanDetectorList1 = this._detectorCategorization.getlist(this.category.id);
                     }
 
                     console.log("evt and list", evt, itemId, this.orphanDetectorList);

@@ -58,10 +58,8 @@ export class CategoryNavComponent implements OnInit {
     hasUncategorizedDetectors: boolean = false;
 
     isSelected(detectorId: string) {
-        console.log("router url", this._route.url, detectorId);
-        var s = this._route.url.includes(detectorId);
-        console.log("Is selected", s);
-        return this._route.url.includes(detectorId);
+        let routerUrl = this._route.url.toLocaleLowerCase();
+        return routerUrl.includes(`detectors/${detectorId}`) || routerUrl.includes(`analysis/${detectorId}`);;
     }
 
     tempCategoriesArray: any[] = [];
@@ -119,7 +117,7 @@ export class CategoryNavComponent implements OnInit {
         var pathSegments = path.split('/');
         let segments: string[] = [path];
         this._route.navigate(segments, navigationExtras).then(() => {
-            console.log("navigated");
+            console.log("navigated", segments, navigationExtras);
         });
         console.log("this._route", this._route.url);
         console.log("activatedRoute", this._activatedRoute);

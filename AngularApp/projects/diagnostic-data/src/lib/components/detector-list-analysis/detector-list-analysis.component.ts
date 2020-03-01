@@ -23,6 +23,7 @@ import { GenericSupportTopicService } from '../../services/generic-support-topic
 import { SearchAnalysisMode } from '../../models/search-mode';
 //  import { GenieService } from '../../../../../app-service-diagnostics/';
 import { GenieGlobals } from '../../services/genie.service';
+import { SolutionService } from '../../services/solution.service';
 
 @Component({
     selector: 'detector-list-analysis',
@@ -90,7 +91,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     constructor(private _activatedRoute: ActivatedRoute, private _router: Router,
         private _diagnosticService: DiagnosticService, private _detectorControl: DetectorControlService,
         protected telemetryService: TelemetryService, public _appInsightsService: AppInsightsQueryService,
-        private _supportTopicService: GenericSupportTopicService, protected _globals: GenieGlobals,
+        private _supportTopicService: GenericSupportTopicService, protected _globals: GenieGlobals, private _solutionService: SolutionService,
         @Inject(DIAGNOSTIC_DATA_CONFIG) config: DiagnosticDataConfig) {
         super(telemetryService);
         this.isPublic = config && config.isPublic;
@@ -589,6 +590,33 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
         };
     }
 
+    public openBladeDiagnoseDetectorId(category: string, detector: string, type: DetectorType = DetectorType.Detector) {
+        const bladeInfo = {
+            title: category,
+            detailBlade: 'SCIFrameBlade',
+            extension: 'WebsitesExtension',
+            detailBladeInputs: {
+                id: this.resourceId,
+                categoryId: category,
+                optionalParameters: [{
+                    key: "categoryId",
+                    value: category
+                },
+                {
+                    key: "detectorId",
+                    value: detector
+                },
+                {
+                    key: "detectorType",
+                    value: type
+                }]
+            }
+        };
+
+        this._solutionService.GoToBlade(this.resourceId, bladeInfo);
+        
+    }
+    
     public selectDetector(viewModel: any) {
         if (viewModel != null && viewModel.model.metadata.id) {
             let detectorId = viewModel.model.metadata.id;
@@ -619,22 +647,33 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                 this.logEvent(TelemetryEventNames.ChildDetectorClicked, clickDetectorEventProperties);
 
                 if (this.analysisId === "searchResultsAnalysis" && this.searchTerm && this.searchTerm.length > 0) {
-                    this.logEvent(TelemetryEventNames.SearchResultClicked, { searchId: this.searchId, detectorId: detectorId, rank: 0, title: clickDetectorEventProperties.ChildDetectorName, status: clickDetectorEventProperties.Status, ts: Math.floor((new Date()).getTime() / 1000).toString() });
-                    console.log("detectorlist current router", this._router.url, this.resourceId);
 
-                    let dest1 = `resource${this.resourceId}/categories/${categoryName}/analysis/${detectorId}`;
-                    //     let dest = `../../categories/ConfigurationAndManagement/detectors/${detectorId}`;
-                    //let dest = `../../categories/${categoryName}/detectors/${detectorId}`;
-                    console.log("navigate to", dest1);
-                    
-                    // This router is different for genie and case submission flow
-                    //  this._router.navigate([`../analysis/${this.analysisId}/search/detectors/${detectorId}`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', preserveFragment: true, queryParams: { searchTerm: this.searchTerm } });
-                    // ConfigurationAndManagement
-                    //navigate to ../../categories/ConfigurationandManagement/detectors/swap
-                    this._globals.openGeniePanel = false;
-                    console.log("close panel and openGeniePanel", this._globals);
-                    //this._router.navigateByUrl(`${dest1}`).then(()=>{ console.log("navigated");});
-                    this._router.navigate([dest1]);
+                    const isHomepage = !this._activatedRoute.root.firstChild.firstChild.firstChild.firstChild.snapshot.params["category"];
+                    //If in homepage then open second blade for Diagnostic Tool and second blade will continue to open third blade for 
+                    if (isHomepage) {
+                        console.log("bladeInfo", BladeInfo);
+                        this.openBladeDiagnoseDetectorId(categoryName, detectorId, DetectorType.Detector);
+                    }
+                    else
+                    {
+                        this.logEvent(TelemetryEventNames.SearchResultClicked, { searchId: this.searchId, detectorId: detectorId, rank: 0, title: clickDetectorEventProperties.ChildDetectorName, status: clickDetectorEventProperties.Status, ts: Math.floor((new Date()).getTime() / 1000).toString() });
+                        console.log("detectorlist current router", this._router.url, this.resourceId);
+    
+                        let dest1 = `resource${this.resourceId}/categories/${categoryName}/analysis/${detectorId}`;
+                        //     let dest = `../../categories/ConfigurationAndManagement/detectors/${detectorId}`;
+                        //let dest = `../../categories/${categoryName}/detectors/${detectorId}`;
+                        console.log("navigate to", dest1);
+                        
+                        // This router is different for genie and case submission flow
+                        //  this._router.navigate([`../analysis/${this.analysisId}/search/detectors/${detectorId}`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', preserveFragment: true, queryParams: { searchTerm: this.searchTerm } });
+                        // ConfigurationAndManagement
+                        //navigate to ../../categories/ConfigurationandManagement/detectors/swap
+                        this._globals.openGeniePanel = false;
+                        console.log("close panel and openGeniePanel", this._globals);
+                        //this._router.navigateByUrl(`${dest1}`).then(()=>{ console.log("navigated");});
+                        this._router.navigate([dest1]);   
+                    }
+              
                     //  this.customRedirectTo(dest1);
 
                     //    this._router.navigate([`${dest}`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', preserveFragment: true, queryParams: { searchTerm: this.searchTerm } });

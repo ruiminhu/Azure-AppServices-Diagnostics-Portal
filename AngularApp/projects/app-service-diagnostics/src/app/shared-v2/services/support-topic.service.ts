@@ -61,8 +61,8 @@ export class SupportTopicService {
                   detectorPath = `/analysis/${matchingDetector.id}`;
                 }
               }
-            }
-            return {path: detectorPath, queryParams: {}};
+            }    
+            return {path: detectorPath, queryParams: {"searchTerm": searchTerm}};
           }));
       }
     }));

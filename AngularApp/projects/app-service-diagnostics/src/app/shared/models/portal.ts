@@ -11,6 +11,7 @@ export interface StartupInfo {
     sessionId: string;
     resourceId: string;
     featureUri?:  string;
+    armEndpoint?: string;
     source?:  string;
     pesId?: string;
     supportTopicId?:  string;
@@ -88,6 +89,16 @@ export class Verbs {
     public static openSupportRequestBlade = 'open-support-request-inputs';
     public static getAppInsightsResource = 'get-appinsights-resource';
     public static sendAppInsightsResource = 'send-appinsights-resource';
+    
+    //CXP Live Chat Requests from iframe
+    public static getChatAvailability = 'get-chat-availability';
+    public static sendChatAvailability = 'send-chat-availability';
+    public static buildChatUrl = 'build-chat-url';
+    public static sendbuiltChatUrl = 'send-built-chat-url';
+    public static getChatUrl = 'get-chat-url'; //This combines the functionality of getChatAvailability and buildChatUrl
+    public static sendChatUrl = 'send-chat-url';
+    public static notifyChatOpened = 'notify-Chat-Opened';
+    public static notifyChatOpenedResponse = 'notify-Chat-Opened-Response';
 }
 
 export enum LogEntryLevel {

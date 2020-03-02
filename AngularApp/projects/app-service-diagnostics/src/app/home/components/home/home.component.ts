@@ -23,8 +23,6 @@ import { FabSearchBoxComponent } from '@angular-react/fabric';
 import { Globals } from '../../../globals';
 import { VersioningHelper } from '../../../shared/utilities/versioningHelper';
 import { DemoSubscriptions } from "../../../betaSubscriptions";
-// import { FabSearchBoxModule } from '@angular-react/fabric';
-// import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import {
     ICalendarStrings,
     IContextualMenuProps,
@@ -37,11 +35,10 @@ import {
     IPeoplePickerProps,
     IIconProps
 } from 'office-ui-fabric-react';
-// import { FabPeoplePickerComponent } from '@angular-react/fabric/public-api';
 import { from } from 'rxjs';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
 import { VersionTestService } from '../../../fabric-ui/version-test.service';
-
+import { SubscriptionPropertiesService } from '../../../shared/services/subscription-properties.service';
 
 @Component({
     selector: 'home',
@@ -77,13 +74,12 @@ export class HomeComponent implements OnInit {
 
     constructor(private _resourceService: ResourceService, private _categoryService: CategoryService, private _notificationService: NotificationService, private _router: Router,
         private _detectorControlService: DetectorControlService, private _featureService: FeatureService, private _logger: LoggingV2Service, private _authService: AuthService,
-        private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService, private kustologgingService: PortalKustoTelemetryService, private _diagnosticService: DiagnosticService, private _portalService: PortalActionService,private globals:Globals,private versionTestService:VersionTestService) {
+        private _navigator: FeatureNavigationService, private _activatedRoute: ActivatedRoute, private armService: ArmService, private logService: TelemetryService,
+        private kustologgingService: PortalKustoTelemetryService, private _diagnosticService: DiagnosticService, private _portalService: PortalActionService, private globals: Globals,
+        private versionTestService: VersionTestService, private subscriptionPropertiesService: SubscriptionPropertiesService) {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
-        // this.useLegacy = DemoSubscriptions.betaSubscriptions.findIndex(item => this.subscriptionId.toLowerCase() === item.toLowerCase()) > -1;
         this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy)
-        // this.useLegacy = false;
-        //  this.useLegacy = true;
 
         if (_resourceService.armResourceConfig && _resourceService.armResourceConfig.homePageText
             && _resourceService.armResourceConfig.homePageText.title && _resourceService.armResourceConfig.homePageText.title.length > 1
@@ -127,7 +123,8 @@ export class HomeComponent implements OnInit {
             }
         }
 
-        if (this.isPublicAzure == false && this.isIE_Browser == false) {
+        if (this.isAKSOnNationalCloud) {
+
             this.homePageText = {
                 title: 'Azure Kubernetes Service Diagnostics',
                 description: 'Explore ways to diagnose and troubleshoot the common problems of your cluster from CRUD operations to connection problems. Click on any of the documents below to start troubleshooting.',
@@ -151,9 +148,7 @@ export class HomeComponent implements OnInit {
             }
         });
 
-        // this.globals.removeMsgFromLocalStorage();
     }
-
 
     ngOnInit() {
         this.resourceName = this._resourceService.resource.name;
@@ -162,16 +157,34 @@ export class HomeComponent implements OnInit {
             this._detectorControlService.setDefault();
         }
 
-        if (this._resourceService.resource.type === 'Microsoft.Web/sites') {
-            // Register Change Analysis Resource Provider.
-            this.armService.postResourceFullResponse(this.providerRegisterUrl, {}, true, '2018-05-01').subscribe((response: HttpResponse<{}>) => {
+        let locationPlacementId = '';
+        this.subscriptionPropertiesService.getSubscriptionProperties(this.subscriptionId).subscribe((response: HttpResponse<{}>) => {
+            let subscriptionProperties = response.body['subscriptionPolicies'];
+            if (subscriptionProperties) {
+                locationPlacementId = subscriptionProperties['locationPlacementId'];
                 let eventProps = {
-                    url: this.providerRegisterUrl
+                    subscriptionId: this.subscriptionId,
+                    subscriptionLocationPlacementId: locationPlacementId
                 };
-                this.kustologgingService.logEvent("Change Analysis Resource Provider registered", eventProps);
-            }, (error: any) => {
-                this.logHTTPError(error, 'registerResourceProvider');
-            });
+                this.logService.logEvent('SubscriptionProperties', eventProps);
+            }
+        });
+
+        if (this._resourceService.resource.type === 'Microsoft.Web/sites') {
+            if (locationPlacementId.toLowerCase() !== 'geos_2020-01-01') {
+                // Register Change Analysis Resource Provider.
+                this.armService.postResourceFullResponse(this.providerRegisterUrl, {}, true, '2018-05-01').subscribe((response: HttpResponse<{}>) => {
+                    let eventProps = {
+                        url: this.providerRegisterUrl
+
+                    };
+                    this.kustologgingService.logEvent("Change Analysis Resource Provider registered", eventProps);
+                }, (error: any) => {
+                    this.logHTTPError(error, 'registerResourceProvider');
+                });
+            } else {
+                this._categoryService.filterCategoriesForSub();
+            }
         }
 
         if (!this._detectorControlService.startTime) {
@@ -181,15 +194,20 @@ export class HomeComponent implements OnInit {
         this.logService.logEvent("telemetry service logging", {});
         this.kustologgingService.logEvent("kusto telemetry service logging", {});
 
-
         initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
 
     };
 
 
+    public get isAKSOnNationalCloud(): boolean {
+        return this.armService.isNationalCloud
+            && this._resourceService.parseResourceUri(this._resourceService.resourceIdForRouting).provider.toLowerCase() == 'microsoft.containerservice';
+    }
+
     onSearchBoxFocus(event: any): void {
         this.searchBoxFocus = true;
     }
+
 
     clearSearch() {
         this.searchBoxFocus = false;

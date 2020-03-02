@@ -46,7 +46,7 @@ export class SiteFeatureService extends FeatureService {
       // }
       this.addDiagnosticTools(startupInfo.resourceId);
       this.addProactiveTools(startupInfo.resourceId);
-      this.addPremiumTools(startupInfo.resourceId);
+      this.addPremiumTools();
     });
   }
 
@@ -140,7 +140,7 @@ export class SiteFeatureService extends FeatureService {
     ];
   }
 
-  addPremiumTools(resourceId: string) {
+  addPremiumTools() {
     this.premiumTools = <SiteFilteredItem<Feature>[]>[
       {
         appType: AppType.WebApp,
@@ -155,14 +155,7 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolIds.SecurityScanning, 'Premium Tools', () => {
-            // this._portalActionService.openTifoilSecurityBlade();
-
-            //Need remove after A/B test
-            if (this.isLegacy) {
-              this._portalActionService.openTifoilSecurityBlade();
-            } else {
-              this.navigateTo(resourceId,ToolIds.SecurityScanning);
-            }
+            this._portalActionService.openTifoilSecurityBlade();
           })
         }
       }
@@ -466,15 +459,8 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.MetricPerInstance.Identifier, 'Support Tools', () => {
-            // this._portalActionService.openMdmMetricsV3Blade();
+            this._portalActionService.openMdmMetricsV3Blade();
             // this.navigateTo(resourceId,ToolIds.MetricPerInstanceApp);
-
-            //Need remove after A/B test
-            if (this.isLegacy) {
-              this._portalActionService.openMdmMetricsV3Blade();
-            } else {
-              this.navigateTo(resourceId,ToolIds.MetricPerInstanceApp);
-            }
           })
         }
       },
@@ -491,15 +477,8 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.AppServicePlanMetrics.Identifier, 'Support Tools', () => {
-            // this._portalActionService.openMdmMetricsV3Blade(this._resourceService.resource.properties.serverFarmId);
+            this._portalActionService.openMdmMetricsV3Blade(this._resourceService.resource.properties.serverFarmId);
             // this.navigateTo(resourceId,ToolIds.AppServicePlanMetrics);
-
-            //Need remove after A/B test
-            if (this.isLegacy) {
-              this._portalActionService.openMdmMetricsV3Blade(this._resourceService.resource.properties.serverFarmId);
-            } else {
-              this.navigateTo(resourceId,ToolIds.AppServicePlanMetrics);
-            }
           })
         }
       },
@@ -566,15 +545,7 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction('AdvancedAppRestart', 'Support Tools', () => {
-            // this._portalActionService.openBladeAdvancedAppRestartBladeForCurrentSite();
-            // this.navigateTo(resourceId,ToolIds.AdvancedAppRestart);
-
-            //Need remove after A/B test
-            if (this.isLegacy) {
-              this._portalActionService.openBladeAdvancedAppRestartBladeForCurrentSite();
-            } else {
-              this.navigateTo(resourceId,ToolIds.AdvancedAppRestart);
-            }
+            this._portalActionService.openBladeAdvancedAppRestartBladeForCurrentSite();
           })
         }
       }

@@ -114,7 +114,7 @@ export class WebSearchComponent extends DataRenderBaseComponent implements OnIni
             this.logEvent(TelemetryEventNames.WebQueryResults, { searchId: this.searchId, query: this.searchTerm, results: JSON.stringify(this.searchResults.map(result => {
                 return {
                     title: result.title.replace(";"," "),
-                    description: result.description.replace(";", ""),
+                    description: result.description.replace(";", " "),
                     link: result.link
                 };
             })), ts: Math.floor((new Date()).getTime() / 1000).toString() });

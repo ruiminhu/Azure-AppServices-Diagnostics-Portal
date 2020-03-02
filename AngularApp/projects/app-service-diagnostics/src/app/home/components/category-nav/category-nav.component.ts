@@ -306,7 +306,7 @@ export class CategoryNavComponent implements OnInit {
                         if (item && (item.category == undefined || item.category == "") && !this.detectorList.find((detector) => detector.label === item.id)) {
                             if (!this.orphanDetectorList.find((orphan) => (orphan.label) === item.name)) {
                                 let isSelected = () => {
-                                    return this._route.url.includes(item.id);
+                                    return this._route.url.includes(`detectors/${item.id}`) || this._route.url.includes(`analysis/${item.id}`);
                                 };
                                 let icon = this.getIconImagePath(item.id);
                                 let onClick = () => {

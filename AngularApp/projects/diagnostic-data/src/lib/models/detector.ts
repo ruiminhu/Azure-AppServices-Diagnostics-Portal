@@ -105,7 +105,9 @@ export enum RenderingType {
     ApplicationInsightsView,
     DependencyGraph,
     DownTime,
-    SummaryCard
+    SummaryCard,
+    SearchComponent,
+    AppInsightEnablement
 }
 
 export enum TimeSeriesType {
@@ -181,6 +183,7 @@ export interface DynamicInsightRendering extends Rendering {
 
 export interface DetectorListRendering extends Rendering {
     detectorIds: string[];
+    additionalParams?: string;
 }
 
 export interface MarkdownRendering extends Rendering {

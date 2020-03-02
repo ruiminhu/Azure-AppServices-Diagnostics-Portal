@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { SharedV2Module } from '../shared-v2/shared-v2.module';
-import { GenericSupportTopicService } from 'diagnostic-data';
+import { GenericSupportTopicService, GenericContentService } from 'diagnostic-data';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryChatComponent } from './components/category-chat/category-chat.component';
 import { CategoryTileComponent } from './components/category-tile/category-tile.component';
@@ -20,34 +20,13 @@ import { DiagnosticDataModule } from 'diagnostic-data';
 import { GenericAnalysisComponent } from '../shared/components/generic-analysis/generic-analysis.component';
 import { CategorySummaryComponent } from '../fabric-ui/components/category-summary/category-summary.component';
 import { CategoryOverviewComponent } from '../fabric-ui/components/category-overview/category-overview.component';
-import { DetectorCommandBarComponent } from '../fabric-ui/components/detector-command-bar/detector-command-bar.component';
-//import { GeniePanelComponent } from '../fabric-ui/components/genie-panel/genie-panel.component';
 import { DiagnosticsSettingsComponent } from './components/diagnostics-settings/diagnostics-settings.component';
 import { SupportTopicService } from '../shared-v2/services/support-topic.service';
 import { MarkdownModule } from 'ngx-markdown';
+import { CXPChatService } from 'diagnostic-data';
 import { PortalReferrerResolverComponent } from '../shared/components/portal-referrer-resolver/portal-referrer-resolver.component';
-import { SearchPipe, SearchMatchPipe } from './components/pipes/search.pipe';
-
-import { CategoryNavComponent } from './components/category-nav/category-nav.component';
-import { CollapsibleMenuItemComponent } from './components/collapsible-menu-item/collapsible-menu-item.component';
-import { SectionDividerComponent } from './components/section-divider/section-divider.component';
-import { FabricSearchResultsComponent } from '../fabric-ui/components/fabric-search-results/fabric-search-results.component';
-import { FabricFeedbackComponent } from '../fabric-ui/components/fabric-feedback/fabric-feedback.component';
-import { FabricFeedbackContainerComponent } from '../fabric-ui/components/fabric-feedback-container/fabric-feedback-container.component';
-import {
-    FabSearchBoxModule,
-    // FabShimmerModule,
-    // FabSliderModule,
-    // FabSpinnerModule,
-    // FabToggleModule,
-    // FabTooltipModule,
-    // FabSpinButtonModule,
-    // FabTextFieldModule,
-    // FabPeoplePickerModule,
-    // FabTagPickerModule,
-    // FabProgressIndicatorModule,
-    // FabContextualMenuModule
-} from '@angular-react/fabric';
+import { CXPChatCallerService } from '../shared-v2/services/cxp-chat-caller.service';
+import { FabSearchBoxModule } from '@angular-react/fabric';
 import { UncategorizedDetectorsResolver } from './resolvers/uncategorized-detectors.resolver';
 import { DetectorCategorizationService } from '../shared/services/detector-categorized.service';
 import { ToolNames } from '../shared/models/tools-constants';
@@ -67,9 +46,6 @@ import { AutohealingDetectorComponent } from '../availability/detector-view/dete
 import { CpuMonitoringToolComponent } from '../shared/components/tools/cpu-monitoring-tool/cpu-monitoring-tool.component';
 import { EventViewerComponent } from '../shared/components/daas/event-viewer/event-viewer.component';
 import { FrebViewerComponent } from '../shared/components/daas/freb-viewer/freb-viewer.component';
-import { Injectable, Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { PortalActionService } from '../shared/services/portal-action.service';
 import { DiagnosticToolsRoutes, MetricsPerInstanceAppServicePlanResolver, AdvanceApplicationRestartResolver, SecurityScanningResolver, MetricsPerInstanceAppsResolver } from '../diagnostic-tools/diagnostic-tools.routeconfig';
 import { CategoryTileV4Component } from '../fabric-ui/components/category-tile-v4/category-tile-v4.component';
 import { CategoryChatV4Component } from '../fabric-ui/components/category-chat-v4/category-chat-v4.component';
@@ -89,11 +65,11 @@ export const HomeRoutes = RouterModule.forChild([
         path: 'categoriesv3/:category',
         component: CategoryChatComponent,
         data: {
-          cacheComponent: true
+            cacheComponent: true
         },
         resolve: {
-          navigationTitle: CategoryTabResolver,
-          messageList: CategoryChatResolver
+            navigationTitle: CategoryTabResolver,
+            messageList: CategoryChatResolver
         }
     },
     {
@@ -530,21 +506,22 @@ export const HomeRoutes = RouterModule.forChild([
         MarkdownModule.forRoot(),
         FabSearchBoxModule
     ],
-    declarations: [HomeComponent, CategoryChatComponent, CategoryTileComponent, SearchResultsComponent, SupportTopicRedirectComponent, DiagnosticsSettingsComponent,CategoryTileV4Component,CategoryChatV4Component],
-    // ,FabricFeedbackComponent,FabricFeedbackContainerComponent
+    declarations: [HomeComponent, CategoryChatComponent, CategoryTileComponent, SearchResultsComponent, SupportTopicRedirectComponent, DiagnosticsSettingsComponent, CategoryTileV4Component, CategoryChatV4Component],
     providers:
         [
             CategoryTabResolver,
             CategoryChatResolver,
             TimeControlResolver,
+            ContentService,
             UncategorizedDetectorsResolver,
             DetectorCategorizationService,
             MetricsPerInstanceAppsResolver,
             MetricsPerInstanceAppServicePlanResolver,
             AdvanceApplicationRestartResolver,
             SecurityScanningResolver,
-            { provide: GenericSupportTopicService, useExisting: SupportTopicService }
+            { provide: GenericSupportTopicService, useExisting: SupportTopicService },
+            { provide: GenericContentService, useExisting: ContentService },
+            { provide: CXPChatService, useExisting: CXPChatCallerService },
         ],
-    // exports: [GeniePanelComponent]
 })
 export class HomeModule { }

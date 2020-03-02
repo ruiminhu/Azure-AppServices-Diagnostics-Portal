@@ -8,6 +8,7 @@ import { CacheService } from './cache.service';
 import { catchError, retry, map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { GenericArmConfigService } from './generic-arm-config.service';
+import { StartupInfo } from '../models/portal';
 
 
 @Injectable()
@@ -20,23 +21,62 @@ export class ArmService {
     private readonly publicAzureArmUrl = 'https://management.azure.com';
     private readonly chinaAzureArmUrl = 'https://management.chinacloudapi.cn';
     private readonly usGovernmentAzureArmUrl = 'https://management.usgovcloudapi.net';
+    private readonly blackforestAzureArmUrl = 'https://management.microsoftazure.de';
+    private readonly usnatAzureArmUrl = 'https://management.azure.eaglex.ic.gov';
+    private readonly diagRoleVersion = '1';
+    private readonly routeToLiberation = '2';
+    private armEndpoint:string = '';
+    constructor(private _http: HttpClient, private _authService: AuthService, private _cache: CacheService, private _genericArmConfigService?: GenericArmConfigService ) {
+        this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
+            if(!!startupInfo.armEndpoint && startupInfo.armEndpoint !='' && startupInfo.armEndpoint.length > 1) {
+                this.armEndpoint = startupInfo.armEndpoint ;
+            }
+        });
+    }
 
-    constructor(private _http: HttpClient, private _authService: AuthService, private _cache: CacheService, private _genericArmConfigService?: GenericArmConfigService) {
+    get isPublicAzure():boolean {
+        return this.armUrl === this.publicAzureArmUrl;
+    }
 
+    get isFairfax(): boolean {
+        return this.armUrl === this.usGovernmentAzureArmUrl;
+    }
+
+    get isBlackforest(): boolean {
+        return this.armUrl === this.blackforestAzureArmUrl;
+    }
+
+    get isMooncake(): boolean {
+        return this.armUrl ===  this.chinaAzureArmUrl;
+    }
+
+    get isUsnat(): boolean {
+        return this.armUrl ===  this.usnatAzureArmUrl;
+    }
+
+    get isNationalCloud(): boolean {
+        return this.isMooncake || this.isFairfax || this.isBlackforest || this.isUsnat;
     }
 
     get armUrl(): string {
-        let browserUrl = (window.location != window.parent.location) ? document.referrer : document.location.href;
-        let armUrl = this.publicAzureArmUrl;
-        
-        if (browserUrl.includes("azure.cn")){
-            armUrl = this.chinaAzureArmUrl;
+        if(this.armEndpoint !='' && this.armEndpoint.length > 1 ) {
+            return  this.armEndpoint;
         }
-        else if(browserUrl.includes("azure.us")){
-            armUrl = this.usGovernmentAzureArmUrl;
-        }
+        else {
+            let browserUrl = (window.location != window.parent.location) ? document.referrer : document.location.href;
+            let armUrl = this.publicAzureArmUrl;
 
-        return armUrl;
+            if (browserUrl.includes("azure.cn")){
+                armUrl = this.chinaAzureArmUrl;
+            }
+            else if(browserUrl.includes("azure.us")){
+                armUrl = this.usGovernmentAzureArmUrl;
+            } else if(browserUrl.includes("azure.de")) {
+                armUrl = this.blackforestAzureArmUrl;
+            }
+
+            return armUrl;
+        }        
     }
 
     getApiVersion(resourceUri: string, apiVersion?: string): string {
@@ -66,9 +106,22 @@ export class ArmService {
             resourceUri = '/' + resourceUri;
         }
         const url = this.createUrl(resourceUri, apiVersion);
-
+        let subscriptionLocation = '';
+        this.getSubscriptionLocation(resourceUri.split("subscriptions/")[1].split("/")[0]).subscribe(response => {
+            subscriptionLocation = response.body['subscriptionPolicies']['locationPlacementId'];
+        });
+        let additionalHeaders = new Map<string, string>();
+        additionalHeaders.set('x-ms-subscription-location-placementid', subscriptionLocation);
+        // When x-ms-diagversion is set to 1, the requests will be sent to DiagnosticRole.
+        //If the value is set to other than 1 or if the header is not present at all, requests will go to runtimehost
+        if(this.isNationalCloud) {
+            additionalHeaders.set('x-ms-diagversion', this.routeToLiberation);
+        }
+        else {
+            additionalHeaders.set('x-ms-diagversion', this.diagRoleVersion);
+        }
         const request = this._http.get<ResponseMessageEnvelope<T>>(url, {
-            headers: this.getHeaders()
+            headers: this.getHeaders(null, additionalHeaders)
         }).pipe(
             retry(2),
             catchError(this.handleError)
@@ -266,7 +319,17 @@ export class ArmService {
                 url = url + "&" + param["key"] + "=" + encodeURIComponent(param["value"]);
             });
         }
-        const request = this._http.get(url, { headers: this.getHeaders() }).pipe(
+
+        let additionalHeaders = new Map<string, string>();
+        // When x-ms-diagversion is set to 1, the requests will be sent to DiagnosticRole.
+        //If the value is set to other than 1 or if the header is not present at all, requests will go to runtimehost
+        if(this.isNationalCloud) {
+            additionalHeaders.set('x-ms-diagversion', this.routeToLiberation);
+        }
+        else {
+            additionalHeaders.set('x-ms-diagversion', this.diagRoleVersion);
+        }
+        const request = this._http.get(url, { headers: this.getHeaders(null, additionalHeaders) }).pipe(
             map<ResponseMessageCollectionEnvelope<ResponseMessageEnvelope<T>>, ResponseMessageEnvelope<T>[]>(r => r.value),
             catchError(this.handleError)
         );
@@ -274,7 +337,11 @@ export class ArmService {
         return this._cache.get(url, request, invalidateCache);
     }
 
-    getHeaders(etag?: string): HttpHeaders {
+    getSubscriptionLocation(subscriptionId: string): Observable<HttpResponse<any>> {
+        return this.getResourceFullResponse<any>(`/subscriptions/${subscriptionId}`, false, '2019-06-01');
+    }
+
+    getHeaders(etag?: string, additionalHeaders?: Map<string, string>): HttpHeaders {
         let headers = new HttpHeaders();
         headers = headers.set('Content-Type', 'application/json');
         headers = headers.set('Accept', 'application/json');
@@ -282,6 +349,14 @@ export class ArmService {
 
         if (etag) {
             headers = headers.set('If-None-Match', etag);
+        }
+
+        if(additionalHeaders) {
+            additionalHeaders.forEach((headerVal: string, headerKey: string) => {
+                if(headerVal.length > 0 && headerKey.length > 0) {
+                    headers = headers.set(headerKey, headerVal);
+                }
+            });
         }
 
         return headers;

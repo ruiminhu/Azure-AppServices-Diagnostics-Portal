@@ -3,6 +3,7 @@ import 'nvd3';
 import { DetectorControlService } from './services/detector-control.service';
 import { DiagnosticService } from './services/diagnostic.service';
 import { GenericSupportTopicService } from './services/generic-support-topic.service';
+import { GenericContentService } from './services/generic-content.service';
 import { TelemetryService } from './services/telemetry/telemetry.service';
 import { GenieGlobals } from './services/genie.service';
 import { NvD3Module } from 'ng2-nvd3';
@@ -82,12 +83,17 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { HighchartsGraphComponent } from './components/highcharts-graph/highcharts-graph.component';
 import { FabNavModule } from './components/fab-nav/fab-nav.module';
 import { FabIconModule, FabChoiceGroupModule, FabSearchBoxModule, FabDropdownModule } from '@angular-react/fabric';
-// import { FabSummaryCardComponent } from './components/fab-summary-card/fab-summary-card.component';
 import { SummaryCardsComponent } from './components/summary-cards/summary-cards.component';
 import { InsightsV4Component } from './components/insights-v4/insights-v4.component';
 import { CardSelectionV4Component } from './components/card-selection-v4/card-selection-v4.component';
 import { DropdownV4Component } from './components/dropdown-v4/dropdown-v4.component';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CXPChatService } from './services/cxp-chat.service';
+import { CxpChatLauncherComponent } from './components/cxp-chat-launcher/cxp-chat-launcher.component';
+import { AppInsightsEnablementComponent } from './components/app-insights-enablement/app-insights-enablement.component';
+import { ConnectAppInsightsComponent } from './components/connect-app-insights/connect-app-insights.component';
+import {DetectorSearchComponent} from './components/detector-search/detector-search.component';
+import {WebSearchComponent} from './components/web-search/web-search.component';
+import {RenderFilterPipe} from './components/detector-view/detector-view.component';
 
 @NgModule({
   imports: [
@@ -109,7 +115,7 @@ import { DropdownV4Component } from './components/dropdown-v4/dropdown-v4.compon
   ],
   declarations: [
     Nvd3GraphComponent, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent,
-    DataRenderBaseComponent, DataContainerComponent, TimeSeriesInstanceGraphComponent, DetectorViewComponent,
+    DataRenderBaseComponent, DataContainerComponent, TimeSeriesInstanceGraphComponent, DetectorViewComponent, DetectorSearchComponent,
     DataSummaryComponent, EmailComponent, InsightsComponent, LoaderViewComponent, DynamicInsightComponent,
     MarkdownViewComponent, DetectorListComponent, DetectorOrderPipe, StarRatingComponent, StarRatingFeedbackComponent,
     DropdownComponent, StatusIconComponent, DetectorControlComponent, DetectorContainerComponent, InternalPipe,
@@ -127,10 +133,15 @@ import { DropdownV4Component } from './components/dropdown-v4/dropdown-v4.compon
     SummaryCardsComponent,
     InsightsV4Component,
     CardSelectionV4Component,
-    DropdownV4Component
+    DropdownV4Component,
+    CxpChatLauncherComponent,
+    AppInsightsEnablementComponent,
+    ConnectAppInsightsComponent,
+    WebSearchComponent,
+    RenderFilterPipe
   ],
   exports: [
-    FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent,
+    FormsModule, TimeSeriesGraphComponent, DataTableComponent, DynamicDataComponent, DetectorViewComponent, DetectorSearchComponent,
     DataSummaryComponent, LoaderViewComponent, StatusIconComponent, DetectorControlComponent,
     DetectorContainerComponent, InternalPipe, CommAlertComponent, GuageControlComponent, SolutionComponent,
     FormComponent, VerticalDisplayListComponent, VerticalDisplayListItemComponent, SolutionTypeTagComponent, DataContainerComponent,
@@ -140,7 +151,11 @@ import { DropdownV4Component } from './components/dropdown-v4/dropdown-v4.compon
     DetectorListAnalysisComponent,
     AppInsightsMarkdownComponent,
     FabNavModule,
-    FeedbackComponent
+    FeedbackComponent,
+    CxpChatLauncherComponent,
+    AppInsightsEnablementComponent,
+    ConnectAppInsightsComponent,
+    WebSearchComponent
   ],
 })
 export class DiagnosticDataModule {
@@ -150,7 +165,9 @@ export class DiagnosticDataModule {
       providers: [
         DiagnosticService,
         GenericSupportTopicService,
+        GenericContentService,
         { provide: DIAGNOSTIC_DATA_CONFIG, useValue: config },
+        CXPChatService,
         KustoTelemetryService,
         GenieGlobals,
         AppInsightsTelemetryService,

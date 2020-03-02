@@ -42,7 +42,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let viewModel of issueDetectedViewModels">
+                <tr *ngFor="let viewModel of issueDetectedViewModels" class="detector-insight">
                   <td>
                     <div style="white-space: nowrap">
                       <div style="display: inline-block">
@@ -184,9 +184,19 @@
         <i aria-hidden="true" class="fa fa-check"></i>
       </div>
       <div class="list-item">
-        <div class="list-title">Successful Checks</div>
+        <div
+          [ngClass]="{'remove-padding':withinDiagnoseAndSolve, 'white-line':withinDiagnoseAndSolve, 'gray-line':!withinDiagnoseAndSolve}">
+        </div>
+        <div class="list-title">Successful Checks ({{successfulViewModels.length}})
+          <span *ngIf="isDynamicAnalysis || isSearchEmbedded" class="expand-section" (click)="toggleSuccessful()">
+            <i *ngIf="!showSuccessfulChecks" class="fa fa-plus expand-icon"></i>
+            <i *ngIf="showSuccessfulChecks" class="fa fa-minus expand-icon"></i>
+          </span>
+        </div>
         <div>Tests that succeeded for your app</div>
-        <div class="list-text">
+        <div class="list-text" [style.opacity]="showSuccessfulChecks ? '1' : '0'"
+          [style.visibility]="showSuccessfulChecks ? 'visible' : 'hidden'"
+          [style.height]="showSuccessfulChecks ? '' : 0">
           <table class="table detector-list">
             <thead>
               <tr>
@@ -196,7 +206,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let viewModel of successfulViewModels">
+              <tr *ngFor="let viewModel of successfulViewModels" class="detector-insight">
                 <td>
                   <div style="white-space: nowrap">
                     <div style="display: inline-block">
@@ -228,6 +238,15 @@
       </div>
     </div>
   </div>
+
+  <div *ngIf="!isDynamicAnalysis && isSearchEmbedded && getPendingDetectorCount() === 0" style="margin-left:30px;">
+    <detector-search [detector]="analysisId" [diagnosticData]="searchDiagnosticData"></detector-search>
+  </div>
+  <div *ngIf="isDynamicAnalysis && ((!showPreLoader && getPendingDetectorCount() === 0) || showWebSearch)"
+    style="margin-left:80px;margin-top:20px;">
+    <web-search [searchTerm]="searchTerm" [searchId]="searchId" [isChildComponent]="true"></web-search>
+  </div>
+
   <div class="list-wrapper" *ngIf="supportDocumentRendered">
     <div class="list-item-wrapper" *ngIf="supportDocumentRendered">
       <div class="stepper-circle stepper-circle-dark-blue">

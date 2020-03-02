@@ -31,7 +31,8 @@ import { InsightsV4Component } from '../insights-v4/insights-v4.component';
 import { DropdownV4Component } from '../dropdown-v4/dropdown-v4.component';
 import { CardSelectionV4Component } from '../card-selection-v4/card-selection-v4.component';
 import { VersionService } from '../../services/version.service';
-// import { VersionTestService } from 'projects/app-service-diagnostics/src/app/fabric-ui/version-test.service';
+import { ConnectAppInsightsComponent } from '../connect-app-insights/connect-app-insights.component';
+import { DetectorSearchComponent } from '../detector-search/detector-search.component';
 
 @Component({
   selector: 'dynamic-data',
@@ -41,7 +42,7 @@ import { VersionService } from '../../services/version.service';
     TimeSeriesGraphComponent, DataTableComponent, DataSummaryComponent, EmailComponent,
     InsightsComponent, TimeSeriesInstanceGraphComponent, DynamicInsightComponent, MarkdownViewComponent,
     DetectorListComponent, DropdownComponent, CardSelectionComponent, SolutionComponent, GuageControlComponent, FormComponent,
-    ChangeAnalysisOnboardingComponent, ChangesetsViewComponent, AppDependenciesComponent, AppInsightsMarkdownComponent, SummaryCardsComponent,InsightsV4Component,DropdownV4Component,CardSelectionV4Component
+    ChangeAnalysisOnboardingComponent, ChangesetsViewComponent, AppDependenciesComponent, AppInsightsMarkdownComponent, ConnectAppInsightsComponent, DetectorSearchComponent, SummaryCardsComponent, InsightsV4Component, DropdownV4Component, CardSelectionV4Component
   ]
 })
 export class DynamicDataComponent implements OnInit {
@@ -62,7 +63,7 @@ export class DynamicDataComponent implements OnInit {
   @Input() isAnalysisView: boolean = false;
   @ViewChild('dynamicDataContainer', { read: ViewContainerRef, static: true }) dynamicDataContainer: ViewContainerRef;
   private isLegacy: boolean;
-  constructor(private componentFactoryResolver: ComponentFactoryResolver,private versionService:VersionService) { }
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private versionService: VersionService) { }
 
   ngOnInit(): void {
     this.versionService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
@@ -126,6 +127,10 @@ export class DynamicDataComponent implements OnInit {
         return AppDependenciesComponent;
       case RenderingType.SummaryCard:
         return SummaryCardsComponent;
+      case RenderingType.SearchComponent:
+        return DetectorSearchComponent;
+      case RenderingType.AppInsightEnablement:
+        return ConnectAppInsightsComponent;
       default:
         return null;
     }

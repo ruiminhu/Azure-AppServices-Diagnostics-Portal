@@ -31,4 +31,11 @@ export class CategoryService {
     console.log("in categories service, get categories", this._categories);
     this.categories.next(this._categories);
   }
+
+  public filterCategoriesForSub() {
+    this._categories = this._categories.filter( function(category) {
+        return category.id !== 'navigator';
+    });
+    this.categories.next(this._categories);
+  }
 }

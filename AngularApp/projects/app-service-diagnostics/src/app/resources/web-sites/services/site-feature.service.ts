@@ -17,6 +17,8 @@ import { LoggingV2Service } from '../../../shared-v2/services/logging-v2.service
 import { SiteService } from '../../../shared/services/site.service';
 import { CategoryService } from '../../../shared-v2/services/category.service';
 import { VersionTestService } from '../../../fabric-ui/version-test.service';
+import { ArmService } from '../../../shared/services/arm.service';
+import { SubscriptionPropertiesService } from '../../../shared/services/subscription-properties.service';
 
 @Injectable()
 export class SiteFeatureService extends FeatureService {
@@ -25,11 +27,12 @@ export class SiteFeatureService extends FeatureService {
   public proactiveTools: SiteFilteredItem<Feature>[];
   public supportTools: SiteFilteredItem<Feature>[];
   public premiumTools: SiteFilteredItem<Feature>[];
-
+  public subscriptionId: string;
   constructor(protected _diagnosticApiService: DiagnosticService, protected _resourceService: WebSitesService, protected _contentService: ContentService, protected _router: Router,
-    protected _authService: AuthService, protected _portalActionService: PortalActionService, private _websiteFilter: WebSiteFilter, protected _logger: LoggingV2Service, protected _siteService: SiteService, protected _categoryService: CategoryService, protected _activedRoute: ActivatedRoute,protected _versionTestService:VersionTestService) {
+    protected _authService: AuthService, protected _portalActionService: PortalActionService, private _websiteFilter: WebSiteFilter, protected _logger: LoggingV2Service, protected armService: ArmService,
+    protected subscriptionPropertiesService: SubscriptionPropertiesService, protected _siteService: SiteService, protected _categoryService: CategoryService, protected _activedRoute: ActivatedRoute, protected _versionTestService: VersionTestService) {
 
-    super(_diagnosticApiService, _contentService, _router, _authService, _logger, _siteService, _categoryService, _activedRoute, _portalActionService,_versionTestService);
+    super(_diagnosticApiService, _contentService, _router, _authService, _logger, _siteService, _categoryService, _activedRoute, _portalActionService, _versionTestService);
 
     this._featureDisplayOrder = [{
       category: "Availability and Performance",
@@ -47,11 +50,23 @@ export class SiteFeatureService extends FeatureService {
       this.addDiagnosticTools(startupInfo.resourceId);
       this.addProactiveTools(startupInfo.resourceId);
       this.addPremiumTools();
+      this.subscriptionId = startupInfo.resourceId.split("subscriptions/")[1].split("/")[0];
     });
   }
 
   sortFeatures() {
     let featureDisplayOrder = this._featureDisplayOrder;
+    let locationPlacementId = '';
+    this.subscriptionPropertiesService.getSubscriptionProperties(this.subscriptionId).subscribe(response => {
+      locationPlacementId = response.body['subscriptionPolicies']['locationPlacementId'];
+    });
+
+    // remove features not applicable
+    if (locationPlacementId && locationPlacementId.toLowerCase() === 'geos_2020-01-01') {
+      this._features = this._features.filter(x => {
+        return x.id !== 'appchanges';
+      })
+    }
 
     featureDisplayOrder.forEach(feature => {
 
@@ -184,7 +199,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/mitigate`);
             } else {
-              this.navigateTo(resourceId,ToolIds.AutoHealing);
+              this.navigateTo(resourceId, ToolIds.AutoHealing);
             }
           })
         }
@@ -208,7 +223,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/cpumonitoring`);
             } else {
-              this.navigateTo(resourceId,ToolIds.CpuMonitoring);
+              this.navigateTo(resourceId, ToolIds.CpuMonitoring);
             }
           })
         }
@@ -233,12 +248,12 @@ export class SiteFeatureService extends FeatureService {
             // this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
             // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/profiler`);
             // this.navigateTo(resourceId,ToolIds.Profiler);
-            
+
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
             } else {
-              this.navigateTo(resourceId,ToolIds.Profiler);
+              this.navigateTo(resourceId, ToolIds.Profiler);
             }
           })
         }
@@ -263,7 +278,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
             } else {
-              this.navigateTo(resourceId,ToolIds.Profiler);
+              this.navigateTo(resourceId, ToolIds.Profiler);
             }
           })
         }
@@ -283,12 +298,12 @@ export class SiteFeatureService extends FeatureService {
           clickAction: this._createFeatureAction(ToolNames.MemoryDump, 'Diagnostic Tools', () => {
             // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/memorydump`);
             // this.navigateTo(resourceId,ToolIds.MemoryDump);
-            
+
             //Need remove after A/B tes
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/memorydump`);
             } else {
-              this.navigateTo(resourceId,ToolIds.MemoryDump);
+              this.navigateTo(resourceId, ToolIds.MemoryDump);
             }
           })
         }
@@ -313,7 +328,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/databasetester`);
             } else {
-              this.navigateTo(resourceId,ToolIds.DatabaseTester);
+              this.navigateTo(resourceId, ToolIds.DatabaseTester);
             }
           })
         }
@@ -338,7 +353,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/networktrace`);
             } else {
-              this.navigateTo(resourceId,ToolIds.NetworkTrace);
+              this.navigateTo(resourceId, ToolIds.NetworkTrace);
             }
           })
         }
@@ -363,7 +378,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/phploganalyzer`);
             } else {
-              this.navigateTo(resourceId,ToolIds.PHPLogAnalyzer);
+              this.navigateTo(resourceId, ToolIds.PHPLogAnalyzer);
             }
           })
         }
@@ -388,7 +403,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/phpprocessanalyzer`);
             } else {
-              this.navigateTo(resourceId,ToolIds.PHPProcessAnalyzer);
+              this.navigateTo(resourceId, ToolIds.PHPProcessAnalyzer);
             }
           })
         }
@@ -413,7 +428,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/javamemorydump`);
             } else {
-              this.navigateTo(resourceId,ToolIds.JavaMemoryDump);
+              this.navigateTo(resourceId, ToolIds.JavaMemoryDump);
             }
           })
         }
@@ -438,7 +453,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/javathreaddump`);
             } else {
-              this.navigateTo(resourceId,ToolIds.JavaThreadDump);
+              this.navigateTo(resourceId, ToolIds.JavaThreadDump);
             }
           })
         }
@@ -502,7 +517,7 @@ export class SiteFeatureService extends FeatureService {
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/eventviewer`);
             } else {
-              this.navigateTo(resourceId,ToolIds.EventViewer);
+              this.navigateTo(resourceId, ToolIds.EventViewer);
             }
           })
         }
@@ -523,11 +538,11 @@ export class SiteFeatureService extends FeatureService {
             // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/frebviewer`);
             // this.navigateTo(resourceId,ToolIds.FrebViewer);
 
-                        //Need remove after A/B test
+            //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/frebviewer`);
             } else {
-              this.navigateTo(resourceId,ToolIds.FrebViewer);
+              this.navigateTo(resourceId, ToolIds.FrebViewer);
             }
           })
         }

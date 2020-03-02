@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { GenericDetectorComponent } from '../generic-detector/generic-detector.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResourceService } from '../../../shared-v2/services/resource.service';
-import { FeatureNavigationService, TelemetryService, DiagnosticService } from 'diagnostic-data';
+import { FeatureNavigationService, TelemetryService, DiagnosticService, DiagnosticDataConfig, DIAGNOSTIC_DATA_CONFIG } from 'diagnostic-data';
 import { AuthService } from '../../../startup/services/auth.service';
 import { SearchAnalysisMode } from 'projects/diagnostic-data/src/lib/models/search-mode';
+import { CXPChatService } from 'diagnostic-data' ;
+import {GenericSupportTopicService} from '../../../../../../diagnostic-data/src/lib/services/generic-support-topic.service';
 
 @Component({
   selector: 'generic-analysis',
@@ -25,13 +27,32 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
   SearchAnalysisMode = SearchAnalysisMode;
   displayDetectorContainer: boolean = true;
   searchBarFocus: boolean = false;
+  isPublic: boolean = false;
+  cxpChatTrackingId: string = '';
+  cxpChatUrl: string = ''; 
 
   constructor(private _activatedRouteLocal: ActivatedRoute, private _diagnosticServiceLocal: DiagnosticService, _resourceService: ResourceService, _authServiceInstance: AuthService, _telemetryService: TelemetryService,
-    _navigator: FeatureNavigationService, private _routerLocal: Router) {
+    _navigator: FeatureNavigationService, private _routerLocal: Router, private _supportTopicService:GenericSupportTopicService, private _cxpChatService:CXPChatService,
+    @Inject(DIAGNOSTIC_DATA_CONFIG) config: DiagnosticDataConfig) {
     super(_activatedRouteLocal, _diagnosticServiceLocal, _resourceService, _authServiceInstance, _telemetryService, _navigator, _routerLocal);
+    this.isPublic = config && config.isPublic;
   }
 
   ngOnInit() {
+    if (this.isPublic) {
+      this.renderCXPChatButton();
+    }
+    else {
+      var checkOutcome = {
+        _supportTopicServiceObj: !!this._supportTopicService,
+        supportTopicId: (!!this._supportTopicService)? this._supportTopicService.supportTopicId : '_supportTopicService is NULL',
+        _cxpChatService: !!this._cxpChatService,
+        isSupportTopicEnabledForLiveChat:  (!!this._supportTopicService && !!this._cxpChatService)? this._cxpChatService.isSupportTopicEnabledForLiveChat(this._supportTopicService.supportTopicId): null,
+        isPublic: false
+      };
+
+      this._cxpChatService.logChatEligibilityCheck('Call to CXP Chat API skipped. Config is not Public.', JSON.stringify(checkOutcome));
+    }    
     this._activatedRouteLocal.paramMap.subscribe(params => {
       this.analysisId = this.analysisId === "" ? params.get('analysisId'): this.analysisId;
       this.detectorId = params.get('detectorName') === null ? "" : params.get('detectorName');
@@ -91,4 +112,33 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
       this._routerLocal.navigate([`../../../${this.analysisId}`], { relativeTo: this._activatedRouteLocal, queryParamsHandling: 'merge' });
     }
   }
+
+  showChatButton():boolean {
+    return this.isPublic && this.cxpChatTrackingId != '' && this.cxpChatUrl != '';
+  }
+
+  renderCXPChatButton(){
+    if(this.cxpChatTrackingId === '' && this.cxpChatUrl === '') {
+      if(this._supportTopicService && this._cxpChatService && this._cxpChatService.isSupportTopicEnabledForLiveChat(this._supportTopicService.supportTopicId)) {
+          this.cxpChatTrackingId = this._cxpChatService.generateTrackingId();
+          this._cxpChatService.getChatURL(this._supportTopicService.supportTopicId, this.cxpChatTrackingId).subscribe((chatApiResponse:any)=>{
+            if (chatApiResponse && chatApiResponse != '') {
+              this.cxpChatUrl = chatApiResponse;
+            }
+          });               
+      }
+      else {
+        var checkOutcome = {
+          _supportTopicServiceObj: !!this._supportTopicService,
+          supportTopicId: (!!this._supportTopicService)? this._supportTopicService.supportTopicId : '_supportTopicService is NULL',
+          _cxpChatService: !!this._cxpChatService,
+          isSupportTopicEnabledForLiveChat:  (!!this._supportTopicService && !!this._cxpChatService)? this._cxpChatService.isSupportTopicEnabledForLiveChat(this._supportTopicService.supportTopicId): null,
+          isPublic: true
+        };
+
+        this._cxpChatService.logChatEligibilityCheck('Call to CXP Chat API skipped', JSON.stringify(checkOutcome));
+      }
+    }
+  }
+
 }

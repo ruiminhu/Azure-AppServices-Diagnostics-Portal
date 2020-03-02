@@ -7,18 +7,24 @@ export class AppInsightsQueryService {
 
     public loadAppInsightsResourceObservable: BehaviorSubject<boolean>;
 
-    CheckIfAppInsightsEnabled(): Observable<boolean>
-    {
+    public appInsightsSettings: any = {
+        validForStack: undefined,
+        enabledForWebApp: undefined,
+        connectedWithSupportCenter: undefined,
+        resourceUri: undefined,
+        name: undefined,
+        appId: undefined
+    };
+
+    CheckIfAppInsightsEnabled(): Observable<boolean> {
         return null;
     }
 
-    ExecuteQuerywithPostMethod(query: string): Observable<any>
-    {
+    ExecuteQuerywithPostMethod(query: string): Observable<any> {
         return null;
     }
 
-    openAppInsightsFailuresBlade()
-    {
+    openAppInsightsFailuresBlade() {
     }
 
     openAppInsightsBlade() {
@@ -27,9 +33,14 @@ export class AppInsightsQueryService {
     openAppInsightsPerformanceBlade() {
     }
 
-    openAppInsightsExtensionBlade(detailBlade?: string)
-    {
+    openAppInsightsExtensionBlade(detailBlade?: string) {
 
+    }
+
+    logAppInsightsConnectionError(resourceUri:string, error: any) {
+    }
+
+    logAppInsightsConnected(resourceUri:string) {
     }
 }
 

@@ -635,7 +635,6 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
 
             console.log("after encode", categoryName);
             if (detectorId !== "") {
-
                 const clickDetectorEventProperties = {
                     'ChildDetectorName': viewModel.model.title,
                     'ChildDetectorId': viewModel.model.metadata.id,
@@ -647,7 +646,6 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                 this.logEvent(TelemetryEventNames.ChildDetectorClicked, clickDetectorEventProperties);
 
                 if (this.analysisId === "searchResultsAnalysis" && this.searchTerm && this.searchTerm.length > 0) {
-
                     const isHomepage = !this._activatedRoute.root.firstChild.firstChild.firstChild.firstChild.snapshot.params["category"];
                     //If in homepage then open second blade for Diagnostic Tool and second blade will continue to open third blade for 
                     if (isHomepage) {
@@ -659,7 +657,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                         this.logEvent(TelemetryEventNames.SearchResultClicked, { searchId: this.searchId, detectorId: detectorId, rank: 0, title: clickDetectorEventProperties.ChildDetectorName, status: clickDetectorEventProperties.Status, ts: Math.floor((new Date()).getTime() / 1000).toString() });
                         console.log("detectorlist current router", this._router.url, this.resourceId);
     
-                        let dest1 = `resource${this.resourceId}/categories/${categoryName}/analysis/${detectorId}`;
+                        let dest1 = `resource${this.resourceId}/categories/${categoryName}/detectors/${detectorId}`;
                         //     let dest = `../../categories/ConfigurationAndManagement/detectors/${detectorId}`;
                         //let dest = `../../categories/${categoryName}/detectors/${detectorId}`;
                         console.log("navigate to", dest1);

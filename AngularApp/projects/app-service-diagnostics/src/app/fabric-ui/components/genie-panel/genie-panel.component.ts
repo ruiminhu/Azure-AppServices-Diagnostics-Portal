@@ -30,6 +30,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     panelStyles: any;
     width: string = "1200px";
     disableChat: boolean = false;
+    isMessageEmpty: boolean = false;
 
     constructor(private _resourceService: WebSitesService, private _authService: AuthService, private _route: Router, private _genieChatFlow: GenieChatFlow, private _messageProcessor: GenieMessageProcessor, public globals: GenieGlobals) {
         this.panelStyles = {
@@ -45,8 +46,6 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.globals.openGeniePanel = false;
-        console.log("init genie with openGeniePanel", this.globals);
-
         this.getMessage();
         this.chatContainerHeight = window.innerHeight - 170;
 
@@ -58,6 +57,10 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
             return panelTitle;
             // (props?: P, defaultRender?: (props?: P) => JSX.Element | null): JSX.Element | null;
         };
+    }
+
+    isEmptyOrSpaces(str){
+        return str === null || str.match(/^ *$/) !== null;
     }
 
     ngOnDestroy() {
@@ -90,17 +93,18 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     }
 
     onSearchEnter(event: any): void {
-        console.log("search event", event);
         // Push messages to the current object, also wait for the complete status, and push the object to globa message component
         let inputValue = (<HTMLInputElement>document.getElementById("genieChatBox")).value;
+        if (this.isEmptyOrSpaces(inputValue))
+        {
+            this.isMessageEmpty = true;
+            return;
+        }
         let analysisMessageGroupId = inputValue + (new Date()).toUTCString();
         // event.newValue
         this._genieChatFlow.createMessageFlowForAnaysis(inputValue, analysisMessageGroupId, this.resourceId).subscribe((analysisMessages: Message[]) => {
-            console.log("**** analysis messsages", analysisMessages);
             analysisMessages.forEach(message => {
             });
-
-            console.log("constructing messages onsearch", this.globals.messages, this.messages);
         });
         this._messageProcessor.setCurrentKey(analysisMessageGroupId);
         this.getMessage();
@@ -108,10 +112,10 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = true;
         this.disableChat = true;
         this.searchValue="";
+        this.isMessageEmpty = false;
     }
 
     getMessage(event?: any): void {
-        console.log("status oncomplete: event", event);
         const self = this;
         const message = this._messageProcessor.getNextMessage(event);
 

@@ -7,7 +7,6 @@ import { SolutionsModule } from '../solutions/solutions.module';
 import { StartupMessages } from './message-flow/startup/startupmessages';
 import { MainMenuMessageFlow } from './message-flow/main-menu/mainmenumessageflow';
 import { HealthCheckMessageFlow } from './message-flow/health-check/healthcheckmessageflow';
-// import { GenieFeedbackMessageFlow } from './message-flow/feedback/feedbackmessageflow';
 import { Geniefeedbackmessageflow } from './message-flow/genie-feedback/geniefeedbackmessageflow';
 import { GenieMessageProcessor } from './message-processor.service';
 
@@ -32,7 +31,6 @@ import { DetectorSummaryComponent } from './message-flow/detector-summary/detect
 import { DocumentSearchComponent } from './message-flow/document-search/document-search.component';
 import { DocumentSearchResultsComponent } from './message-flow/document-search-results/document-search-results.component';
 import { SharedV2Module } from '../shared-v2/shared-v2.module';
-// import { HomeModule } from '../home/home.module';
 import { DiagnosticDataModule } from 'diagnostic-data';
 import { GenericCategoryFlow } from './message-flow/v2-flows/generic-category.flow';
 import { GenieChatFlow } from './message-flow/v2-flows/genie-chat.flow';
@@ -42,13 +40,11 @@ import { LinuxAvailabilityPerformanceFlow } from './message-flow/v2-flows/linux-
 import { FabIconModule,FabChoiceGroupModule } from '@angular-react/fabric';
 import { DynamicAnalysisComponent } from './message-flow/dynamic-analysis/dynamic-analysis.component';
 import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis-results/dynamic-analysis-results.component';
-// import { GenieFeedbackMessageFlow } from './message-flow/feedback/feedbackmessageflow';
 
 @NgModule({
     declarations: [
         HomepageComponent,
         SupportBotComponent,
-        // DynamicComponent,
         GenieTextMessageComponent,
         LoadingMessageComponent,
         MainMenuComponent,
@@ -73,7 +69,6 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
         AvailabilityModule,
         SolutionsModule,
         SharedV2Module,
-        // HomeModule,
         DiagnosticDataModule,
         FabIconModule,
         FabChoiceGroupModule,
@@ -84,21 +79,18 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
         CategoryMenuComponent,
         DetectorSummaryComponent,
         HealthCheckV3Component,
-        // DynamicComponent,
         LoadingMessageComponent
     ],
     providers: [
         StartupMessages,
         MainMenuMessageFlow,
         HealthCheckMessageFlow,
-        // GenieFeedbackMessageFlow,
         Geniefeedbackmessageflow,
         CpuAnalysisChatFlow,
         GenieMessageProcessor,
         AvailabilityPerformanceFlow,
         LinuxAvailabilityPerformanceFlow,
-        GenericCategoryFlow,
-        // GenieChatFlow
+        GenericCategoryFlow
     ]
 })
 export class SupportBotNewModule {

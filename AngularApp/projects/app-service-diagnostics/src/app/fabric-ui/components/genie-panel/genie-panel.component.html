@@ -4,10 +4,12 @@
     <div>
       <div style="margin-bottom: 10px">
         <div
-          style="position: absolute; left:25px; right: 32px; top:0px; height: 32px; font-family: 'segoe UI'; font-size: 18px; line-height: 24px; font-weight: 600;display: flex; align-items: flex-end" tabindex="0" aria-label="Hi my name is genie">
+          style="position: absolute; left:25px; right: 32px; top:0px; height: 32px; font-family: 'segoe UI'; font-size: 18px; line-height: 24px; font-weight: 600;display: flex; align-items: flex-end"
+          tabindex="0" aria-label="Hi my name is genie">
           Hi my name is genie</div>
         <div
-          style="color:#605E5C; position: absolute; left:25px; right: 32px; top:35px; height: 19px; font-family: 'segoe UI'; font-size: 10px; line-height: 14px; display: block" tabindex="0" aria-label="HelpBot">
+          style="color:#605E5C; position: absolute; left:25px; right: 32px; top:35px; height: 19px; font-family: 'segoe UI'; font-size: 10px; line-height: 14px; display: block"
+          tabindex="0" aria-label="HelpBot">
           Help bot</div>
         <div style="position: absolute; top:10px; right: 10px; align-items: flex-end; cursor: pointer; "
           class="button-container">
@@ -17,7 +19,7 @@
           <div class="button-container">
             <span class="tooltiptext" style="margin-left: -30px;">Collapse</span>
           </div>
-       </div>
+        </div>
       </div>
       <div class="panel-content" style="margin-top: 60px;" #scrollMe>
         <!-- Remove style after A/B Test,except margin-left -->
@@ -25,41 +27,21 @@
           class="ms-Panel-scrollableContent scroll-bottom">
           <div class="animated fadeIn chat-message-container" *ngFor="let item of messages" style="margin-left:0px;margin-top: 10px;margin-right: 10px;
           content: ' ';clear: both;">
-          <dynamic-component-genie [componentData]="item" (onViewUpdate)="updateView($event)"
+            <dynamic-component-genie [componentData]="item" (onViewUpdate)="updateView($event)"
               (onComplete)="updateStatus($event)"></dynamic-component-genie>
           </div>
           <!-- <div class="row animated fadeIn chat-message-container" [hidden]="!showTypingMessage" style="margin-top:10px">
               <loading-message></loading-message>
           </div> -->
         </div>
-        <!-- </fab-pivot-item>
-        <fab-pivot-item headerText="Insights">
-          <div></div>
-        </fab-pivot-item>
-        <fab-pivot-item headerText="History">
-          <div></div>
-        </fab-pivot-item>
-      </fab-pivot> -->
       </div>
 
       <div class="search-box-container">
-        <!-- <fab-text-field [placeholder]="'Type your question'" [iconProps]="{iconName: 'send'}"></fab-text-field> -->
-        <!-- [iconProps]="{iconName: 'send'}" -->
-        <!-- <fab-search-box [placeholder]="'Type your question'" (onSearch)="onSearchEnter($event)"
-        [iconProps]="{iconName: 'send'}" contentStyle="height:31px;border-radius:15px" [value]="searchValue"></fab-search-box>
-         -->
-        <!-- <div class="chat-search-box" style="position: absolute; bottom: 19px; left: 37px; right: 37px">
-          <div class="ms-SearchBox root-66">
-            <div class="ms-SearchBox-iconContainer iconContainer-67" aria-hidden="true">
-              <i data-icon-name="send" role="presentation" aria-hidden="true" class="ms-SearchBox-icon icon-72"></i>
-            </div> -->
         <input id="genieChatBox" class="genie-search-box" (keydown.enter)="onSearchEnter($event)"
           placeholder="Type your question" aria-label="Type your question">
         <span (click)="onSearchEnter($event)" (keydown.enter)="onSearchEnter($event)" tabindex="0"
           aria-label="Send Message"><i class="fa fa-paper-plane search-box-icon"></i></span>
-        <!-- </div>
-        </div> -->
-
+        <span *ngIf="isMessageEmpty"style=" padding-left: 20px; color: red;">Message is empty</span>
       </div>
     </div>
   </div>

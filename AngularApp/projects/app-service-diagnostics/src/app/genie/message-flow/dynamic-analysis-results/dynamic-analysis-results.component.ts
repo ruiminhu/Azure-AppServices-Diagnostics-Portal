@@ -24,7 +24,6 @@ export class DynamicAnalysisResultsComponent implements OnInit, AfterViewInit, I
   ngOnInit() {
     this.searchMode = SearchAnalysisMode.Genie;
     this.inputData = this.injector.get('inputData');
-    console.log("****get inputdata", this.inputData);
     this.onComplete.emit({status: true, data: this.inputData});
   //  this._dynamicAnalysisService.getData()
     // this._contentService.getContent().subscribe(content => {
@@ -38,7 +37,6 @@ export class DynamicAnalysisResultsComponent implements OnInit, AfterViewInit, I
   }
 
   updateStatus($event) {
-   console.log("update status");
   }
 
   openArticle(link) {

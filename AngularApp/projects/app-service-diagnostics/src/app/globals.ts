@@ -34,7 +34,6 @@ export class Globals {
       //this.saveMsgToLocalStorage();
     }
     this._openGeniePanel = value;
-    console.log("open genie panel",value);
   };
   get openGeniePanel() {
     return this._openGeniePanel;
@@ -59,9 +58,6 @@ export class Globals {
       return copiedMsg;
     });
     localStorage.setItem(this.localStorageKey, JSON.stringify(savedMsg));
-    console.log(savedMsg);
-    console.log("globals message",this.messages);
-    console.log("save Messages");
   }
 
 //   updateMsgFromLocalStorage() {

@@ -23,13 +23,10 @@ export class AppComponent implements OnInit {
      }
 
     constructor(private _authService: AuthService, private _router: Router, private _resourceService: WebSitesService) {
-        console.log("Lauching app component");
        // this.resourceId = this._resourceService.resource.id;
-     //   console.log("Lauching app component with resourceId", this._resourceService);
      this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
         // For now, only showing alert in case submission
         let resourceId = startupInfo.resourceId;
-        console.log("Lauching app component with resourceId", resourceId);
       //  this.autoExpand = (startupInfo.supportTopicId && startupInfo.supportTopicId != '');
       });
 

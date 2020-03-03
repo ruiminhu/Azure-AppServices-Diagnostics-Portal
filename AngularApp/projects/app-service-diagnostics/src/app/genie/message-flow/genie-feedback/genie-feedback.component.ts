@@ -46,7 +46,6 @@ export class GenieFeedbackComponent extends ButtonMessageComponent {
         this.rating = 0;
         this.feedbackText = "";
         this.submitted = false;
-        console.log("FabricFeedbackContainerComponent");
     }
 
     ngAfterViewInit(): void {
@@ -73,7 +72,6 @@ export class GenieFeedbackComponent extends ButtonMessageComponent {
           Feedback: this.feedbackText
         };
         this.logEvent(TelemetryEventNames.StarRatingSubmitted, eventProps);
-        console.log(this.rating);
         this.submitted = true;
       }
 

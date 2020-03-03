@@ -3,9 +3,6 @@ import { Message, TextMessage, ButtonListMessage } from '../../models/message';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IChatMessageComponent } from '../../interfaces/ichatmessagecomponent';
 import { SearchAnalysisMode } from 'projects/diagnostic-data/src/lib/models/search-mode';
-// import { FeedbackComponent } from 'diagnostic-data';
-import { v4 as uuid } from 'uuid';
-import { from } from 'rxjs';
 import { ContentService } from '../../../shared-v2/services/content.service';
 import { CategoryChatStateService } from '../../../shared-v2/services/category-chat-state.service';
 import { LoggingV2Service } from '../../../shared-v2/services/logging-v2.service';
@@ -18,7 +15,7 @@ import { LoggingV2Service } from '../../../shared-v2/services/logging-v2.service
 export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMessageComponent {
 
     @Input() keyword: string = "";
-    @Input() resourceId: string="";
+    @Input() resourceId: string = "";
     @Input() targetedScore: number = 0;
     @Input() documentResultCount: string = "3";
     @Output() onViewUpdate = new EventEmitter();
@@ -31,8 +28,6 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
     viewUpdated: boolean = false;
 
     constructor(private _routerLocal: Router, private _activatedRouteLocal: ActivatedRoute, private injector: Injector, private _contentService: ContentService, private _chatState: CategoryChatStateService, private _logger: LoggingV2Service) { }
-
-
     noSearchResult: boolean = undefined;
     showDocumentSearchResult: boolean = false;
     showFeedback: boolean = undefined;
@@ -52,9 +47,6 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
             'Url': window.location.href
         };
 
-        console.log("***Dynamic analysis keyword and resourceId", this.keyword, this.resourceId);
-
-       // this._logger.LogChatSearch(this.keyword, this._chatState.category.name);
         this._contentService.searchWeb(this.keyword, this.documentResultCount).subscribe(searchResults => {
             if (searchResults && searchResults.webPages && searchResults.webPages.value && searchResults.webPages.value.length > 0) {
                 this.hasDocumentSearchResult = true;
@@ -66,50 +58,31 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
                     };
                 });
 
-               // var documentsElement = document.getElementById("search-documents");
-                  setTimeout(() => {
+                setTimeout(() => {
                     this.onViewUpdate.emit();
-                  }, 100);
-                    this.viewUpdated = true;
-                    console.log("starting scroll 1");
-              //      this.onViewUpdate.emit();
-
-                // else
-                // {
-
-                // }
-
-                // console.log("content result", this.content);
-                // console.log("starting scroll 1");
+                }, 100);
+                this.viewUpdated = true;
             }
         });
-
-        // this._routerLocal.navigate([`../analysis/searchResultsAnalysis/search`], { relativeTo: this._activatedRouteLocal, queryParamsHandling: 'merge', queryParams: {searchTerm: this.keyword} });
     }
 
 
-  openArticle(article: any) {
-      console.log("article", article);
-    window.open(article.link, '_blank');
-     // console.log("this._chatState.category.name", this._chatState.category.name);
-  //  this._logger.LogChatSearchSelection(this.keyword, this._chatState.category.name, article.title, article.link, 'content');
-  }
+    openArticle(article: any) {
+        window.open(article.link, '_blank');
+    }
 
-  getLink(link: string) {
-    return !link || link.length < 20 ? link : link.substr(0, 25) + '...';
-  }
+    getLink(link: string) {
+        return !link || link.length < 20 ? link : link.substr(0, 25) + '...';
+    }
 
     ngAfterViewInit() {
-        if (!this.viewUpdated || !this.hasDocumentSearchResult)
-        {
+        if (!this.viewUpdated || !this.hasDocumentSearchResult) {
             console.log("starting scroll 1");
             this.onViewUpdate.emit();
         }
     }
 
     updateStatus(dataOutput) {
-        console.log("status Value before", dataOutput);
-
         let nextKey = "";
         if ((dataOutput.data == undefined || dataOutput.data.detectors == undefined || dataOutput.data.detectors.length === 0) && (this.content == undefined || this.content.length == 0)) {
             this.noSearchResult = true;
@@ -124,22 +97,12 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
 
         let statusValue = {
             status: dataOutput.status,
-     //       documentSearchResult: this.content,
             data: {
                 hasResult: !this.noSearchResult,
                 next_key: nextKey,
                 outputData: dataOutput.data
             }
         };
-
-        console.log("status Value", statusValue);
-        // this._genieChatFlow.createMessageFlowForAnaysisResult(statusValue.outputData, this.noSearchResult);
-        console.log("Current route", this._routerLocal.url, this._activatedRouteLocal);
-        // this._activatedRouteLocal.url.subscribe((url)=>{
-        //     console.log("activated route url", url);
-        // });
-
-        console.log("****lalalastatus Value", statusValue);
         this.onComplete.emit(statusValue);
     }
 
@@ -155,7 +118,7 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
 }
 
 export class DynamicAnalysisMessage extends Message {
-    constructor(keyword: string = "", resourceId:string="", targetedScore: number = 0, messageDelayInMs: number = 0) {
+    constructor(keyword: string = "", resourceId: string = "", targetedScore: number = 0, messageDelayInMs: number = 0) {
         super(DynamicAnalysisComponent, {
             keyword: keyword,
             resourceId: resourceId,

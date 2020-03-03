@@ -1,29 +1,5 @@
-<!-- *ngIf="!loading else loadingMessage" -->
 <div class="detector-summary-container" [class.with-full-report]="false" >
-    <!-- <detector-list-analysis withinDiagnoseAndSolve="true" detectorParmName="detectorName"></detector-list-analysis> -->
-    <generic-analysis [analysisId]="'searchResultsAnalysis'" [resourceId]="resourceId" [targetedScore]="targetedScore" [searchTerm]="keyword" [searchMode]="searchMode" (onComplete)="updateStatus($event)"></generic-analysis>
-    <!-- <div class="full-report" *ngIf="showTopLevelFullReport">
-      {{detector.name}}
-      <div class="full-report-link" tabindex="0" (keyup.enter)="openFullReport()">
-        <a (click)="openFullReport()">View Full Report <i class="fa fa-chevron-right"></i></a>
-      </div>
-    </div>
-    <div class="status-bar" *ngFor="let model of detectorSummaryViewModels" (click)="selectDetectorSummaryItem(model)" (keyup.enter)="selectDetectorSummaryItem(model)"  tabindex="0">
-      <div class="status-bar-icon align-content-center">
-          <status-icon [loading]="model.loading" [status]="model.status" [size]="16"></status-icon>
-      </div>
-      <div class="status-bar-title">{{model.name}}</div>
-      <div class="align-content-center"><i class="fa fa-chevron-right"></i></div>
-    </div> -->
-    <!-- <div *ngIf="noSearchResult === false">
-        <span>Does this information help you solve the issue?</span>
-        <button class="feedback-button" (click)="addHelpfulFeedback()">Yes</button>
-        <button class="feedback-button" (click)="addNotHelpfulFeedback()">No</button>
-      </div>
-    <div *ngIf="noSearchResult === true">
-        <span>Sorry we are not able to find any result based on your questions.</span>
-      </div>
-  </div> -->
+   <generic-analysis [analysisId]="'searchResultsAnalysis'" [resourceId]="resourceId" [targetedScore]="targetedScore" [searchTerm]="keyword" [searchMode]="searchMode" (onComplete)="updateStatus($event)"></generic-analysis>
   <div *ngIf="noSearchResult === true">
       <div tabindex="0" class="message-sent-by-system-genie" style="margin-top:10px; margin-bottom:10px">
       <span>Sorry we are not able to find any result based on your questions. Can you rephrease your last message?</span>
@@ -33,8 +9,6 @@
       <div tabindex="0" class="message-sent-by-system-genie" style="margin-top:10px; margin-bottom:10px">{{feedbackText}}
       </div>
       <div style="height:0px;overflow-y: hidden">
-          <!-- <feedback [showFeedbackForm]="'shown'" (showFeedbackFormChange)="toggleButtonView(Feedback)" [source]="'appanalysis'" [ratingEventProperties]="ratingEventProperties"></feedback>
- -->
         </div>
   </div>
 
@@ -50,9 +24,4 @@
         </div>
       </div>
   </div>
-
-
-  <!-- <ng-template #loadingMessage>
-      <loading-message></loading-message>
-  </ng-template> -->
 

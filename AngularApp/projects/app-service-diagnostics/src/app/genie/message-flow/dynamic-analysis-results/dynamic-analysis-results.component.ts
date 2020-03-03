@@ -25,11 +25,6 @@ export class DynamicAnalysisResultsComponent implements OnInit, AfterViewInit, I
     this.searchMode = SearchAnalysisMode.Genie;
     this.inputData = this.injector.get('inputData');
     this.onComplete.emit({status: true, data: this.inputData});
-  //  this._dynamicAnalysisService.getData()
-    // this._contentService.getContent().subscribe(content => {
-    //   this.content = content;
-    //   this.onComplete.emit({status: true});
-    // });
   }
 
   ngAfterViewInit() {

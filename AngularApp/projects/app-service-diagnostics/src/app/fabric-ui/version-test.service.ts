@@ -21,7 +21,6 @@ export class VersionTestService {
             const isExternalSub = DemoSubscriptions.betaSubscriptions.findIndex(item => item.toLowerCase() === subId.toLowerCase()) === -1;
             this._siteService.currentSite.subscribe(site => {
                 const legacy = this.shouleUseLegacy(site, isExternalSub, resourceType);
-                console.log("version test service", legacy);
                 this.isLegacySub.next(legacy);
             });
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DataRenderBaseComponent } from '../data-render-base/data-render-base.component';
 import { HealthStatus, DiagnosticData, DetectorMetaData, DetectorType } from '../../models/detector';
 import { FeatureNavigationService } from '../../services/feature-navigation.service';
@@ -58,12 +58,7 @@ export class SummaryCardsComponent extends DataRenderBaseComponent {
     this._diagnosticService.getDetectors().subscribe(detectors => {
       this.detectors = detectors;
     })
-    // this._authService.getStartupInfo().subscribe(startupInfo => this.resourceId = startupInfo.resourceId);
-    // console.log("summary card",this._featureService);
   }
-  // ngOnInit() {
-  //   this.ngOnInit();
-  // }
 
   protected processData(data: DiagnosticData) {
     super.processData(data);

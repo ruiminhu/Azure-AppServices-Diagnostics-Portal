@@ -12,7 +12,7 @@
 
   <div
     *ngIf="detectors.length > 0 && (issueDetectedViewModels.length > 0 || successfulViewModels.length > 0) || (getPendingDetectorCount() === 0 && loadingChildDetectors)"
-    class="list-wrapper">
+    class="list-wrapper" [ngClass]="{'list-wrapper-genie': withinGenie}">
     <div class="red-line" [ngClass]="{'remove-padding':withinDiagnoseAndSolve}"></div>
     <div class="list-item-wrapper" *ngIf="issueDetectedViewModels.length > 0">
       <div class="stepper-circle">

@@ -24,6 +24,8 @@ export class DemoSubscriptions {
         'da511dea-6e00-4728-93ff-6302ad7fe284', //Microsoft Azure Internal Consumption (Nazeef's subscription)
         '931906d8-00b9-481b-aba2-f227b237cada', //Private Test Sub NMALLICK (Nazeef's subscription)
         '1402be24-4f35-4ab7-a212-2cd496ebdf14', // Antps05 
-        '5abde51d-cc72-4bcc-b0d7-3c86b4db2a7c' // Shekhar's subscription
+        '5abde51d-cc72-4bcc-b0d7-3c86b4db2a7c', // Shekhar's subscription
+        '6a205b0a-6b5a-4346-8468-f4b6367f7efa', //Private Test Sub HAWFOR (Hawk's subscription)
+        '6b6db65f-680e-4650-b97d-e82ed6a0f583', //Private Test Sub PUNEETG (Puneet's subscription)
     ];
 }

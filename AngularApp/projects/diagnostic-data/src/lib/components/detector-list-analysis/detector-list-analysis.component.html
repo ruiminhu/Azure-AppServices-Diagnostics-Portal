@@ -188,15 +188,13 @@
           [ngClass]="{'remove-padding':withinDiagnoseAndSolve, 'white-line':withinDiagnoseAndSolve, 'gray-line':!withinDiagnoseAndSolve}">
         </div>
         <div class="list-title">Successful Checks ({{successfulViewModels.length}})
-          <span *ngIf="isDynamicAnalysis || isSearchEmbedded" class="expand-section" (click)="toggleSuccessful()">
+          <span *ngIf="(isDynamicAnalysis || isSearchEmbedded)&&!withinGenie" class="expand-section" (click)="toggleSuccessful()">
             <i *ngIf="!showSuccessfulChecks" class="fa fa-plus expand-icon"></i>
             <i *ngIf="showSuccessfulChecks" class="fa fa-minus expand-icon"></i>
           </span>
         </div>
         <div>Tests that succeeded for your app</div>
-        <div class="list-text" [style.opacity]="showSuccessfulChecks ? '1' : '0'"
-          [style.visibility]="showSuccessfulChecks ? 'visible' : 'hidden'"
-          [style.height]="showSuccessfulChecks ? '' : 0">
+        <div class="list-text" [class.sucessful-check]="showSuccessfulChecks" [class.hide-sucessful-check]="!showSuccessfulChecks">
           <table class="table detector-list">
             <thead>
               <tr>

@@ -72,7 +72,7 @@ export class CategoryTileV4Component implements OnInit {
       }
     });
 
-    console.log("Get detectors")
+    // console.log("Get detectors")
   }
 
   generateImagePath(name: string): string {

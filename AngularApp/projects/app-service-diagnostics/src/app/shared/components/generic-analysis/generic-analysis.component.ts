@@ -84,7 +84,6 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
   }
 
   updateLoadingStatus(dataOutput){
-      console.log("status:", dataOutput.status);
       this.onComplete.emit(dataOutput);
   }
 

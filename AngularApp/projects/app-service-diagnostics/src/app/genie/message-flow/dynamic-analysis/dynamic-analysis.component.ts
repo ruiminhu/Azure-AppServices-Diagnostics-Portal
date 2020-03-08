@@ -77,7 +77,6 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
 
     ngAfterViewInit() {
         if (!this.viewUpdated || !this.hasDocumentSearchResult) {
-            console.log("starting scroll 1");
             this.onViewUpdate.emit();
         }
     }

@@ -61,9 +61,6 @@ export class GenieDynamicComponent {
         const inputProviders = Object.keys(message.parameters).map((inputName) => ({ provide: inputName, useValue: message.parameters[inputName] }));
         const resolvedInputs = ReflectiveInjector.resolve(inputProviders);
 
-        console.log("inputProviders", inputProviders);
-        console.log("resolvedInputs", resolvedInputs);
-
         // Create injector out of the data we want to pass down and this components injector
         const injector = ReflectiveInjector.fromResolvedProviders(resolvedInputs, this.dynamicComponentContainer.parentInjector);
 
@@ -72,11 +69,8 @@ export class GenieDynamicComponent {
         // Create the component using the factory and the injector
         const component = factory.create(injector);
 
-        console.log("Create component", component);
-
         // Insert the component into the dom container
         this.dynamicComponentContainer.insert(component.hostView);
-        console.log("*****hostview", component.hostView);
 
         // Destroy the old component
         if (this.currentComponent) {

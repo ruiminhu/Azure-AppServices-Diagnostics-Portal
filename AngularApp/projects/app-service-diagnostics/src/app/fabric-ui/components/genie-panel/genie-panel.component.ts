@@ -73,6 +73,8 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
 
     updateView(event?: any): void {
         this.scrollToBottom();
+
+        // Enable chat again after we get feed-back dynamic component followed with dynamic analysis component
         if (event && event.hasOwnProperty('data') && event['data'] === "view-loaded" ) {
             (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
         }
@@ -81,7 +83,13 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     updateStatus(event?: any): void {
         this.loading = false;
         this.getMessage(event);
-        this.disableChat = false;
+        
+        // Enable chat after dynamic analysis loaded
+        if (event && event.hasOwnProperty('hasResult') && event.hasOwnProperty('next_key')) {
+            if (event['hasResult'] === false) {
+                (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
+            }
+        }
     }
 
     scrollToBottom(event?: any): void {

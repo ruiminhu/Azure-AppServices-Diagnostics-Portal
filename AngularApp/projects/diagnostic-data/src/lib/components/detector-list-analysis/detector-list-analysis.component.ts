@@ -137,7 +137,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     toggleSuccessful(){
         this.showSuccessfulChecks = !this.showSuccessfulChecks;
     }
-    
+
     public getMetaDataMarkdown(metaData: AppInsightQueryMetadata) {
         let str = "<pre>" + metaData.query + "</pre>";
         return str;
@@ -459,7 +459,6 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                     'issueDetectedViewModels': this.issueDetectedViewModels
                 };
 
-                console.log("emitting data 1", dataOutput);
                 this.onComplete.emit(dataOutput);
             }, 10);
 

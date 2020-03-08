@@ -14,28 +14,9 @@ import { TelemetryService } from 'diagnostic-data';
 import { PortalKustoTelemetryService } from '../../../shared/services/portal-kusto-telemetry.service';
 import { WebSitesService } from '../../../resources/web-sites/services/web-sites.service';
 import { AppType } from '../../../shared/models/portal';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { DiagnosticService } from 'diagnostic-data';
-import { ISearchBoxProps } from 'office-ui-fabric-react';
-import { FabDropdownComponent } from '@angular-react/fabric';
 import { HttpResponse } from '@angular/common/http';
-import { FabSearchBoxComponent } from '@angular-react/fabric';
 import { Globals } from '../../../globals';
-import { VersioningHelper } from '../../../shared/utilities/versioningHelper';
-import { DemoSubscriptions } from "../../../betaSubscriptions";
-import {
-    ICalendarStrings,
-    IContextualMenuProps,
-    ISelection,
-    Selection,
-    DropdownMenuItemType,
-    IDropdownOption,
-    ICheckboxProps,
-    IPersonaProps,
-    IPeoplePickerProps,
-    IIconProps
-} from 'office-ui-fabric-react';
-import { from } from 'rxjs';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
 import { VersionTestService } from '../../../fabric-ui/version-test.service';
 import { SubscriptionPropertiesService } from '../../../shared/services/subscription-properties.service';
@@ -194,8 +175,7 @@ export class HomeComponent implements OnInit {
         this.logService.logEvent("telemetry service logging", {});
         this.kustologgingService.logEvent("kusto telemetry service logging", {});
 
-        initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
-
+     //   initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
     };
 
 
@@ -275,7 +255,6 @@ export class HomeComponent implements OnInit {
 
     openGeniePanel() {
         this.globals.openGeniePanel = true;
-        console.log(this.globals.openGeniePanel);
     }
 }
 

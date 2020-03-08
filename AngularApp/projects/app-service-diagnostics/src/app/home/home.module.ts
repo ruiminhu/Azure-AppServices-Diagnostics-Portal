@@ -50,7 +50,7 @@ import { DiagnosticToolsRoutes, MetricsPerInstanceAppServicePlanResolver, Advanc
 import { CategoryTileV4Component } from '../fabric-ui/components/category-tile-v4/category-tile-v4.component';
 import { CategoryChatV4Component } from '../fabric-ui/components/category-chat-v4/category-chat-v4.component';
 import { VersionTestService } from '../fabric-ui/version-test.service';
-import { SupportBotNewModule } from '../genie/supportbot.module';
+import { GenieModule } from '../genie/genie.module';
 export const HomeRoutes = RouterModule.forChild([
     {
         path: '',
@@ -501,7 +501,7 @@ export const HomeRoutes = RouterModule.forChild([
         DiagnosticDataModule,
         HomeRoutes,
         SupportBotModule,
-        SupportBotNewModule,
+        GenieModule,
         FormsModule,
         MarkdownModule.forRoot(),
         FabSearchBoxModule

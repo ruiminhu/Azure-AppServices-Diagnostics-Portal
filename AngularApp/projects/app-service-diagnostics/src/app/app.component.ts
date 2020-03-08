@@ -5,8 +5,6 @@ import { WebSitesService } from './resources/web-sites/services/web-sites.servic
 import { AuthService } from './startup/services/auth.service';
 import { StartupInfo } from './shared/models/portal';
 
-
-
 @Component({
     selector: 'sc-app',
     templateUrl: 'app.component.html'
@@ -14,8 +12,6 @@ import { StartupInfo } from './shared/models/portal';
 export class AppComponent implements OnInit {
 
     private _newVersionEnabled = true;
-    //public resourceId: string="";
-
     public get newVersionEnabled() { return this._newVersionEnabled; }
 
     public set newVersionEnabled(value: boolean) {
@@ -23,17 +19,14 @@ export class AppComponent implements OnInit {
      }
 
     constructor(private _authService: AuthService, private _router: Router, private _resourceService: WebSitesService) {
-       // this.resourceId = this._resourceService.resource.id;
      this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
         // For now, only showing alert in case submission
         let resourceId = startupInfo.resourceId;
-      //  this.autoExpand = (startupInfo.supportTopicId && startupInfo.supportTopicId != '');
       });
 
     }
 
     ngOnInit() {
-
         if (isDevMode()) {
             console.log('%c Support Center is running in dev mode', 'color: orange');
             console.log('%c Logs that are normally published to the portal kusto logs will show up in the console', 'color: orange');

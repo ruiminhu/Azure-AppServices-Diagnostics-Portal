@@ -19,55 +19,30 @@ import { Globals } from '../../../globals';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../startup/services/auth.service';
 import { StartupInfo } from '../../../shared/models/portal';
-// import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
-// import { FeedbackComponent } from 'dist/diagnostic-data/lib/components/feedback/feedback.component';
-// import { KustoTelemetryService } from 'dist/diagnostic-data/lib/services/telemetry/kusto-telemetry.service';
-// import { MessageProcessor } from '../../message-processor.service';
 
 @Injectable()
 @RegisterMessageFlowWithFactory()
 export class GenieChatFlow extends IMessageFlowProvider {
-
   messageFlowList: MessageGroup[] = [];
   resourceId: string="";
   categoriesCreated: Category[] = [];
 
   targetedScore: number = 0.5;
 
-//   private _messageProcessor: MessageProcessor,
   constructor(private _router: Router, private _authService: AuthService, private _activatedRoute: ActivatedRoute, private _diagnosticApiService: DiagnosticService, private _resourceService: ResourceService, public globals: Globals, private _genericArmConfigService?: GenericArmConfigService) {
     super();
-    // this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
-    //     // For now, only showing alert in case submission
-    //     this.resourceId = startupInfo.resourceId;
-    //     console.log("Lauching genie chat flow with resourceId", this.resourceId);
-    //   //  this.autoExpand = (startupInfo.supportTopicId && startupInfo.supportTopicId != '');
-    //   });
-
-    const needAnalysis: MessageGroup = new MessageGroup('need-analysis', [], () => 'analysis');
-   // needAnalysis.messages.push(new TextMessage('Ok give me a moment while I analyze your app for any issue related to this.', MessageSender.System));
-    // needMoreHelp.messages.push(new TextMessage('genie-I need further assistance', MessageSender.User));
-    // needMoreHelp.messages.push(new TextMessage('genie-Sorry to hear I could not help you solve your problem', MessageSender.System));
-
     let welcomeMessage: string = "Hello, Welcome to App Service Diagnostics. My name is Genie and I am here to help you answer any questions you may have about diagnosing and solving your problems with your app. Please describe the issue of your app.";
 
     const welcomeMessageGroup: MessageGroup = new MessageGroup('welcome', [], () => '');
-     welcomeMessageGroup.messages.push(new TextMessage(welcomeMessage, MessageSender.System, 200));
-    //welcomeMessageGroup.messages.push(new TextMessage('genie-I need further assistance', MessageSender.User));
-   // welcomeMessageGroup.messages.push(new TextMessage('genie-Sorry to hear I could not help you solve your problem', MessageSender.System));
-
+    welcomeMessageGroup.messages.push(new TextMessage(welcomeMessage, MessageSender.System, 200));
+ 
     const feedbackMessageGroup: MessageGroup = new MessageGroup('feedback', [], () => '');
-  //  feedbackMessageGroup.messages.push(new TextMessage('Did this information help you solve the issue?', MessageSender.System, 2000, false, MessageType.Feedback));
-    //documentSearch.messages.push(new TextMessage('genie-Please describe your problem below, so I can search relevant documentation and tools that may help you.', MessageSender.System));
-   // documentSearch.messages.push(new DocumentSearchMessage());
-   // documentSearch.messages.push(new TextMessage('Was this helpful to finding what you were looking for?', MessageSender.System, 2000));
-   feedbackMessageGroup.messages.push(new FeedbackButtonListMessage('Did this information help you solve the issue?',this._getButtonListDidYouFindHelpfulinNewGenie('more-help', 'I need further assistance'), 'Availability and Performance'));
+    feedbackMessageGroup.messages.push(new FeedbackButtonListMessage('Did this information help you solve the issue?',this._getButtonListDidYouFindHelpfulinNewGenie('more-help', 'I need further assistance'), 'Availability and Performance'));
    const helpfulGroup: MessageGroup = new MessageGroup('feedback-helpful', [], () => 'feedback-textbox');
    helpfulGroup.messages.push(new TextMessage('Yes', MessageSender.User, 200));
    helpfulGroup.messages.push(new TextMessage('Good to hear! Could you let us know how helpful was this?', MessageSender.System, 500));
    helpfulGroup.messages.push(new GenieFeedbackMessage([], 'Submit', 'Feedback', 'Support Home'));
    helpfulGroup.messages.push(new TextMessage('Thank you for your feedback! What else can I help you with today? Type in your question below.'));
-
 
    const notHelpfulGroup: MessageGroup = new MessageGroup('feedback-not-helpful', [], () => 'feedback-textbox');
    notHelpfulGroup.messages.push(new TextMessage('No', MessageSender.User, 200));
@@ -76,10 +51,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
    notHelpfulGroup.messages.push(new TextMessage('Thank you for your feedback! Could you help describe your issue again so we can further assist you?'));
    const feedbackText: MessageGroup = new MessageGroup('feedback-textbox', [], () => '');
 
-    // documentSearch.messages.push(new TextMessage('Yes I found the right information.', MessageSender.User));
-    // documentSearch.messages.push(new TextMessage('Great I\'m glad I could be of help!', MessageSender.System));
-
-    // this.messageFlowList.push(needAnalysis);
     this.messageFlowList.push(welcomeMessageGroup);
     this.messageFlowList.push(feedbackMessageGroup);
     this.messageFlowList.push(helpfulGroup);
@@ -92,9 +63,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
   }
 
   createMessageFlowForAnaysisResult(data: any, noSearchResult: boolean = false): any {
-    console.log("1.****messages", data);
-    // this.globals.messages.push(new DynamicAnalysisResultsMessage(data));
-     console.log("****messages", this.globals.messages);
      const moreHelpId: string = `more-help-WindowsAvailabilityAndPerformance`;
      const showTiles: string = `show-all-tiles-WindowsAvailabilityAndPerformance`;
      const feedback: string = `feedback-WindowsAvailabilityAndPerformance`;
@@ -102,18 +70,13 @@ export class GenieChatFlow extends IMessageFlowProvider {
 
   createMessageFlowForAnaysis(keyword: string, messageGroupId: string, resourceId: string=""): Observable<Message[]> {
     this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
-        // For now, only showing alert in case submission
         this.resourceId = startupInfo.resourceId;
         console.log("Lauching genie chat flow with resourceId", this.resourceId);
       });
-    //const dynamicAnalysisGroup: MessageGroup = new MessageGroup("dynamic-analysis", [], () => "feedback");
     let analysisMessages: Message[]  = [];
-  //  analysisMessages.push(new CategoryMenuMessage());
     let keywordTextMessage = new TextMessage(keyword, MessageSender.User, 500);
     let systemResponseTextMessage = new TextMessage('Okay give me a moment while I analyze your app for any issues related to this.', MessageSender.System, 500);
     resourceId = this.resourceId;
-   // console.log("resourceId:", resourceId);
-   // console.log("Router", this._router.url, this._activatedRoute.firstChild);
     let dynamicAnalysisMessage = new DynamicAnalysisMessage(keyword, resourceId);
 
     const analysisMessageGroup: MessageGroup = new MessageGroup(`${messageGroupId}`, [], () => '');
@@ -123,13 +86,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
     let additionalMessageGroup: MessageGroup[] = [];
     additionalMessageGroup.push(analysisMessageGroup);
     this.additionalMessageFlows.next(additionalMessageGroup);
-    //this.messageFlowList.push(analysisMessageGroup);
-
-    console.log("1. push two text message", keywordTextMessage, systemResponseTextMessage);
-  //  analysisMessages.push(new DynamicAnalysisMessage(keyword, this.targetedScore));
-    console.log("2. after push dynamicmessage", analysisMessages);
-
-   // this.messageFlowList.push(dynamicAnalysisGroup);
     return of(analysisMessages);
   }
 
@@ -150,17 +106,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
       let serviceName: string = 'App Service Diagnostics';
       let welcomeMessage = "genie-Welcome to App Service Diagnostics. My name is Genie and I am here to help you answer any questions you may have about diagnosing and solving your problems with your app. Please describe the issue of your app.";
 
-      // this.panelStyles = {
-      //     type: PanelType.custom,
-      //     customWidth: "585px",
-      // }
-
-      // let elem = document.createElement('div') as HTMLElement
-      // this.messages.push(new Message {
-
-      // });
-
-
       if (this._resourceService.armResourceConfig
         && this._resourceService.armResourceConfig.homePageText
         && this._resourceService.armResourceConfig.homePageText.title
@@ -170,8 +115,7 @@ export class GenieChatFlow extends IMessageFlowProvider {
 
       const welcomeCategory: MessageGroup = new MessageGroup(`welcome`, [], () => mainMenuId);
       welcomeCategory.messages.push(new TextMessage(welcomeMessage, MessageSender.System, 200));
-     // welcomeCategory.messages.push(new TextMessage(`Here are some issues related to ${category.name} that I can help with. Please select the tile that best describes your issue.`, MessageSender.System, 500));
-
+ 
       const categoryMainMenu: MessageGroup = new MessageGroup(mainMenuId, [], () => feedback);
       categoryMainMenu.messages.push(new CategoryMenuMessage());
       categoryMainMenu.messages.push(new TextMessage('genie-Okay give me a moment while I analyze your app for any issues related to this tile. Once the detectors load, feel free to click to investigate each topic further.', MessageSender.System, 500));
@@ -213,10 +157,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
       return messageGroupList;
     }, this));
   }
-
-//   public setCurrentKey(messageGroupKey: string):any {
-//      this._messageProcessor.setCurrentKey(messageGroupKey);
-//   }
 
   private _getButtonListForMoreHelpSearchResponse(mainMenuId: string): any {
     return [{

@@ -46,7 +46,7 @@ export class StartupModule {
             AvailabilityPerformanceFlow,
             LinuxAvailabilityPerformanceFlow,
             GenericCategoryFlow,
-             GenieChatFlow
+            GenieChatFlow
         ]
     };
 }

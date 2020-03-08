@@ -4,10 +4,10 @@ import { GenieMessageProcessor } from './message-processor.service';
 
 @Component({
     selector: 'support-bot-new',
-    templateUrl: 'support-bot.component.html',
+    templateUrl: 'support-bot-new.component.html',
     providers: [GenieMessageProcessor]
 })
-export class SupportBotComponent implements OnInit {
+export class SupportBotNewComponent implements OnInit {
     @ViewChild('scrollMe', { static: false }) myScrollContainer: ElementRef;
 
 messages: Message[];
@@ -30,8 +30,6 @@ messages: Message[];
         this.chatContainerHeight = window.innerHeight - 60;
 
         this.getMessage();
-
-        console.log("this.messages after init", this.messages);
     }
 
     scrollToBottom(event?: any): void {
@@ -45,7 +43,6 @@ messages: Message[];
         const self = this;
         const message = this._messageProcessor.getNextMessage(event);
 
-        console.log("message in support bot", message);
         if (message) {
 
             console.log("message not empty", message);

@@ -3,16 +3,12 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AvailabilityModule } from '../availability/availability.module';
 import { SolutionsModule } from '../solutions/solutions.module';
-
 import { StartupMessages } from './message-flow/startup/startupmessages';
 import { MainMenuMessageFlow } from './message-flow/main-menu/mainmenumessageflow';
 import { HealthCheckMessageFlow } from './message-flow/health-check/healthcheckmessageflow';
 import { Geniefeedbackmessageflow } from './message-flow/genie-feedback/geniefeedbackmessageflow';
 import { GenieMessageProcessor } from './message-processor.service';
-
-import { HomepageComponent } from './homepage/homepage.component';
-import { SupportBotComponent } from './support-bot.component';
-import { GenieDynamicComponent } from './dynamic-component/dynamic.component';
+import { SupportBotNewComponent } from './support-bot-new.component';
 import { GenieTextMessageComponent } from './common/text-message/text-message.component';
 import { ButtonMessageComponent } from './common/button-message/button-message.component';
 import { FeedbackButtonMessageComponent } from './common/feedback-button-message/feedback-button-message.component';
@@ -25,7 +21,6 @@ import { SolutionsMessageComponent } from './common/solutions-message/solutions-
 import { GraphMessageComponent } from './common/graph-message/graph-message.component';
 import { CpuAnalysisChatFlow } from './message-flow/cpu-analysis-chat/cpu-analysis-chat-flow';
 import { ProblemStatementMessageComponent } from './common/problem-statement-message/problem-statement-message.component';
-import { AppInsightsSettingsComponent } from '../availability/app-insights/app-insights-settings.component';
 import { CategoryMenuComponent } from './message-flow/category-menu/category-menu.component';
 import { DetectorSummaryComponent } from './message-flow/detector-summary/detector-summary.component';
 import { DocumentSearchComponent } from './message-flow/document-search/document-search.component';
@@ -43,8 +38,7 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
 
 @NgModule({
     declarations: [
-        HomepageComponent,
-        SupportBotComponent,
+        SupportBotNewComponent,
         GenieTextMessageComponent,
         LoadingMessageComponent,
         MainMenuComponent,
@@ -74,8 +68,7 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
         FabChoiceGroupModule,
     ],
     exports: [
-        HomepageComponent,
-        SupportBotComponent,
+        SupportBotNewComponent,
         CategoryMenuComponent,
         DetectorSummaryComponent,
         HealthCheckV3Component,
@@ -93,5 +86,5 @@ import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis
         GenericCategoryFlow
     ]
 })
-export class SupportBotNewModule {
+export class GenieModule {
 }

@@ -54,7 +54,7 @@ export class ResourceRedirectComponent implements OnInit {
                 );
               }
             }
-            console.log("category,detector,type param after", info.optionalParameters);
+
             // This additional info is used to open a specific detector/tool under the right category in a new SCIFrameblade
             // To Open the detector or diagnostic tool under the right category
             if (info.optionalParameters)

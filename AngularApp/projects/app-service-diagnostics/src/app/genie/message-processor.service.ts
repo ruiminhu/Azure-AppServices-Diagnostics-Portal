@@ -9,7 +9,6 @@ import { ButtonActionType } from './models/message-enums';
 export class GenieMessageProcessor {
     private _messageFlowProviders: IMessageFlowProvider[];
     private _messageGroups: MessageGroup[] = [];
-    //private _startingKey: string = 'startup';
     private _startingKey: string = 'welcome';
     private _currentKey: string;
     private _currentMessageGroup: MessageGroup;
@@ -32,14 +31,9 @@ export class GenieMessageProcessor {
 
         this._messageGroups = messageGroups;
         this.setCurrentKey(this._startingKey);
-
-        // this._currentKey = this._startingKey;
-        // this._currentMessageIterator = 0;
-        // this._currentMessageGroup = this._getMessageGroupByKey(this._currentKey);
     }
 
     public setCurrentKey(key: string) {
-        console.log("current message group", this._messageGroups);
         this._currentKey = key;
         this._currentMessageIterator = 0;
         this._currentMessageGroup = this._getMessageGroupByKey(this._currentKey);

@@ -1,5 +1,5 @@
 <fab-panel [isOpen]="globals.openGeniePanel" [type]="type" [customWidth]="width" [isHiddenOnDismiss]="true"
-  [isLightDismiss]="true" [hasCloseButton]="false" [closeButtonAriaLabel]="'close'">
+  [isLightDismiss]="true" [hasCloseButton]="true" [closeButtonAriaLabel]="'close'" (onDismissed)="genieDismissedHandler()">
   <div class="row">
     <div>
       <div style="margin-bottom: 10px">
@@ -12,17 +12,17 @@
           tabindex="0" aria-label="HelpBot">
           An interactive self-serve diagnostics tool</div>
         <div style="position: absolute; top:10px; right: 10px; align-items: flex-end; cursor: pointer; "
-          class="button-container">
-          <div tabindex="0" aria-label="Collapse" (keydown.enter)="closeGeniePanel()">
-            <i class="fa fa-lg fa-angle-double-right close-button" (click)="closeGeniePanel()"></i>
+          class="button-container" (keydown.enter)="closeGeniePanel()" (click)="closeGeniePanel()">
+          <div tabindex="0" aria-label="Collapse">
+            <!-- <i class="fa fa-lg fa-angle-double-right close-button" (click)="closeGeniePanel()"></i> -->
           </div>
-          <div class="button-container">
-            <span class="tooltiptext" style="margin-left: -30px;">Collapse</span>
+          <div class="button-container" style="margin-top:25px">
+            <span class="tooltiptext" style="margin-left: -30px;">Collapse Genie</span>
           </div>
         </div>
       </div>
-      <div class="panel-content" style="margin-top: 60px;" #scrollMe>
-        <!-- Remove style after A/B Test,except margin-left -->
+      <div class="panel-content" style="margin-top: 10px;" #scrollMe>
+        <!-- Remove style afterF A/B Test,except margin-left -->
         <div [style.height.px]="chatContainerHeight" style="overflow-y: auto; display: inline-block; height: 78vh;"
           class="ms-Panel-scrollableContent scroll-bottom">
           <div class="animated fadeIn chat-message-container" *ngFor="let item of messages" style="margin-left:0px;margin-top: 10px;margin-right: 10px;
@@ -42,5 +42,4 @@
       </div>
     </div>
   </div>
-  <!-- <span>Chat</span> -->
 </fab-panel>

@@ -71,7 +71,6 @@ export class GenieChatFlow extends IMessageFlowProvider {
   createMessageFlowForAnaysis(keyword: string, messageGroupId: string, resourceId: string=""): Observable<Message[]> {
     this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
         this.resourceId = startupInfo.resourceId;
-        console.log("Lauching genie chat flow with resourceId", this.resourceId);
       });
     let analysisMessages: Message[]  = [];
     let keywordTextMessage = new TextMessage(keyword, MessageSender.User, 500);

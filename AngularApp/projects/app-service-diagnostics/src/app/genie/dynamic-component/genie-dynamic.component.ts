@@ -6,9 +6,9 @@ import {
 import { ButtonMessageComponent } from '../common/button-message/button-message.component';
 import { FeedbackButtonMessageComponent } from '../common/feedback-button-message/feedback-button-message.component';
 import { GraphMessageComponent } from '../common/graph-message/graph-message.component';
-import {
-    ProblemStatementMessageComponent
-} from '../common/problem-statement-message/problem-statement-message.component';
+// import {
+//     ProblemStatementMessageComponent
+// } from '../common/problem-statement-message/problem-statement-message.component';
 import { SolutionsMessageComponent } from '../common/solutions-message/solutions-message.component';
 import { GenieTextMessageComponent } from '../common/text-message/text-message.component';
 import { CategoryMenuComponent } from '../message-flow/category-menu/category-menu.component';
@@ -26,7 +26,6 @@ import {
 } from '../message-flow/dynamic-analysis-results/dynamic-analysis-results.component';
 import { DocumentSearchComponent } from '../message-flow/document-search/document-search.component';
 import { GenieFeedbackComponent } from '../message-flow/genie-feedback/genie-feedback.component';
-import { HealthCheckComponent } from '../message-flow/health-check/health-check.component';
 import { MainMenuComponent } from '../message-flow/main-menu/main-menu.component';
 import {
     TalkToAgentMessageComponent
@@ -37,8 +36,8 @@ import { HealthCheckV3Component } from '../message-flow/health-check-v3/health-c
 
 @Component({
     selector: 'dynamic-component-genie',
-    entryComponents: [GenieTextMessageComponent, MainMenuComponent, ButtonMessageComponent, FeedbackButtonMessageComponent, HealthCheckComponent, HealthCheckV3Component,
-        GenieFeedbackComponent, SolutionsMessageComponent, GraphMessageComponent, ProblemStatementMessageComponent, TalkToAgentMessageComponent, CategoryMenuComponent,
+    entryComponents: [GenieTextMessageComponent, MainMenuComponent, ButtonMessageComponent, FeedbackButtonMessageComponent, HealthCheckV3Component,
+        GenieFeedbackComponent, SolutionsMessageComponent, GraphMessageComponent, TalkToAgentMessageComponent, CategoryMenuComponent,
         DetectorSummaryComponent, DocumentSearchComponent, DocumentSearchResultsComponent, DynamicAnalysisComponent, DynamicAnalysisResultsComponent],
     template: `
     <div #genieDynamicComponentContainer></div>
@@ -92,7 +91,6 @@ export class GenieDynamicComponent {
             takeUntil(this.onComplete)
         ).subscribe((response: { status: boolean, data?: any }) => {
             if (response.status === true) {
-                console.log("status from dynamic component", response.data);
                 this.onComplete.emit(response.data);
                 this.viewUpdateSubscription.unsubscribe();
 

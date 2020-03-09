@@ -49,6 +49,7 @@ import { ResourcesModule } from './resources/resources.module';
 import { WebSitesModule } from './resources/web-sites/web-sites.module';
 import { VersionTestService } from './fabric-ui/version-test.service';
 import { BackendCtrlService } from './shared/services/backend-ctrl.service';
+import { GenieModule } from './genie/genie.module';
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { BackendCtrlService } from './shared/services/backend-ctrl.service';
     ),
     CustomMaterialModule,
     HighchartsChartModule,
+    GenieModule
   ],
   declarations: [
     AppComponent,

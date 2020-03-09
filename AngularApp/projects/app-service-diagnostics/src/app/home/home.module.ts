@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { SharedV2Module } from '../shared-v2/shared-v2.module';
 import { GenericSupportTopicService, GenericContentService } from 'diagnostic-data';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryChatComponent } from './components/category-chat/category-chat.component';
@@ -41,16 +40,16 @@ import { ConnectionDiagnoserToolComponent } from '../shared/components/tools/con
 import { AutohealingComponent } from '../auto-healing/autohealing.component';
 import { NetworkTraceToolComponent } from '../shared/components/tools/network-trace-tool/network-trace-tool.component';
 import { DaasMainComponent } from '../shared/components/daas-main/daas-main.component';
-import { Route, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
 import { AutohealingDetectorComponent } from '../availability/detector-view/detectors/autohealing-detector/autohealing-detector.component';
 import { CpuMonitoringToolComponent } from '../shared/components/tools/cpu-monitoring-tool/cpu-monitoring-tool.component';
 import { EventViewerComponent } from '../shared/components/daas/event-viewer/event-viewer.component';
 import { FrebViewerComponent } from '../shared/components/daas/freb-viewer/freb-viewer.component';
-import { DiagnosticToolsRoutes, MetricsPerInstanceAppServicePlanResolver, AdvanceApplicationRestartResolver, SecurityScanningResolver, MetricsPerInstanceAppsResolver } from '../diagnostic-tools/diagnostic-tools.routeconfig';
+import { MetricsPerInstanceAppServicePlanResolver, AdvanceApplicationRestartResolver, SecurityScanningResolver, MetricsPerInstanceAppsResolver } from '../diagnostic-tools/diagnostic-tools.routeconfig';
 import { CategoryTileV4Component } from '../fabric-ui/components/category-tile-v4/category-tile-v4.component';
 import { CategoryChatV4Component } from '../fabric-ui/components/category-chat-v4/category-chat-v4.component';
-import { VersionTestService } from '../fabric-ui/version-test.service';
 import { GenieModule } from '../genie/genie.module';
+import { FabricModule } from '../fabric-ui/fabric.module';
+
 export const HomeRoutes = RouterModule.forChild([
     {
         path: '',
@@ -502,6 +501,7 @@ export const HomeRoutes = RouterModule.forChild([
         HomeRoutes,
         SupportBotModule,
         GenieModule,
+        FabricModule,
         FormsModule,
         MarkdownModule.forRoot(),
         FabSearchBoxModule

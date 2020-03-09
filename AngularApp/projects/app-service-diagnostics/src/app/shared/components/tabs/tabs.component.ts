@@ -71,11 +71,6 @@ export class TabsComponent implements OnInit {
     });
   }
 
-  // ngAfterViewInit() {
-  //   this.isLegacy = this._versionTestService.getIsLegcy();
-  //   console.log("tab component",this.isLegacy);
-  // }
-
   getAnalysisTabIfAnalysisDetector(url: string) {
     if (url.indexOf("/analysis/") >=0 && url.indexOf("/detectors/") >= 0 && url.indexOf("/legacy/") === -1) {
       let detectorWithAnalysisPath = url.split("/analysis/")[1];

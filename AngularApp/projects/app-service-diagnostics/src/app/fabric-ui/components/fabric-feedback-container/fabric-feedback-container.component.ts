@@ -58,7 +58,6 @@ export class FabricFeedbackContainerComponent implements OnInit {
       this.rating = 0;
       this.feedbackText = "";
       this.submitted = false;
-      console.log("reset feedback statement");
     });
   }
 }

@@ -57,7 +57,6 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
       this.analysisId = this.analysisId === "" ? params.get('analysisId'): this.analysisId;
       this.detectorId = params.get('detectorName') === null ? "" : params.get('detectorName');
       this._activatedRouteLocal.queryParamMap.subscribe(qParams => {
-          console.log("searchterm from route params", qParams, qParams.get('searchTerm') === null);
         this.searchTerm = qParams.get('searchTerm') === null ? this.searchTerm : qParams.get('searchTerm');
         if (this.analysisId=== "searchResultsAnalysis" && this.searchTerm && this.searchTerm.length>0){
             this.showSearchBar = this.searchMode === SearchAnalysisMode.CaseSubmission ? true : this.showSearchBar;
@@ -68,11 +67,8 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
             this.showSearchBar = false;
         }
 
-        console.log("In general Analysis, analysisId and searchTerm", this.analysisId, this.searchTerm);
-
         this._diagnosticServiceLocal.getDetectors().subscribe(detectorList => {
           if (detectorList) {
-            console.log("In general Analysis, detectorlist and detectorid", detectorList, this.detectorId);
             if (this.detectorId !== "") {
               let currentDetector = detectorList.find(detector => detector.id == this.detectorId)
               this.detectorName = currentDetector.name;
@@ -88,7 +84,6 @@ export class GenericAnalysisComponent extends GenericDetectorComponent implement
   }
 
   triggerSearch(){
-      console.log("triggersearch");
     if (this.searchTerm && this.searchTerm.length>1) {
       this.searchBarFocus = false;
       var searchBar = document.getElementById('caseSubmissionFlowSearchBar');

@@ -14,8 +14,7 @@ import { AuthService } from '../../../startup/services/auth.service';
 import { DiagnosticService, DetectorMetaData, DetectorType } from 'diagnostic-data';
 import { filter, tap } from 'rxjs/operators';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
- import { Globals } from '../../../globals';
-// import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
+import { Globals } from '../../../globals';
 
 @Component({
     selector: 'category-summary',
@@ -51,18 +50,15 @@ export class CategorySummaryComponent implements OnInit {
     openPanel: boolean = false;
 
     setFocusOnCallpsibleButton() {
-        console.log("collapse-genie-button", document.getElementById("collapse-genie-button"));
         document.getElementById("collapse-genie-button").focus();
     }
     closeGeniePanel() {
         this.globals.openGeniePanel = false;
         this.openPanel = false;
-        console.log("close panel, isOpen:", this.globals.openGeniePanel);
     }
 
     openGeniePanel() {
         this.globals.openGeniePanel  = true;
-        console.log("open panel, isOpen:", this.globals.openGeniePanel);
     }
 
     setCategoryIndex(event:any) {
@@ -72,54 +68,18 @@ export class CategorySummaryComponent implements OnInit {
     constructor(protected _diagnosticApiService: DiagnosticService, private _route: Router, private _injector: Injector, private _activatedRoute: ActivatedRoute, private categoryService: CategoryService,
         private _chatState: CategoryChatStateService, private _genericApiService: GenericApiService
         , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals) {
-            // this._route.routeReuseStrategy.shouldReuseRoute = function(){
-            //     return true;
-            //  }
-
-            //  this._route.events.subscribe((evt) => {
-            //     if (evt instanceof NavigationEnd) {
-            //        // trick the Router into believing it's last link wasn't previously loaded
-            //        this._route.navigated = false;
-            //        // if you need to scroll back to top, here is the right place
-            //        window.scrollTo(0, 0);
-            //     }
-            // });
-            console.log("init ngsummary in constructor");
     }
 
     ngOnInit() {
-        console.log("init ngsummary");
-       // this.globals.openGeniePanel = false;
         this.categoryService.categories.subscribe(categories => {
-         //   let decodedCategoryName = decodeURIComponent(this._activatedRoute.snapshot.params.category);
-         let decodedCategoryName = this._activatedRoute.snapshot.params.category.toLowerCase();
-            console.log("categoryName before decode and after", this._activatedRoute.snapshot.params.category, decodedCategoryName);
-            if (categories)
-            {
-                console.log("all the categories", categories);
-            }
-            //|| category.name.replace(/\s/g, '') === categoryName
+          let decodedCategoryName = this._activatedRoute.snapshot.params.category.toLowerCase();
             this.category = categories.find(category => category.id.toLowerCase() === this._activatedRoute.snapshot.params.category.toLowerCase() ||  category.name.replace(/\s/g, '').toLowerCase() === decodedCategoryName);
-            console.log("finding category in category summary", this.category);
             this._chatState.category = this.category;
             this.categoryName = this.category.name;
 
             this.resourceName = this._activatedRoute.snapshot.params.resourcename;
             this._portalActionService.updateDiagnoseCategoryBladeTitle(`${this.resourceName} - ` + this.categoryName);
         });
-
-        // this._route.events.subscribe((evt) => {
-        //     if (evt instanceof NavigationEnd) {
-        //         // trick the Router into believing it's last link wasn't previously loaded
-
-        //         console.log("evt with categorySmmary", evt, this._activatedRoute, this._route);
-        //         this._route.navigateByUrl(evt.url);
-        //     }
-        // });
-    }
-
-    private getCurrentRoutePath() {
-        this.currentRoutePath = this._activatedRoute.firstChild.snapshot.url.map(urlSegment => urlSegment.path);
     }
 
     navigateTo(path: string) {
@@ -128,8 +88,6 @@ export class CategorySummaryComponent implements OnInit {
             preserveFragment: true,
             relativeTo: this._activatedRoute
         };
-        console.log("Navigateto path", path);
         this._route.navigate(path.split('/'), navigationExtras);
-        console.log("this._route", this._route);
     }
 }

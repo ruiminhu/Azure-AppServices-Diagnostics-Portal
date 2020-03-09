@@ -85,9 +85,6 @@ export class CategoryNavComponent implements OnInit {
             (item.platform & this._webSiteService.platform) > 0 &&
             (item.sku & this._webSiteService.sku) > 0 &&
             (item.hostingEnvironmentKind & this._webSiteService.hostingEnvironmentKind) > 0 &&
-            // (item.stack === ''
-            // || (overrideStack && (overrideStack === '' || overrideStack.toLowerCase() === 'all'))
-            // || item.stack.toLowerCase().indexOf('all') >= 0) &&
             (!this.toolsAlreadyAdded(item.item));
     }
 
@@ -100,7 +97,6 @@ export class CategoryNavComponent implements OnInit {
     }
 
     toolsAlreadyAdded(item: any): boolean {
-        console.log("checking tools name:", item.name);
         if (item.name && this.tempToolsArray.indexOf(item.name) > -1) {
             return true;
         }
@@ -116,11 +112,7 @@ export class CategoryNavComponent implements OnInit {
         };
         var pathSegments = path.split('/');
         let segments: string[] = [path];
-        this._route.navigate(segments, navigationExtras).then(() => {
-            console.log("navigated", segments, navigationExtras);
-        });
-        console.log("this._route", this._route.url);
-        console.log("activatedRoute", this._activatedRoute);
+        this._route.navigate(segments, navigationExtras).then(() => {});
     }
 
 
@@ -154,7 +146,6 @@ export class CategoryNavComponent implements OnInit {
 
 
         this.hasUncategorizedDetectors = false;
-        console.log("init category-nav");
         this._route.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
             this.getCurrentRoutePath();
         });
@@ -292,15 +283,6 @@ export class CategoryNavComponent implements OnInit {
                             routePath = "analysis";
                         }
 
-                        // itemId = evt.url.split("/")[1];
-                        // if (evt.url.split("/")[14].toLowerCase() === "analysis") {
-                        //     routePath = "analysis";
-                        // }
-                        // else if (evt.url.includes("analysis/")) {
-                        //     itemId = evt.url.split("analysis/")[1].split("?")[0];
-                        //     routePath = "analysis";
-                        // }
-
                         let item = this.detectorDataLocalCopy.find(metadata => metadata.id.toLowerCase() === itemId.toLowerCase());
 
                         if (item && (item.category == undefined || item.category == "") && !this.detectorList.find((detector) => detector.label === item.id)) {
@@ -311,7 +293,6 @@ export class CategoryNavComponent implements OnInit {
                                 let icon = this.getIconImagePath(item.id);
                                 let onClick = () => {
                                     let dest1 = `resource${this.resourceId}/categories/${this.categoryId}/${routePath}/${item.id}`;
-                                    console.log("navigate to", dest1);
                                     this._route.navigate([dest1]);
                                 };
                                 let orphanMenuItem = new CollapsibleMenuItem(item.name, onClick, isSelected, icon);
@@ -319,14 +300,10 @@ export class CategoryNavComponent implements OnInit {
                                 if (!this.orphanDetectorList.find((item1 => item1.label === orphanMenuItem.label))) {
                                     this._detectorCategorization.detectorlistCategories[this.category.id].push(orphanMenuItem);
                                 }
-                                console.log("orphanlist", this.orphanDetectorList, this._detectorCategorization.detectorlistCategories);
                                 this.orphanDetectorList = this._detectorCategorization.detectorlistCategories[this.category.id];
-                                console.log("orphanlist", this._detectorCategorization.detectorlistCategories);
-                                // this._detectorCategorization.pushDetectorToCategory(orphanMenuItem, this.category.id);
                             }
                         }
 
-                        console.log("evt and list", evt, itemId, this.orphanDetectorList);
                     }
                 }
             }

@@ -15,32 +15,20 @@ export class CollapsibleMenuItemComponent implements OnInit {
 
   @Input() menuItem: CollapsibleMenuItem;
   @Input() level: number = 0;
-  // @Input() set searchValue(value) {
-  //   this._searchValueSubject.next(value);
-  // };
 
   children: CollapsibleMenuItem[];
 
   truncatedLable: string = "";
   hasChildren: boolean;
   matchesSearchTerm: boolean = true;
-  // imagePlaceHolder: string = '../../../../assets/img/detectors/default.png';
   imagePlaceHolder: string = '../../../../assets/img/detectors/default.svg';
 
-  //private _searchPipe: SearchPipe
   constructor() { }
 
   ngOnInit() {
     this.children = this.menuItem.subItems;
     this.hasChildren = this.menuItem.subItems && this.menuItem.subItems.length > 0;
     this.truncatedLable = this.menuItem.label.length > 24 ? this.menuItem.label.substr(0, 24) + ".." : this.menuItem.label;
-    // this._searchValueSubject.subscribe(searchValue => {
-    //   this.searchValueLocal = searchValue;
-    //   this.menuItem.expanded = searchValue != undefined;
-    // //  this.hasChildren = this.menuItem.subItems ? this._searchPipe.transform(this.menuItem.subItems, searchValue).length > 0 : false;
-    // this.hasChildren  = false;
-    // this.matchesSearchTerm = !this.searchValueLocal || this.menuItem.label.toLowerCase().indexOf(this.searchValueLocal.toLowerCase()) >= 0 || this.hasChildren;
-    // });
   }
 
   handleClick() {

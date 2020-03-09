@@ -41,13 +41,7 @@ export class CategoryTileV4Component implements OnInit {
     }
 
     this._diagnosticService.getDetectors().subscribe(detectors => {
-
-      console.log("All detectors", detectors);
-      console.log("category id", this.category.id);
       var currentCategoryDetectors = detectors.filter(detector => detector.category === this.category.id);
-      console.log("this category", this.category);
-
-      console.log("Filetered detectors", currentCategoryDetectors);
       if (currentCategoryDetectors.length === 1) {
         this._notificationService.dismiss();
         this._logger.LogTopLevelDetector(currentCategoryDetectors[0].id, currentCategoryDetectors[0].name, this.category.id);
@@ -66,13 +60,9 @@ export class CategoryTileV4Component implements OnInit {
         };
 
         this._notificationService.dismiss();
-
-        console.log("router", path);
         this._router.navigate(path, navigationExtras);
       }
     });
-
-    // console.log("Get detectors")
   }
 
   generateImagePath(name: string): string {

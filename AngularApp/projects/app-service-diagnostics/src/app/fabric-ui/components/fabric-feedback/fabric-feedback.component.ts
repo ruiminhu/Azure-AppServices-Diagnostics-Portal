@@ -21,6 +21,5 @@ export class FabricFeedbackComponent {
   dismissedHandler() {
     this.globals.openFeedback = false;
     this.dismissSubject.next();
-    console.log("feedback panel dismissed");
   }
 }

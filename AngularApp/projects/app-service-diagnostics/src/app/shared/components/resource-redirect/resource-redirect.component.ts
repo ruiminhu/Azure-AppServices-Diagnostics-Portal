@@ -25,8 +25,6 @@ export class ResourceRedirectComponent implements OnInit {
     this._authService.getStartupInfo()
       .subscribe(info => {
         if (info && info.resourceId && info.token) {
-          console.log("startupinfo", info);
-
           //   Uncomment to enable only for internal subs
           let split = info.resourceId.split('/');
           let subscriptionId = split[split.indexOf('subscriptions') + 1];
@@ -84,44 +82,6 @@ export class ResourceRedirectComponent implements OnInit {
                 );
               }
             }
-
-            // if (info.optionalParameters && (info.optionalParameters.find(param => param.key === "detectorId") || info.optionalParameters.find(para => para.key === "toolId"))) {
-            //   let categoryIdParam = info.optionalParameters.find(param => param.key === "categoryId");
-            //   let detectorTypeParam = info.optionalParameters.find(param => param.key === "detectorType");
-            //   let detectorIdParam = info.optionalParameters.find(param => param.key === "detectorId");
-            //   let toolIdParam = info.optionalParameters.find(param => param.key === "toolId");
-            //   console.log("category,detector,type param after", categoryIdParam, detectorIdParam, detectorTypeParam, toolIdParam);
-            //   if (categoryIdParam) {
-            //     let categoryId = categoryIdParam.value;
-            //     path += `/categories/${categoryId}`;
-
-            //     if (detectorIdParam && detectorTypeParam) {
-            //       if (detectorTypeParam.value === DetectorType.Detector) {
-            //         path += `/detectors/${detectorIdParam.value}`;
-            //       } else if (detectorTypeParam.value === DetectorType.Analysis) {
-            //         path += `/analysis/${detectorIdParam.value}`;
-            //       }
-            //     } else if (toolIdParam) {
-            //       path += `/tools/${toolIdParam.value}`;
-            //     }
-
-            //     this._router.navigateByUrl(
-            //       this._router.createUrlTree([path], navigationExtras)
-            //     );
-            //   }
-            // }
-            // // To Open the overview page under the right category
-            // else if (info.optionalParameters) {
-            //   var categoryIdParam = info.optionalParameters.find(param => param.key === "categoryId");
-
-            //   if (categoryIdParam) {
-            //     var categoryId = categoryIdParam.value;
-            //     path += `/categories/${categoryId}`;
-            //     this._router.navigateByUrl(
-            //       this._router.createUrlTree([path], navigationExtras)
-            //     );
-            //   }
-            // }
 
             if (info.supportTopicId) {
               path += `/supportTopicId`;

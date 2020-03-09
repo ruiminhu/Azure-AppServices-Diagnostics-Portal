@@ -13,7 +13,6 @@ import { Geniefeedbackmessageflow } from '../genie/message-flow/genie-feedback/g
 import { MessageProcessor } from '../supportbot/message-processor.service';
 import { GenieMessageProcessor } from '../genie/message-processor.service';
 import { GenericCategoryFlow } from '../supportbot/message-flow/v2-flows/generic-category.flow';
-import { GenieChatFlow } from '../genie/message-flow/v2-flows/genie-chat.flow';
 import { AvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/availability-performance.flow';
 import { CpuAnalysisChatFlow } from '../supportbot/message-flow/cpu-analysis-chat/cpu-analysis-chat-flow';
 import { LinuxAvailabilityPerformanceFlow } from '../supportbot/message-flow/v2-flows/linux-availability-performance.flow';
@@ -39,14 +38,12 @@ export class StartupModule {
             HealthCheckMessageFlow,
             FeedbackMessageFlow,
             Geniefeedbackmessageflow,
-            // GenieFeedbackMessageFlow,
             CpuAnalysisChatFlow,
             MessageProcessor,
             GenieMessageProcessor,
             AvailabilityPerformanceFlow,
             LinuxAvailabilityPerformanceFlow,
             GenericCategoryFlow,
-            GenieChatFlow
         ]
     };
 }

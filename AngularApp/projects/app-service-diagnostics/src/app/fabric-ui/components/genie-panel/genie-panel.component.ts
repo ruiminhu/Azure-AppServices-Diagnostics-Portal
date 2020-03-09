@@ -76,7 +76,6 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         try {
             this.myScrollContainer.nativeElement.childNodes[0].scrollTop = this.myScrollContainer.nativeElement.childNodes[0].scrollHeight;
         } catch (err) {
-            console.log("scrolltobottom error", err);
         }
     }
 

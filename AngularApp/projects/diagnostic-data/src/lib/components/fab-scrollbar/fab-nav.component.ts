@@ -95,9 +95,6 @@ export class FabScrollPanelComponent extends ReactWrapperComponent<IPanelProps> 
 
   constructor(elementRef: ElementRef, changeDetectorRef: ChangeDetectorRef, renderer: Renderer2) {
     super(elementRef, changeDetectorRef, renderer);
-
-  //  super(elementRef, changeDetectorRef, renderer);
-    console.log("Contruct the fab nav again");
     this.onLinkClickHandler = this.onLinkClickHandler.bind(this);
     this.onLinkExpandClickHandler = this.onLinkExpandClickHandler.bind(this);
   }

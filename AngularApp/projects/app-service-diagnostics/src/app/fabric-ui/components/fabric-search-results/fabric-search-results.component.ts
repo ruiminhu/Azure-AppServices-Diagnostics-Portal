@@ -100,7 +100,6 @@ export class FabricSearchResultsComponent {
     }, 5000);
     this.features = this.featureService.getFeatures(this.searchValue);
     this.isEscape = false;
-    console.log("Update Search Value");
   }
 
   onSearchBoxFocus() {
@@ -111,7 +110,6 @@ export class FabricSearchResultsComponent {
     //get element which type is input,class has ms-SearchBox-field,placeholder=Search
     const input: any = document.querySelector("input.ms-SearchBox-field[placeholder=Search]");
     input.autocomplete = "off";
-    console.log("Foucs Search Box");
   }
 
   clearSearch() {
@@ -129,7 +127,6 @@ export class FabricSearchResultsComponent {
       case BlurType.Blur:
         this.clearSearch();
         this.showSearchResults = false;
-        console.log("Update Search Value");
         break;
       case BlurType.None:
         this.clickSearchBox = BlurType.Blur;
@@ -139,7 +136,6 @@ export class FabricSearchResultsComponent {
     }
   }
   openGeniePanel() {
-    console.log("ask,genie");
     this.isEscape = true;
     this.globals.openGeniePanel = true;
   }

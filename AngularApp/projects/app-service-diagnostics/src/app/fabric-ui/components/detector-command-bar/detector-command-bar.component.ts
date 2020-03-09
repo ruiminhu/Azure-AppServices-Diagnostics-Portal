@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import {
-  IContextualMenuProps,
-} from 'office-ui-fabric-react';
 import { Globals } from '../../../globals';
 import { DetectorControlService } from 'projects/diagnostic-data/src/lib/services/detector-control.service';
 
@@ -15,35 +12,13 @@ export class DetectorCommandBarComponent {
     openPanel: false
   };
 
-
-
   time: string;
-
-
-  // commandbar related
-  commandbarStyles = {
-    backgroundColor: "blue"
-  };
-  listenObj: any;
-  dropdownOpen: boolean = true;
-
-
-
-  itemProps1: Partial<IContextualMenuProps> = {
-    onItemClick: (ev, item) => {
-      return false;
-    }
-  };
-
 
   constructor(private globals: Globals, private detectorControlService: DetectorControlService) { }
 
-
   toggleOpenState() {
     this.globals.openGeniePanel = !this.globals.openGeniePanel;
-    console.log("toggle panel, isOpen:", this.globals.openGeniePanel);
   }
-
 
   sendFeedback() {
     this.globals.openFeedback = !this.globals.openFeedback;
@@ -57,15 +32,10 @@ export class DetectorCommandBarComponent {
     this.globals.openTimePicker = !this.globals.openTimePicker;
   }
 
-  updateMessage(s: string) {
-    this.time = s;
-  }
-
-  showSearch() {
-
+  updateMessage(timeStr: string) {
+    this.time = timeStr;
   }
 
   onCopyClicked() {
-
   }
 }

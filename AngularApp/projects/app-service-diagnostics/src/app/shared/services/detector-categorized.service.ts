@@ -42,12 +42,10 @@ export class DetectorCategorizationService {
         if (!this.detectorCategories.hasOwnProperty(categoryId))
         {
             this.detectorCategories[categoryId]=[detectorId];
-            console.log("uncategorized detectors is empty in current category", detectorId, categoryId, this.detectorCategories);
         }
         else
         {
             this.detectorCategories[categoryId].push(detectorId);
-            console.log("uncategorized detectors exists", detectorId, categoryId, this.detectorCategories);
         }
     }
 

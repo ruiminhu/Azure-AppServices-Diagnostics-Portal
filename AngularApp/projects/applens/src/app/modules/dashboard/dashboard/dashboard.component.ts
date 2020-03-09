@@ -170,7 +170,6 @@ export class DashboardComponent implements OnDestroy {
   }
 
   copyToClipboard(item, event) {
-    //console.log(event.target);
     let listener = (e: ClipboardEvent) => {
       e.clipboardData.setData('text/plain', (item));
       e.preventDefault();

@@ -90,8 +90,6 @@ export class MainComponent implements OnInit {
     if (_adalService.userInfo.userName === 'cmaher@microsoft.com' || _adalService.userInfo.userName === "shgup@microsoft.com"){
       this.showCaseCleansingOption = true;
     }
-
-    console.log("Loading main component");
   }
 
   ngOnInit() {
@@ -153,7 +151,6 @@ export class MainComponent implements OnInit {
     }
 
     let route = this.selectedResourceType.routeName(form.resourceName);
-    console.log("route", route);
 
     if (route === 'srid') {
       window.location.href = `https://azuresupportcenter.msftcloudes.com/caseoverview?srId=${form.resourceName}`;

@@ -16,8 +16,6 @@ export class ResourceResolver implements Resolve<Observable<{} | ArmResource>> {
 
             this._detectorControlService.setDefault();
         }
-        console.log("resolve url", activatedRouteSnapshot.parent.url);
-        console.log("resolve url1", activatedRouteSnapshot.parent.url.filter(x => x.path !== 'new' && x.path !== 'categories').join('/'));
         return this._resourceService.registerResource(activatedRouteSnapshot.parent.url.filter(x => x.path !== 'new' && x.path !== 'categories').join('/'));
     }
 }

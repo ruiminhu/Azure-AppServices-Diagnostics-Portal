@@ -5,7 +5,7 @@ import { IChatMessageComponent } from '../../interfaces/ichatmessagecomponent';
 import { BotLoggingService } from '../../../shared/services/logging/bot.logging.service';
 import { ButtonActionType, MessageSender } from '../../models/message-enums';
 import { CategoryChatStateService } from '../../../shared-v2/services/category-chat-state.service';
- import { Globals } from '../../../globals';
+import { Globals } from '../../../globals';
 //import { Globals } from 'dist/diagnostic-data/lib/services/genie.service';
 
 @Component({
@@ -22,18 +22,16 @@ export class ButtonMessageComponent implements OnInit, AfterViewInit, IChatMessa
     @Output() onViewUpdate = new EventEmitter();
     @Output() onComplete = new EventEmitter<{ status: boolean, data?: any }>();
 
-    constructor(protected injector: Injector, protected _logger: BotLoggingService,protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
+    constructor(protected injector: Injector, protected _logger: BotLoggingService, protected globals: Globals, @Optional() protected _chatState?: CategoryChatStateService) {
     }
 
     ngOnInit(): void {
         const buttons = <{ title: string, type: ButtonActionType, next_key: string }[]>this.injector.get('buttonList', []);
         buttons.forEach(button => {
-            if (button.type === ButtonActionType.GetFeedback)
-            {
+            if (button.type === ButtonActionType.GetFeedback) {
                 this.isFeedbackButtonGroup = true;
             }
             this.buttonList.push(button);
-            console.log("button title", button.title);
         });
 
         const context = this.injector.get('context', '');
@@ -57,8 +55,7 @@ export class ButtonMessageComponent implements OnInit, AfterViewInit, IChatMessa
 
         if (item.type === ButtonActionType.GetFeedback)
         {
-            console.log("Feedback button onclick", item);
-        this.onComplete.emit({ status: true, data: item });
+            this.onComplete.emit({ status: true, data: item });
+        }
     }
-}
 }

@@ -18,12 +18,7 @@ export class AppComponent implements OnInit {
         this._newVersionEnabled = value;
      }
 
-    constructor(private _authService: AuthService, private _router: Router, private _resourceService: WebSitesService) {
-     this._authService.getStartupInfo().subscribe((startupInfo: StartupInfo) => {
-        // For now, only showing alert in case submission
-        let resourceId = startupInfo.resourceId;
-      });
-
+    constructor(private _router: Router) {
     }
 
     ngOnInit() {

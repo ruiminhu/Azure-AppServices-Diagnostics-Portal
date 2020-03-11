@@ -172,6 +172,14 @@ export class LoggingService {
         });
     }
 
+    LogGenieFeedbackMessage(source: string, rating: string, message: string, category: string = 'Availability') {
+        this._log(CommonLogEventType[CommonLogEventType.FeedbackMessage], category, {
+            source: source,
+            rating: rating,
+            message: message
+        });
+    }
+
     LogIncidentNotification(hasActiveIncident: boolean) {
         this._log(CommonLogEventType[CommonLogEventType.IncidentNotification], 'Incidents', {
             active: hasActiveIncident

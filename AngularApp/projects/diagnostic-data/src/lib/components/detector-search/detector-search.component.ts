@@ -16,6 +16,8 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Solution } from '../solution/solution';
 import { InsightUtils, Insight } from '../../models/insight';
 import { StatusStyles } from '../../models/styles';
+import { SearchConfiguration } from '../../models/search';
+import { GenericResourceService } from '../../services/generic-resource-service';
 @Component({
     selector: 'detector-search',
     templateUrl: './detector-search.component.html',
@@ -36,6 +38,7 @@ import { StatusStyles } from '../../models/styles';
     ]
 })
 export class DetectorSearchComponent extends DataRenderBaseComponent implements OnInit {
+    detectorSearchEnabledPesIds: string[] = ["14748"];
     startTime: Moment;
     endTime: Moment;
     isPublic: boolean = false;
@@ -66,44 +69,72 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
 
     showSuccessfulChecks: boolean = false;
 
-    firstLoad: boolean = true;
-
     webSearchResults: any[] = [];
-    showWebSearch: boolean = false;
-    webSearchShowTimeout: any = null;
+    
+    searchConfiguration: SearchConfiguration = null;
 
     @Input()
     withinDiagnoseAndSolve: boolean = false;
     @Input() detector: string = '';
+    @Input() diagnosticData: DiagnosticData;
 
     constructor(@Inject(DIAGNOSTIC_DATA_CONFIG) config: DiagnosticDataConfig, private _diagnosticService: DiagnosticService, public telemetryService: TelemetryService,
-        private detectorControlService: DetectorControlService, private _activatedRoute: ActivatedRoute, private _router: Router) {
+        private detectorControlService: DetectorControlService, private _activatedRoute: ActivatedRoute, private _router: Router, private _resourceService: GenericResourceService) {
         super(telemetryService);
         this.isPublic = config && config.isPublic;
     }
     childDetectorsData: string = "";
 
     ngOnInit() {
-        this.detectorControlService.update.subscribe(isValidUpdate => {
-            if (isValidUpdate) {
-                this.refresh();
+        super.ngOnInit();
+        var searchConf = new SearchConfiguration(this.diagnosticData.table);
+        this.searchConfiguration = searchConf;
+        this._resourceService.getPesId().subscribe(pesId => {
+            if (this.detectorSearchEnabledPesIds.findIndex(x => x==pesId)<0){
+                this.searchConfiguration.DetectorSearchEnabled = false;
             }
-        });
+            this.detectorControlService.update.subscribe(isValidUpdate => {
+                if (isValidUpdate) {
+                    this.refresh();
+                }
+            });
 
-        this._activatedRoute.queryParamMap.pipe(take(1)).subscribe(qParams => {
-            if (!this.firstLoad) {
-                return;
-            }
-            this.searchTerm = qParams.get('searchTerm') === null ? "" || this.searchTerm : qParams.get('searchTerm');
-            this.refresh();
-        });
+            this._activatedRoute.queryParamMap.pipe(take(1)).subscribe(qParams => {
+                this.searchTerm = qParams.get('searchTerm') === null ? "" || this.searchTerm : qParams.get('searchTerm');
+                if (!this.searchTerm || this.searchTerm.length==0){
+                    if (this.searchConfiguration.CustomQueryString && this.searchConfiguration.CustomQueryString.length > 1) {
+                        this.searchTerm = this.searchConfiguration.CustomQueryString;
+                        this.hitSearch();
+                    }
+                }
+                else {
+                    this.refresh();
+                }
+            });
+        });       
 
         this.startTime = this.detectorControlService.startTime;
         this.endTime = this.detectorControlService.endTime;
     }
 
+    hitSearch(){
+        if (this.searchTerm && this.searchTerm.length > 1){
+            const queryParams: Params = { searchTerm: this.searchTerm };
+            this._router.navigate(
+                [],
+                {
+                    relativeTo: this._activatedRoute,
+                    queryParams: queryParams,
+                    queryParamsHandling: 'merge'
+                }
+            );
+        }
+        this.refresh();
+    }
+
     refresh() {
         if (!this.detectorId && this.searchTerm && this.searchTerm.length > 1) {
+            if(this.searchConfiguration.DetectorSearchEnabled)
             this.triggerSearch();
         }
     }
@@ -111,20 +142,9 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     handleRequestFailure() {
         this.showPreLoadingError = true;
         this.showSearchTermPractices = false;
-        this.showWebSearch = true;
     }
 
     triggerSearch() {
-        this.firstLoad = false;
-        const queryParams: Params = { searchTerm: this.searchTerm };
-        this._router.navigate(
-            [],
-            {
-                relativeTo: this._activatedRoute,
-                queryParams: queryParams,
-                queryParamsHandling: 'merge'
-            }
-        );
         this.resetGlobals();
         this.searchId = uuid();
         let searchTask = this._diagnosticService.getDetectorsSearch(this.searchTerm).pipe(map((res) => res), catchError(e => {
@@ -148,7 +168,11 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
             var childrenOfParent = results[2];
             if (detectorList) {
                 searchResults.forEach(result => {
-                    if ((result.id !== this.detector) && (childrenOfParent.findIndex((x: string) => x.toLowerCase() == result.id.toLowerCase()) < 0) && (result.type === DetectorType.Detector)) {
+                    if ((result.id === this.detector) || (childrenOfParent.findIndex((x: string) => x.toLowerCase() == result.id.toLowerCase()) >= 0))
+                    {
+                        return;
+                    }
+                    else if (result.type === DetectorType.Detector) {
                         this.insertInDetectorArray({ name: result.name, id: result.id, score: result.score });
                     }
                     else if (result.type === DetectorType.Analysis) {
@@ -163,11 +187,16 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
                         this.insertInDetectorArray({ name: result.name, id: result.id, score: result.score });
                     }
                 });
-                // Start the web search after 10 seconds if detectors take long to run
-                if(this.webSearchShowTimeout){
-                    clearTimeout(this.webSearchShowTimeout);
-                }
-                this.webSearchShowTimeout = setTimeout(() => {this.showWebSearch = true;}, 10000);
+                // Pick up the top MaxResults number of results
+                this.detectors = this.detectors.sort((a, b) => {
+                    if (a.score > b.score){
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+                .slice(0, Math.min(this.searchConfiguration.DetectorSearchConfiguration.MaxResults, this.detectors.length));
                 this.startDetectorRendering(detectorList);
             }
         },
@@ -182,7 +211,6 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         if (this.detectorMetaData.length === 0) {
             this.searchTermDisplay = this.searchTerm.valueOf();
             this.showSearchTermPractices = true;
-            this.showWebSearch = true;
         }
         else {
             this.showSearchTermPractices = false;
@@ -248,7 +276,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     }
 
     getChildrenOfAnalysis(analysisId, detectorList) {
-        return detectorList.filter(element => (element.analysisTypes != null && element.analysisTypes.length > 0 && element.analysisTypes.findIndex(x => x == analysisId) >= 0)).map(element => { return { name: element.name, id: element.id }; });
+        return detectorList.filter(element => (element.analysisTypes != null && element.analysisTypes.length > 0 && element.analysisTypes.findIndex(x => x == analysisId) >= 0));
     }
 
     getChildrenOfParentDetector(parentDetectorId) {
@@ -272,7 +300,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     }
 
     insertInDetectorArray(detectorItem) {
-        if (this.detectors.findIndex(x => x.id === detectorItem.id) < 0) {
+        if ((detectorItem.score>this.searchConfiguration.DetectorSearchConfiguration.MinScoreThreshold) && (this.detectors.findIndex(x => x.id === detectorItem.id) < 0)) {
             this.detectors.push(detectorItem);
             this.loadingMessages.push("Checking " + detectorItem.name);
         }
@@ -304,7 +332,6 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         this.showSuccessfulChecks = false;
         this.showSearchTermPractices = false;
         this.showPreLoadingError = false;
-        this.showWebSearch = false;
     }
 
     getDetectorInsight(viewModel: any): any {

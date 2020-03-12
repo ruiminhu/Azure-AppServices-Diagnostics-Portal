@@ -60,6 +60,17 @@
         },
         {
             "service": "ResourceService",
+            "resourceType": "Microsoft.RedHatOpenShift/openShiftClusters",
+            "templateFileName": "OpenShiftClusters",
+            "imgSrc": "assets/img/Azure-Red-Hat-OpenShift-Logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "openShiftClusters",
+            "pesId": "16734",
+            "staticSelfHelpContent": "",
+            "searchSuffix": "AZURE RED HAT OPENSHIFT CLUSTER"
+        },
+        {
+            "service": "ResourceService",
             "resourceType": "Microsoft.BotService/botServices",
             "templateFileName": "BotService",
             "imgSrc": "assets/img/BotService-Logo.png",
@@ -131,7 +142,7 @@
             "staticSelfHelpContent": "",
             "searchSuffix": "AZURE CONTAINER REGISTRY"
         },
-		{
+        {
             "service": "ResourceService",
             "resourceType": "Microsoft.Automation/automationAccounts",
             "templateFileName": "AzureAutomation",
@@ -142,7 +153,7 @@
             "staticSelfHelpContent": "",
             "searchSuffix": "AZURE AUTOMATION ACCOUNT"
         },
-		{
+        {
             "service": "ResourceService",
             "resourceType": "Microsoft.MachineLearningServices/workspaces",
             "templateFileName": "MachineLearningServices",
@@ -229,6 +240,61 @@
             "pesId": "15922",
             "staticSelfHelpContent": "",
             "searchSuffix": "AZURE APPLICATION GATEWAY"
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.ServiceBus/namespaces",
+            "templateFileName": "ServiceBus",
+            "imgSrc": "assets/img/servicebus-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "ServiceBus",
+            "pesId": "13186",
+            "staticSelfHelpContent": "Microsoft.ServiceBus",
+            "searchSuffix": "AZURE SERVICE BUS"
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.EventHub/namespaces",
+            "templateFileName": "EventHub",
+            "imgSrc": "assets/img/eventhub-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "EventHub",
+            "pesId": "16125",
+            "staticSelfHelpContent": "Microsoft.EventHub",
+            "searchSuffix": "AZURE EVENT HUB"
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.EventGrid/topics",
+            "templateFileName": "EventGridTopics",
+            "imgSrc": "assets/img/eventgrid-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "EventGrid",
+            "pesId": "16263",
+            "staticSelfHelpContent": "Microsoft.EventGrid",
+            "searchSuffix": "AZURE EVENT GRID"
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.EventGrid/domains",
+            "templateFileName": "EventGridDomains",
+            "imgSrc": "assets/img/eventgrid-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "EventGrid",
+            "pesId": "16263",
+            "staticSelfHelpContent": "Microsoft.EventGrid",
+            "searchSuffix": "AZURE EVENT GRID"
+        },
+        {
+            "service": "ResourceService",
+            "resourceType": "Microsoft.Relay/namespaces",
+            "templateFileName": "Relay",
+            "imgSrc": "assets/img/relay-logo.png",
+            "versionPrefix": "",
+            "azureCommImpactedServicesList": "Relay",
+            "pesId": "16123",
+            "staticSelfHelpContent": "Microsoft.Relay",
+            "searchSuffix": "AZURE RELAY"
         }
     ]
 }

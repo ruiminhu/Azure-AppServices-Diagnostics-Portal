@@ -85,6 +85,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     showSuccessfulChecks: boolean = true;
     showWebSearch: boolean = false;
     showWebSearchTimeout: any = null;
+    searchDiagnosticData: DiagnosticData;
 
     constructor(private _activatedRoute: ActivatedRoute, private _router: Router,
         private _diagnosticService: DiagnosticService, private _detectorControl: DetectorControlService,
@@ -167,7 +168,6 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                                     title: appInsightData.title,
                                     description: appInsightData.description,
                                     renderingProperties: appInsightData.renderingProperties,
-                                    table: rows,
                                     poralBladeInfo: appInsightData.poralBladeInfo,
                                     diagnosticData: <DiagnosticData>{
                                         table: <DataTableResponseObject>{
@@ -211,8 +211,13 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     checkSearchEmbedded(response: DetectorResponse) {
         response.dataset.forEach((ds: DiagnosticData) => {
             if (ds.renderingProperties.type === RenderingType.SearchComponent) {
+                this.searchDiagnosticData = ds;
                 this.isSearchEmbedded = true;
                 this.showSuccessfulChecks = false;
+            }
+            else{
+                this.isSearchEmbedded = false;
+                this.showSuccessfulChecks = true;
             }
         });
     }
@@ -399,7 +404,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
         this.loadingMessages = [];
         this.successfulViewModels = [];
         this.showWebSearch = false;
-
+        this.isSearchEmbedded = false;
     }
 
     getDetectorInsight(viewModel: any): any {

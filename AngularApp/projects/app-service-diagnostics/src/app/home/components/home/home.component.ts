@@ -104,8 +104,7 @@ export class HomeComponent implements OnInit {
             }
         }
 
-        if (this.isAKSOnNationalCloud) {
-
+        if (this.useStaticAksText) {
             this.homePageText = {
                 title: 'Azure Kubernetes Service Diagnostics',
                 description: 'Explore ways to diagnose and troubleshoot the common problems of your cluster from CRUD operations to connection problems. Click on any of the documents below to start troubleshooting.',
@@ -177,7 +176,11 @@ export class HomeComponent implements OnInit {
 
      //   initializeIcons('https://static2.sharepointonline.com/files/fabric/assets/icons/');
     };
-
+   
+  public get useStaticAksText() : boolean {
+    return this.armService.isMooncake 
+    && this._resourceService.parseResourceUri(this._resourceService.resourceIdForRouting).provider.toLowerCase() == 'microsoft.containerservice';
+  }
 
     public get isAKSOnNationalCloud(): boolean {
         return this.armService.isNationalCloud

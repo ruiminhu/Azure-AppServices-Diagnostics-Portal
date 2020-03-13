@@ -30,7 +30,7 @@ import { FabSearchBoxModule } from '@angular-react/fabric';
 import { UncategorizedDetectorsResolver } from './resolvers/uncategorized-detectors.resolver';
 import { DetectorCategorizationService } from '../shared/services/detector-categorized.service';
 import { ToolNames } from '../shared/models/tools-constants';
-import { ProfilerToolComponent } from '../shared/components/tools/prohttps://github.com/Azure/Azure-AppServices-Diagnostics-Portal/pull/653/conflict?name=AngularApp%252Fprojects%252Fapp-service-diagnostics%252Fsrc%252Fapp%252Fhome%252Fhome.module.ts&ancestor_oid=8ba56b81718cc88c09c12f46ead5c81b4cf3b7ca&base_oid=fb1011eed887a9d39027b7e35ded7376df217720&head_oid=5b259d7327ad5c3bb8b11824e2dd13db7eb11d67filer-tool/profiler-tool.component';
+import { ProfilerToolComponent } from '../shared/components/tools/profiler-tool/profiler-tool.component';
 import { MemoryDumpToolComponent } from '../shared/components/tools/memorydump-tool/memorydump-tool.component';
 import { JavaThreadDumpToolComponent } from '../shared/components/tools/java-threaddump-tool/java-threaddump-tool.component';
 import { JavaMemoryDumpToolComponent } from '../shared/components/tools/java-memorydump-tool/java-memorydump-tool.component';

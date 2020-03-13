@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { GenericSupportTopicService, GenericContentService } from 'diagnostic-data';
+import { SharedV2Module } from '../shared-v2/shared-v2.module';
+import { GenericSupportTopicService, GenericContentService, GenericResourceService} from 'diagnostic-data';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryChatComponent } from './components/category-chat/category-chat.component';
 import { CategoryTileComponent } from './components/category-tile/category-tile.component';
@@ -29,7 +30,7 @@ import { FabSearchBoxModule } from '@angular-react/fabric';
 import { UncategorizedDetectorsResolver } from './resolvers/uncategorized-detectors.resolver';
 import { DetectorCategorizationService } from '../shared/services/detector-categorized.service';
 import { ToolNames } from '../shared/models/tools-constants';
-import { ProfilerToolComponent } from '../shared/components/tools/profiler-tool/profiler-tool.component';
+import { ProfilerToolComponent } from '../shared/components/tools/prohttps://github.com/Azure/Azure-AppServices-Diagnostics-Portal/pull/653/conflict?name=AngularApp%252Fprojects%252Fapp-service-diagnostics%252Fsrc%252Fapp%252Fhome%252Fhome.module.ts&ancestor_oid=8ba56b81718cc88c09c12f46ead5c81b4cf3b7ca&base_oid=fb1011eed887a9d39027b7e35ded7376df217720&head_oid=5b259d7327ad5c3bb8b11824e2dd13db7eb11d67filer-tool/profiler-tool.component';
 import { MemoryDumpToolComponent } from '../shared/components/tools/memorydump-tool/memorydump-tool.component';
 import { JavaThreadDumpToolComponent } from '../shared/components/tools/java-threaddump-tool/java-threaddump-tool.component';
 import { JavaMemoryDumpToolComponent } from '../shared/components/tools/java-memorydump-tool/java-memorydump-tool.component';
@@ -49,6 +50,7 @@ import { CategoryTileV4Component } from '../fabric-ui/components/category-tile-v
 import { CategoryChatV4Component } from '../fabric-ui/components/category-chat-v4/category-chat-v4.component';
 import { GenieModule } from '../genie/genie.module';
 import { FabricModule } from '../fabric-ui/fabric.module';
+import { ResourceService } from '../shared-v2/services/resource.service';
 
 export const HomeRoutes = RouterModule.forChild([
     {
@@ -522,6 +524,7 @@ export const HomeRoutes = RouterModule.forChild([
             { provide: GenericSupportTopicService, useExisting: SupportTopicService },
             { provide: GenericContentService, useExisting: ContentService },
             { provide: CXPChatService, useExisting: CXPChatCallerService },
+            { provide: GenericResourceService, useExisting: ResourceService},
         ],
 })
 export class HomeModule { }

@@ -6,13 +6,11 @@ import { Category } from '../../../shared-v2/models/category';
 import { CategoryChatStateService } from '../../../shared-v2/services/category-chat-state.service';
 import { INavProps, INavLink, INav, autobind, INavStyles } from 'office-ui-fabric-react';
 import { GenericApiService } from '../../../shared/services/generic-api.service';
-import { CategoriesService } from '../../../shared/services/categories.service';
 import { FeatureService } from '../../../shared-v2/services/feature.service';
 import { Tile } from '../../../shared/components/tile-list/tile-list.component';
 import { Feature } from '../../../shared-v2/models/features';
 import { AuthService } from '../../../startup/services/auth.service';
 import { DiagnosticService, DetectorMetaData, DetectorType } from 'diagnostic-data';
-import { filter } from 'rxjs/operators';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
 
 @Component({

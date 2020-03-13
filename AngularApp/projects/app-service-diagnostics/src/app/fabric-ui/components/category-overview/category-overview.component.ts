@@ -69,10 +69,6 @@ export class CategoryOverviewComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        var x = document.getElementById("custom");
-        x.addEventListener("click", function (event) {
-            event.preventDefault()
-        });
     }
 
     openMessageBar: boolean = false;

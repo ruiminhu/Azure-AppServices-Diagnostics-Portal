@@ -57,6 +57,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         // Enable chat again after we get feed-back dynamic component followed with dynamic analysis component
         if (event && event.hasOwnProperty('data') && event['data'] === "view-loaded") {
             (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
+            (<HTMLInputElement>document.getElementById("genieChatBox")).focus();
         }
     }
 
@@ -68,6 +69,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         if (event && event.hasOwnProperty('hasResult') && event.hasOwnProperty('next_key')) {
             if (event['hasResult'] === false) {
                 (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
+                (<HTMLInputElement>document.getElementById("genieChatBox")).focus();
             }
         }
     }

@@ -22,8 +22,6 @@ import { AppType } from '../../../shared/models/portal';
 import { OperatingSystem, HostingEnvironmentKind } from '../../../shared/models/site';
 import { Sku } from '../../../shared/models/server-farm';
 import { icons } from '../../../fabric-ui/icons-constants';
-// import { SiteFilteredItem } from '../models/site-filter';
-// import { WebSitesService } from '../services/web-sites.service';
 
 @Component({
     selector: 'category-nav',
@@ -73,9 +71,7 @@ export class CategoryNavComponent implements OnInit {
                 (item.platform & this._webSiteService.platform) > 0 &&
                 (item.sku & this._webSiteService.sku) > 0 &&
                 (item.hostingEnvironmentKind & this._webSiteService.hostingEnvironmentKind) > 0 &&
-                (item.stack === ''
-                    // || (overrideStack && (overrideStack === '' || overrideStack.toLowerCase() === 'all'))
-                    || item.stack.toLowerCase().indexOf('all') >= 0) &&
+                (item.stack === '' || item.stack.toLowerCase().indexOf('all') >= 0) &&
                 (!this.alreadyAdded(item.item)))
             .map(item => item);
     }
@@ -110,7 +106,6 @@ export class CategoryNavComponent implements OnInit {
             preserveFragment: true,
             relativeTo: this._activatedRoute
         };
-        var pathSegments = path.split('/');
         let segments: string[] = [path];
         this._route.navigate(segments, navigationExtras).then(() => {});
     }
@@ -225,7 +220,6 @@ export class CategoryNavComponent implements OnInit {
         this.toolCategoriesFilteredByStack = this.transform(this.toolCategories);
 
         this.categoryService.categories.subscribe(categories => {
-            //  let decodedCategoryName = decodeURIComponent(this._activatedRoute.snapshot.params.category);
             let decodedCategoryName = this._activatedRoute.snapshot.params.category.toLowerCase();
             this.category = categories.find(category => category.id.toLowerCase() === this._activatedRoute.snapshot.params.category.toLowerCase() || category.name.replace(/\s/g, '').toLowerCase() == decodedCategoryName);
             this._chatState.category = this.category;

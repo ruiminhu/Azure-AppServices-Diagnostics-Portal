@@ -65,12 +65,10 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         if (curr.routeConfig === null && future.routeConfig === null) {
             return true;
         }
-
         if (future.routeConfig !== curr.routeConfig) {
             return false;
         }
 
-        var c = this._getUrl(future) === this._getUrl(curr);
         return this._getUrl(future) === this._getUrl(curr);
 
     }

@@ -9,10 +9,10 @@
     border: 0;
 }
 
-#app-content {
+.panel-body-withtab {
     height: calc(100vh - 56px);
 }
 
-// #body-content {
-//     padding: 0px;
-// }
+.panel-body-notab {
+    height: calc(100vh - 10px);
+}

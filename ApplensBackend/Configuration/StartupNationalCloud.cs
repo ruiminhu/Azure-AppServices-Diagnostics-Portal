@@ -162,7 +162,7 @@ namespace AppLensV3.Configuration
                 {
                     if (context.Request.Path.ToString().Contains("signin"))
                     {
-                        context.Response.Redirect($"https://{context.Request.Host}/index.html", true);
+                        context.Response.Redirect($"https://{context.Request.Host}/index.html", false);
                     }
                     else
                     {

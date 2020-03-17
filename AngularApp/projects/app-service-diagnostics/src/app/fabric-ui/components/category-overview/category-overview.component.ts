@@ -74,9 +74,11 @@ export class CategoryOverviewComponent implements OnInit {
     openMessageBar: boolean = false;
 
     ngOnInit() {
-        this.categoryId = this._activatedRoute.parent.snapshot.params.category;
-        this._categoryService.categories.subscribe(categorys => {
-            this.category = categorys.find(category => this.categoryId === category.id);
+        let categoryParam = this._activatedRoute.parent.snapshot.params.category.toLowerCase();
+        this._categoryService.categories.subscribe(categories => {
+            this.category = categories.find(category => categoryParam === category.id.toLowerCase() || category.name.replace(/\s/g, '').toLowerCase() === categoryParam);
         });
+
+        this.categoryId = this.category.id
     }
 }

@@ -56,9 +56,22 @@
     margin-top: 0px;
 }
 
+.menu-item .tooltiptext {
+    visibility: hidden;
+    background: white;
+}
 
+.menu-item:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    background: white!important;
+    width: 100%;
+    white-space: nowrap;
+    z-index: 999;
+    margin-top: 6px;
+    position: relative;
+    border: 1px solid black;
+    padding: 3px;
+    font-size: 12px;
+}
 
-// .menu-label {
-//     font-size: "13px!important";
-//     font-family: "az_ea_font,'Segoe UI',az_font,system-ui,-apple-system,BlinkMacSystemFont,Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif";
-// }

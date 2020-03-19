@@ -12,7 +12,8 @@ import { Site } from '../shared/models/site';
     providedIn: 'root'
 })
 export class VersionTestService {
-    public isLegacySub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    public isLegacySub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
+    public isWindowsWebApp: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
     constructor(private _authService: AuthService, private _resourceService: ResourceService, private _siteService: SiteService) {
         this._authService.getStartupInfo().subscribe(startupInfo => {
             const resourceType = this._authService.resourceType;
@@ -20,11 +21,11 @@ export class VersionTestService {
             const subId = resourceId.split('/')[2];
             const isExternalSub = DemoSubscriptions.betaSubscriptions.findIndex(item => item.toLowerCase() === subId.toLowerCase()) === -1;
             this._siteService.currentSite.subscribe(site => {
-                const legacy = this.shouleUseLegacy(site, isExternalSub, resourceType);
-                this.isLegacySub.next(legacy);
+                const isWebAppResource = this.isWindowsWebAppResource(site, resourceType);
+                const shouldUseLegacy = isExternalSub||!isWebAppResource;
+                this.isLegacySub.next(shouldUseLegacy);
+                this.isWindowsWebApp.next(isWebAppResource);
             });
-
-
         });
     }
 
@@ -32,13 +33,8 @@ export class VersionTestService {
         this.isLegacySub.next(useLegacy);
     }
 
-    private shouleUseLegacy(site: Site, isExternalSub: boolean, resourceType: ResourceType): boolean {
-        if (resourceType !== ResourceType.Site) {
-            return true;
-        }
-        if (!site || site.appType !== AppType.WebApp) {
-            return true;
-        }
-        return isExternalSub;
+    private isWindowsWebAppResource(site: Site, resourceType: ResourceType): boolean {
+        let isLinuxPlatform = site && site.kind && site.kind.toLowerCase().indexOf('linux') >= 0;
+        return resourceType === ResourceType.Site && site && site.appType === AppType.WebApp && !isLinuxPlatform;
     }
 }

@@ -21,9 +21,6 @@ import {
 import {
     DynamicAnalysisComponent
 } from '../message-flow/dynamic-analysis/dynamic-analysis.component';
-import {
-    DynamicAnalysisResultsComponent
-} from '../message-flow/dynamic-analysis-results/dynamic-analysis-results.component';
 import { DocumentSearchComponent } from '../message-flow/document-search/document-search.component';
 import { GenieFeedbackComponent } from '../message-flow/genie-feedback/genie-feedback.component';
 import { MainMenuComponent } from '../message-flow/main-menu/main-menu.component';
@@ -38,7 +35,7 @@ import { HealthCheckV3Component } from '../message-flow/health-check-v3/health-c
     selector: 'dynamic-component-genie',
     entryComponents: [GenieTextMessageComponent, MainMenuComponent, ButtonMessageComponent, FeedbackButtonMessageComponent, HealthCheckV3Component,
         GenieFeedbackComponent, SolutionsMessageComponent, GraphMessageComponent, TalkToAgentMessageComponent, CategoryMenuComponent,
-        DetectorSummaryComponent, DocumentSearchComponent, DocumentSearchResultsComponent, DynamicAnalysisComponent, DynamicAnalysisResultsComponent],
+        DetectorSummaryComponent, DocumentSearchComponent, DocumentSearchResultsComponent, DynamicAnalysisComponent],
     template: `
     <div #genieDynamicComponentContainer></div>
   `,

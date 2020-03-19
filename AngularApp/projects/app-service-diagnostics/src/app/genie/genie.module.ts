@@ -27,7 +27,6 @@ import { GenieChatFlow } from './message-flow/v2-flows/genie-chat.flow';
 import { HealthCheckV3Component } from './message-flow/health-check-v3/health-check-v3.component';
 import { FabIconModule,FabChoiceGroupModule } from '@angular-react/fabric';
 import { DynamicAnalysisComponent } from './message-flow/dynamic-analysis/dynamic-analysis.component';
-import { DynamicAnalysisResultsComponent } from './message-flow/dynamic-analysis-results/dynamic-analysis-results.component';
 import { GeniePanelComponent } from '../fabric-ui/components/genie-panel/genie-panel.component';
 import { GenieDynamicComponent} from './dynamic-component/genie-dynamic.component';
 import { CommonModule } from '@angular/common';
@@ -50,7 +49,6 @@ import { FabPanelModule } from '@angular-react/fabric';
         DocumentSearchResultsComponent,
         HealthCheckV3Component,
         DynamicAnalysisComponent,
-        DynamicAnalysisResultsComponent,
         GeniePanelComponent,
         GenieDynamicComponent
     ],

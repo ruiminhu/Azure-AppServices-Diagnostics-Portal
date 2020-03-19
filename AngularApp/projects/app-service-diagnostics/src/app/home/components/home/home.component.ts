@@ -28,6 +28,7 @@ import { SubscriptionPropertiesService } from '../../../shared/services/subscrip
 })
 export class HomeComponent implements OnInit {
     useLegacy: boolean = true;
+    isWindowsWebApp: boolean = true;
     resourceName: string;
     categories: Category[];
     searchValue = '';
@@ -60,7 +61,8 @@ export class HomeComponent implements OnInit {
         private versionTestService: VersionTestService, private subscriptionPropertiesService: SubscriptionPropertiesService) {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
-        this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy)
+        this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy);
+        this.versionTestService.isWindowsWebApp.subscribe(isWebAppResource => this.isWindowsWebApp = isWebAppResource);
 
         if (_resourceService.armResourceConfig && _resourceService.armResourceConfig.homePageText
             && _resourceService.armResourceConfig.homePageText.title && _resourceService.armResourceConfig.homePageText.title.length > 1

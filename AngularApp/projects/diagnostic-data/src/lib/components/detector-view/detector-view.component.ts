@@ -325,8 +325,8 @@ export class DetectorViewComponent implements OnInit {
   populateSupportTopicDocument(){
     if (!this.supportDocumentRendered){
       this._supportTopicService.getSelfHelpContentDocument().subscribe(res => {
-        if (res && res.json() && res.json().length>0){
-          var htmlContent = res.json()[0]["htmlContent"];
+        if (res && res.length>0){
+          var htmlContent = res[0]["htmlContent"];
           // Custom javascript code to remove top header from support document html string
           var tmp = document.createElement("DIV");
           tmp.innerHTML = htmlContent;

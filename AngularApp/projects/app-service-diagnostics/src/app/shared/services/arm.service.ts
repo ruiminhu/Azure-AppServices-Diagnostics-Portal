@@ -188,10 +188,6 @@ export class ArmService {
     deleteResource<T>(resourceUri: string, apiVersion?: string, invalidateCache: boolean = false): Observable<any> {
         const url = this.createUrl(resourceUri, apiVersion);
         return this._http.delete(url, { headers: this.getHeaders() }).pipe(
-            // map((response: Response) => {
-            //     let body = response.text();
-            //     return body && body.length > 0 ? response.json() : "";
-            // }),
             catchError(this.handleError)
         );
     }

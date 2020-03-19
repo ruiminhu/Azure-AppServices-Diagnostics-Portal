@@ -1,6 +1,5 @@
 
 import {of as observableOf,  Observable } from 'rxjs';
-
 import { map, flatMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -27,8 +26,10 @@ export class SupportTopicService {
     if (this.pesId && this.pesId.length>0 && this.supportTopicId && this.supportTopicId.length>0){
       return this._authService.getStartupInfo().pipe(flatMap(res => {
         var selfHelpContentForSupportTopicUrl = this.selfHelpContentUrl + "&productId=" + encodeURIComponent(this.pesId) + "&topicId=" + encodeURIComponent(this.supportTopicId);
-        const headers = new HttpHeaders();
-        headers.append('Authorization', `Bearer ${res.token}`);
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${res.token}`
+        });
+
         return this._http.get(selfHelpContentForSupportTopicUrl, {
           headers: headers
         });

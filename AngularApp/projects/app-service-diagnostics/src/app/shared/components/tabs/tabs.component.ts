@@ -14,7 +14,7 @@ import { AuthService } from '../../../startup/services/auth.service';
 export class TabsComponent implements OnInit {
 
   public navigationItems: INavigationItem[];
-  public isLegacy:boolean;
+  public isLegacy:boolean = true;
   constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _routeReuseStrategy: CustomReuseStrategy,private _versionTestService:VersionTestService,private _authService: AuthService) {
     this.navigationItems = [];
     this._versionTestService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy);
@@ -22,7 +22,6 @@ export class TabsComponent implements OnInit {
 
   ngOnInit() {
     this._router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
-
       const navigationTitleStr: string = 'navigationTitle';
       let currentRoute = this._activatedRoute.root;
       while (currentRoute.children[0] !== undefined) {

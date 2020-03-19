@@ -14,6 +14,11 @@ import { Site } from '../shared/models/site';
 export class VersionTestService {
     public isLegacySub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
     public isWindowsWebApp: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
+    // If overrideUseLegacy is not set, we still use the logic to return true for windows web app, return false for other resource types
+    // If overrideUseLegacy is set, this will take precedence of our existing logic:
+    // overrideUseLegacy = 1, we switch to the old experience. 
+    // overrideUseLegacy = 2, we switch to the new experience. 
+    public overrideUseLegacy: BehaviorSubject<number> = new BehaviorSubject(0); 
     constructor(private _authService: AuthService, private _resourceService: ResourceService, private _siteService: SiteService) {
         this._authService.getStartupInfo().subscribe(startupInfo => {
             const resourceType = this._authService.resourceType;
@@ -21,16 +26,19 @@ export class VersionTestService {
             const subId = resourceId.split('/')[2];
             const isExternalSub = DemoSubscriptions.betaSubscriptions.findIndex(item => item.toLowerCase() === subId.toLowerCase()) === -1;
             this._siteService.currentSite.subscribe(site => {
-                const isWebAppResource = this.isWindowsWebAppResource(site, resourceType);
-                const shouldUseLegacy = isExternalSub||!isWebAppResource;
-                this.isLegacySub.next(shouldUseLegacy);
-                this.isWindowsWebApp.next(isWebAppResource);
+                this.overrideUseLegacy.subscribe(overrideValue => {
+                    const isWebAppResource = this.isWindowsWebAppResource(site, resourceType);
+                    const shouldUseLegacy = overrideValue !== 0 ? overrideValue === 1 : (isExternalSub||!isWebAppResource);
+                    this.isLegacySub.next(shouldUseLegacy);
+                    this.isWindowsWebApp.next(isWebAppResource);
+                });
             });
         });
     }
 
+    // If overrideUseLegacy is set, this will take precedence of our existing logic to determine if we will use new experience.
     public setLegacyFlag(useLegacy) {
-        this.isLegacySub.next(useLegacy);
+        this.overrideUseLegacy.next(useLegacy);
     }
 
     private isWindowsWebAppResource(site: Site, resourceType: ResourceType): boolean {

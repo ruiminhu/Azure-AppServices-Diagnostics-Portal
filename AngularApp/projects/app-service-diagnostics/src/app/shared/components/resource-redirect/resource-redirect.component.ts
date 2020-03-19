@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { StartupInfo } from '../../models/portal';
 import { DemoSubscriptions } from '../../../betaSubscriptions';
 import { DetectorType } from 'diagnostic-data';
-
+import { VersionTestService } from '../../../fabric-ui/version-test.service';
 
 @Component({
   selector: 'resource-redirect',
@@ -15,9 +15,11 @@ import { DetectorType } from 'diagnostic-data';
 })
 export class ResourceRedirectComponent implements OnInit {
   private _newVersionEnabled = true;
-  constructor(private _authService: AuthService, private _router: Router, private _windowService: WindowService) { }
+  private _useLegacyVersion = true;
+  constructor(private _authService: AuthService, private _router: Router, private _windowService: WindowService, private _versionTestService: VersionTestService) { }
 
   ngOnInit() {
+    this._versionTestService.isLegacySub.subscribe(useLegacyVersion => this._useLegacyVersion = useLegacyVersion);
     this.navigateToExperience();
   }
 
@@ -25,38 +27,51 @@ export class ResourceRedirectComponent implements OnInit {
     this._authService.getStartupInfo()
       .subscribe(info => {
         if (info && info.resourceId && info.token) {
+          if (info.optionalParameters && info.optionalParameters.find(param => param.key === "categoryId")) {
+            //  Open the new experience since we are navigating to a specific category
+            this._versionTestService.setLegacyFlag(2);
+          }
           //   Uncomment to enable only for internal subs
           let split = info.resourceId.split('/');
           let subscriptionId = split[split.indexOf('subscriptions') + 1];
           this._newVersionEnabled = DemoSubscriptions.betaSubscriptions.indexOf(subscriptionId) >= 0;
+          const navigationExtras: NavigationExtras = {
+            queryParamsHandling: 'merge',
+          };
 
-          // If it's internal subscription and windows app, enable newer version of UI
-          if ((this._newVersionEnabled || (info.pesId && info.pesId === "14748"))) {
-            const navigationExtras: NavigationExtras = {
-              queryParamsHandling: 'merge',
-            };
-
-            let path = 'resource/' + info.resourceId.toLowerCase();
-            var caseSubject = null;
-            if (info.optionalParameters) {
-              var caseSubjectParam = info.optionalParameters.find(param => param.key === "caseSubject");
-              if (caseSubjectParam) {
-                caseSubject = caseSubjectParam.value;
-              }
-
-              var referrerParam = info.optionalParameters.find(param => param.key.toLowerCase() === "referrer");
-              if (referrerParam) {
-                path += `/portalReferrerResolver`;
-                this._router.navigateByUrl(
-                  this._router.createUrlTree([path])
-                );
-              }
+          let path = 'resource/' + info.resourceId.toLowerCase();
+          var caseSubject = null;
+          if (info.optionalParameters) {
+            var caseSubjectParam = info.optionalParameters.find(param => param.key === "caseSubject");
+            if (caseSubjectParam) {
+              caseSubject = caseSubjectParam.value;
             }
 
+            var referrerParam = info.optionalParameters.find(param => param.key.toLowerCase() === "referrer");
+            if (referrerParam) {
+              path += `/portalReferrerResolver`;
+              this._router.navigateByUrl(
+                this._router.createUrlTree([path])
+              );
+            }
+          }
+          if (info.supportTopicId) {
+            path += `/supportTopicId`;
+            navigationExtras.queryParams = {
+              supportTopicId: info.supportTopicId,
+              caseSubject: caseSubject,
+              pesId: info.pesId
+            };
+          }
+
+          this._router.navigateByUrl(
+            this._router.createUrlTree([path], navigationExtras)
+          );
+
+          if (!this._useLegacyVersion) {
             // This additional info is used to open a specific detector/tool under the right category in a new SCIFrameblade
             // To Open the detector or diagnostic tool under the right category
-            if (info.optionalParameters)
-            {
+            if (info.optionalParameters) {
               let categoryIdParam = info.optionalParameters.find(param => param.key === "categoryId");
               if (categoryIdParam) {
                 let categoryId = categoryIdParam.value;
@@ -66,7 +81,7 @@ export class ResourceRedirectComponent implements OnInit {
                 let detectorTypeParam = info.optionalParameters.find(param => param.key === "detectorType");
                 let detectorIdParam = info.optionalParameters.find(param => param.key === "detectorId");
                 let toolIdParam = info.optionalParameters.find(param => param.key === "toolId");
-                
+
                 if (detectorIdParam && detectorTypeParam) {
                   if (detectorTypeParam.value === DetectorType.Detector) {
                     path += `/detectors/${detectorIdParam.value}`;
@@ -82,53 +97,6 @@ export class ResourceRedirectComponent implements OnInit {
                 );
               }
             }
-
-            if (info.supportTopicId) {
-              path += `/supportTopicId`;
-              navigationExtras.queryParams = {
-                supportTopicId: info.supportTopicId,
-                caseSubject: caseSubject,
-                pesId: info.pesId
-              };
-            }
-
-            this._router.navigateByUrl(
-              this._router.createUrlTree([path], navigationExtras)
-            );
-          }
-          else {
-            const navigationExtras: NavigationExtras = {
-              queryParamsHandling: 'merge',
-            };
-  
-            let path = 'resource/' + info.resourceId.toLowerCase();
-            var caseSubject = null;
-            if (info.optionalParameters){
-              var caseSubjectParam = info.optionalParameters.find(param => param.key === "caseSubject");
-              if (caseSubjectParam){
-                caseSubject = caseSubjectParam.value;
-              }
-  
-              var referrerParam = info.optionalParameters.find(param => param.key.toLowerCase() === "referrer");
-              if (referrerParam){
-                path += `/portalReferrerResolver`;
-                this._router.navigateByUrl(
-                  this._router.createUrlTree([path])
-                  );
-              }
-            }
-            if (info.supportTopicId) {
-              path += `/supportTopicId`;
-              navigationExtras.queryParams = {
-                supportTopicId: info.supportTopicId,
-                caseSubject: caseSubject,
-                pesId: info.pesId
-              };
-            }
-  
-            this._router.navigateByUrl(
-              this._router.createUrlTree([path], navigationExtras)
-            );
           }
         } else {
           if (!environment.production) {

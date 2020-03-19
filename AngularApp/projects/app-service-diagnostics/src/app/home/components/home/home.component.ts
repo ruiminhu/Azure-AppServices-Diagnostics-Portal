@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit {
 
     switchView() {
         this.useLegacy = !this.useLegacy;
-        this.versionTestService.setLegacyFlag(this.useLegacy);
+        this.versionTestService.setLegacyFlag(this.useLegacy === true ? 1 : 2);
     }
 
     ngOnInit() {

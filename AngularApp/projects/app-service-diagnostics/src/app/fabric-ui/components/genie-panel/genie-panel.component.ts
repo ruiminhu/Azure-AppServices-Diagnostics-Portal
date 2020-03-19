@@ -42,7 +42,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
     }
 
     isEmptyOrSpaces(str) {
-        return str === null || str.match(/^ *$/) !== null;
+        return str === null || str.replace(/[\n\r]+/g, '').replace(/\s+/g, '') == "" || str.match(/^ *$/) !== null;
     }
 
     ngOnDestroy() {
@@ -56,8 +56,8 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         this.scrollToBottom();
         // Enable chat again after we get feed-back dynamic component followed with dynamic analysis component
         if (event && event.hasOwnProperty('data') && event['data'] === "view-loaded") {
-            (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
-            (<HTMLInputElement>document.getElementById("genieChatBox")).focus();
+            (<HTMLTextAreaElement>document.getElementById("genieChatBox")).disabled = false;
+            document.getElementById("genieChatBox").focus();
         }
     }
 
@@ -68,8 +68,8 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         // Enable chat after dynamic analysis loaded
         if (event && event.hasOwnProperty('hasResult') && event.hasOwnProperty('next_key')) {
             if (event['hasResult'] === false) {
-                (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = false;
-                (<HTMLInputElement>document.getElementById("genieChatBox")).focus();
+                (<HTMLTextAreaElement>document.getElementById("genieChatBox")).disabled = false;
+                document.getElementById("genieChatBox").focus();
             }
         }
     }
@@ -83,7 +83,7 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
 
     onSearchEnter(event: any): void {
         // Push messages to the current object, also wait for the complete status, and push the object to globa message component
-        let inputValue = (<HTMLInputElement>document.getElementById("genieChatBox")).value;
+        let inputValue = (<HTMLTextAreaElement>document.getElementById("genieChatBox")).value;
         if (this.isEmptyOrSpaces(inputValue)) {
             this.isMessageEmpty = true;
             return;
@@ -95,8 +95,8 @@ export class GeniePanelComponent implements OnInit, OnDestroy {
         });
         this._messageProcessor.setCurrentKey(analysisMessageGroupId);
         this.getMessage();
-        (<HTMLInputElement>document.getElementById("genieChatBox")).value = "";
-        (<HTMLInputElement>document.getElementById("genieChatBox")).disabled = true;
+        (<HTMLTextAreaElement>document.getElementById("genieChatBox")).value = "";
+        (<HTMLTextAreaElement>document.getElementById("genieChatBox")).disabled = true;
         this.searchValue = "";
         this.isMessageEmpty = false;
     }

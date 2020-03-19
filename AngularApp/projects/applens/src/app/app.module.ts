@@ -22,10 +22,6 @@ import {UnauthorizedComponent} from './shared/components/unauthorized/unauthoriz
 import {AuthRequestFailedComponent} from './shared/components/auth-request-failed/auth-request-failed.component';
 import {TokenInvalidComponent} from './shared/components/tokeninvalid/tokeninvalid.component';
 import { AngularReactBrowserModule } from '@angular-react/core';
-// import {
-//   FabButtonModule,
-//   FabDialogModule,
-// } from '@angular-react/fabric';
 
 @Injectable()
 export class ValidResourceResolver implements Resolve<void>{

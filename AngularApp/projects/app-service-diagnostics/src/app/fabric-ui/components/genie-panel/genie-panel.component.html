@@ -1,5 +1,6 @@
 <fab-panel [isOpen]="globals.openGeniePanel" [type]="type" [customWidth]="width" [isHiddenOnDismiss]="true"
-  [isLightDismiss]="true" [hasCloseButton]="true" [closeButtonAriaLabel]="'close'" (onDismissed)="genieDismissedHandler()">
+  [isLightDismiss]="true" [hasCloseButton]="true" [closeButtonAriaLabel]="'close'"
+  (onDismissed)="genieDismissedHandler()">
   <div class="row">
     <div>
       <div style="margin-bottom: 10px">
@@ -32,13 +33,14 @@
           </div>
         </div>
       </div>
-
       <div class="search-box-container">
-        <input id="genieChatBox" class="genie-search-box" (keydown.enter)="onSearchEnter($event)"
-          placeholder="Type your question" aria-label="Type your question">
-        <span (click)="onSearchEnter($event)" (keydown.enter)="onSearchEnter($event)" tabindex="0"
-          aria-label="Send Message"><i class="fa fa-paper-plane search-box-icon"></i></span>
-        <span *ngIf="isMessageEmpty"style=" padding-left: 20px; color: red;">Message is empty</span>
+        <textarea id="genieChatBox" class="genie-search-box" (keydown.enter)="onSearchEnter($event)"
+          placeholder="Type your question" aria-label="Type your question"></textarea>
+        <div class="search-button-container">
+            <span (click)="onSearchEnter($event)" (keydown.enter)="onSearchEnter($event)" tabindex="0"
+              aria-label="Send Message"><i class="fa fa-paper-plane search-box-icon"></i></span>
+            <span *ngIf="isMessageEmpty" tabindex="0" aria-label="Message is empty" class="empty-message-warning">Message is empty</span>
+        </div>
       </div>
     </div>
   </div>

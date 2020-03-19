@@ -115,11 +115,6 @@ export class DetectorTimePickerComponent implements OnInit {
     }
 
     this.detectorControlService.update.subscribe(validUpdate => {
-      // if (validUpdate) {
-      //   this.startTime = this.detectorControlService.startTimeString;
-      //   this.endTime = this.detectorControlService.endTimeString;
-      // }
-
       const routeParams = {
         'startTime': this.detectorControlService.startTime.format('YYYY-MM-DDTHH:mm'),
         'endTime': this.detectorControlService.endTime.format('YYYY-MM-DDTHH:mm')
@@ -128,8 +123,6 @@ export class DetectorTimePickerComponent implements OnInit {
         routeParams['detectorQueryParams'] = this.detectorControlService.detectorQueryParamsString;
       }
       this.router.navigate([], { queryParams: routeParams, relativeTo: this.activatedRoute });
-
-      // this.updateTimerMessage.next(this.time);
     });
   }
 
@@ -191,18 +184,13 @@ export class DetectorTimePickerComponent implements OnInit {
 
   onSelectStartDateHandler(e: { date: Date }) {
     this.startDate = e.date;
-    // this.isCustom = true;
   }
   onSelectEndDateHandler(e: { date: Date }) {
     this.endDate = e.date;
-    // this.isCustom = true;
   }
 
   //
   private convertLocalDateToUTC(date: Date) {
-    // return new Date(
-    //   Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes())
-    // );
     const moment = momentNs.utc(date.getTime());
     const stringFormat: string = 'YYYY-MM-DD HH:mm';
     return moment.format(stringFormat);

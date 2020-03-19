@@ -245,10 +245,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.Profiler, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/profiler`);
-            // this.navigateTo(resourceId,ToolIds.Profiler);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
@@ -271,9 +267,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.Profiler, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/profiler`);
-            // this.navigateTo(resourceId,ToolIds.Profiler);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/profiler`);
@@ -296,9 +289,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.MemoryDump, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/memorydump`);
-            // this.navigateTo(resourceId,ToolIds.MemoryDump);
-
             //Need remove after A/B tes
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/memorydump`);
@@ -321,9 +311,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.DatabaseTester, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/databasetester`);
-            // this.navigateTo(resourceId,ToolIds.DatabaseTester);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/databasetester`);
@@ -346,9 +333,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.NetworkTrace, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/networktrace`);
-            // this.navigateTo(resourceId,ToolIds.NetworkTrace);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/networktrace`);
@@ -371,9 +355,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.PHPLogAnalyzer, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/phploganalyzer`);
-            // this.navigateTo(resourceId,ToolIds.PHPLogAnalyzer);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/phploganalyzer`);
@@ -396,9 +377,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.PHPProcessAnalyzer, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/phpprocessanalyzer`);
-            // this.navigateTo(resourceId,ToolIds.PHPProcessAnalyzer);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/phpprocessanalyzer`);
@@ -421,9 +399,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.JavaMemoryDump, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/javamemorydump`);
-            // this.navigateTo(resourceId,ToolIds.JavaMemoryDump);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/javamemorydump`);
@@ -446,9 +421,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(ToolNames.JavaThreadDump, 'Diagnostic Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/javathreaddump`);
-            // this.navigateTo(resourceId,ToolIds.JavaThreadDump);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/javathreaddump`);
@@ -475,7 +447,6 @@ export class SiteFeatureService extends FeatureService {
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.MetricPerInstance.Identifier, 'Support Tools', () => {
             this._portalActionService.openMdmMetricsV3Blade();
-            // this.navigateTo(resourceId,ToolIds.MetricPerInstanceApp);
           })
         }
       },
@@ -493,7 +464,6 @@ export class SiteFeatureService extends FeatureService {
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.AppServicePlanMetrics.Identifier, 'Support Tools', () => {
             this._portalActionService.openMdmMetricsV3Blade(this._resourceService.resource.properties.serverFarmId);
-            // this.navigateTo(resourceId,ToolIds.AppServicePlanMetrics);
           })
         }
       },
@@ -510,9 +480,6 @@ export class SiteFeatureService extends FeatureService {
           description: 'View event logs(containing exceptions, errors etc) generated by your application.',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.EventViewer.Identifier, 'Support Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/eventviewer`);
-            // this.navigateTo(resourceId,ToolIds.EventViewer);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/eventviewer`);
@@ -535,9 +502,6 @@ export class SiteFeatureService extends FeatureService {
           description: '',
           featureType: FeatureTypes.Tool,
           clickAction: this._createFeatureAction(SupportBladeDefinitions.FREBLogs.Identifier, 'Support Tools', () => {
-            // this._router.navigateByUrl(`resource${resourceId}/categories/DiagnosticTools/tools/frebviewer`);
-            // this.navigateTo(resourceId,ToolIds.FrebViewer);
-
             //Need remove after A/B test
             if (this.isLegacy) {
               this._router.navigateByUrl(`resource${resourceId}/tools/frebviewer`);

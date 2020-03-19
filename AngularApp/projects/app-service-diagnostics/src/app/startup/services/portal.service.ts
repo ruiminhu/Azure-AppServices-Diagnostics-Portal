@@ -81,7 +81,6 @@ export class PortalService {
     }
 
     updateBladeInfo(bladeInfo: any, source: string) {
-    //    this.postMessage(Verbs.openBlade, JSON.stringify(bladeInfo));
         this.postMessage("update-blade-info", JSON.stringify(bladeInfo));
     }
 

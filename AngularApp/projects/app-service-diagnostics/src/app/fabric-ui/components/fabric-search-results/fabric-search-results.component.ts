@@ -69,7 +69,6 @@ export class FabricSearchResultsComponent {
 
   constructor(public featureService: FeatureService, private _logger: LoggingV2Service,
     private _notificationService: NotificationService, private globals: Globals) {
-    // this.features = this.featureService.getFeatures(this.searchValue);
   }
 
   navigateToFeature(feature: Feature) {

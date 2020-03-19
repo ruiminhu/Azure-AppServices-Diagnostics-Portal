@@ -88,9 +88,6 @@ export class SummaryCardsComponent extends DataRenderBaseComponent {
 
   }
 
-
-  
-
   //Todo: Add Tool type Navigation
   onClickCard(card: SummaryCard): void {
     switch (card.actionType) {
@@ -108,7 +105,6 @@ export class SummaryCardsComponent extends DataRenderBaseComponent {
   navigate(card: SummaryCard): void {
     //for now only navigate to detectors which are under same category
     if (this.isPublic) {
-      // const category = this._featureService.getCategoryIdByhDetectorId(card.link);
       if (card.isDetector) {
         this._router.navigate([`../detectors/${card.link}`],{relativeTo: this._activatedRoute,queryParamsHandling:'merge'});
       } else {

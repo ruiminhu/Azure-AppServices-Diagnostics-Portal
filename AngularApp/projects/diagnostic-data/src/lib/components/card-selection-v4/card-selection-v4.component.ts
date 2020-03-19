@@ -72,10 +72,6 @@ export class CardSelectionV4Component extends DataRenderBaseComponent {
     }
   }
 
-  // public getColor(index: number): string {
-  //   return this.colors[index % this.colors.length];
-  // }
-
   // Send telemetry event for clicking Card
   logCardClick(title: string) {
     const eventProps = {

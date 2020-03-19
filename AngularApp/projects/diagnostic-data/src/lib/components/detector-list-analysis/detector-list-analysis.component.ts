@@ -225,7 +225,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
 
     refresh() {
         // For dynamic analysis in genie
-        if (this.analysisId === "searchResultsAnalysis" && this.searchMode === SearchAnalysisMode.Genie && this.searchTerm && this.searchTerm.length > 1) {
+        if (this.analysisId === "searchResultsAnalysis" && this.searchMode === SearchAnalysisMode.Genie && this.searchTerm && this.searchTerm.length >= 1) {
             this.detectorId = "";
             this.showAppInsightsSection = false;
             this.searchId = uuid();

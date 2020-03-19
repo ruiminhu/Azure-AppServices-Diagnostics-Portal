@@ -28,6 +28,10 @@ export class VersionTestService {
         });
     }
 
+    public setLegacyFlag(useLegacy) {
+        this.isLegacySub.next(useLegacy);
+    }
+
     private shouleUseLegacy(site: Site, isExternalSub: boolean, resourceType: ResourceType): boolean {
         if (resourceType !== ResourceType.Site) {
             return true;

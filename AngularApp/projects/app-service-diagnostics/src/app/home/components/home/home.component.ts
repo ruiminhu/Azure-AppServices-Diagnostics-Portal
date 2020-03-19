@@ -130,6 +130,11 @@ export class HomeComponent implements OnInit {
 
     }
 
+    switchView() {
+        this.useLegacy = !this.useLegacy;
+        this.versionTestService.setLegacyFlag(this.useLegacy);
+    }
+
     ngOnInit() {
         this.resourceName = this._resourceService.resource.name;
         this.providerRegisterUrl = `/subscriptions/${this.subscriptionId}/providers/Microsoft.ChangeAnalysis/register`;

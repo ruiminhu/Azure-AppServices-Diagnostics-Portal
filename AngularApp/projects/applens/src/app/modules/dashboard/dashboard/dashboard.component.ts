@@ -106,6 +106,7 @@ export class DashboardComponent implements OnDestroy {
         if (serviceInputs.resourceType.toString() === 'Microsoft.Web/hostingEnvironments' && this.resource && this.resource.Name)
         {
             this.observerLink = "https://wawsobserver.azurewebsites.windows.net/MiniEnvironments/"+ this.resource.Name;
+            this._diagnosticApiService.GeomasterServiceAddress = this.resource["GeomasterServiceAddress"];
         }
         else if (serviceInputs.resourceType.toString() === 'Microsoft.Web/sites')
         {
@@ -156,11 +157,11 @@ export class DashboardComponent implements OnDestroy {
   }
 
   openResourceInfoModal() {
-    if (this.keys.indexOf('VnetName') == -1 && this.resourceReady !== undefined && this.resourceDetailsSub === undefined)
+    if (this.keys.indexOf('VnetName') == -1 && this.resourceReady != null && this.resourceDetailsSub == null)
     {
       this.resourceDetailsSub = this.resourceReady.subscribe(resource => {
         if (resource) {
-          this._observerService.getSiteRequestDetails(this.resource.SiteName, this.resource.StampName).subscribe(siteInfo => {
+          this._observerService.getSiteRequestDetails(this.resource.SiteName, this.resource.InternalStampName).subscribe(siteInfo => {
             this.resource['VnetName'] = siteInfo.details.vnetname;
             this.keys.push('VnetName');
 

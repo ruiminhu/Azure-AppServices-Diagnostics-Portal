@@ -1,6 +1,5 @@
 
 import { throwError as observableThrowError, ReplaySubject, Observable } from 'rxjs';
-import { Http, Headers, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Subscription } from '../models/subscription';
 import { ResponseMessageEnvelope, ResponseMessageCollectionEnvelope } from '../models/responsemessageenvelope';
@@ -11,7 +10,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { GenericArmConfigService } from './generic-arm-config.service';
 import { StartupInfo } from '../models/portal';
 import { DemoSubscriptions } from '../../betaSubscriptions';
-
+import {VersioningHelper} from '../../../app/shared/utilities/versioningHelper';
 @Injectable()
 export class ArmService {
     public subscriptions = new ReplaySubject<Subscription[]>(1);
@@ -36,7 +35,7 @@ export class ArmService {
             let resourceId = startupInfo.resourceId;
             let subscriptionId = resourceId.split('/')[2];
             let isInternalSub = DemoSubscriptions.betaSubscriptions.findIndex(sub => sub.toLocaleLowerCase() === subscriptionId.toLocaleLowerCase()) >= 0;
-            if(this.isNationalCloud || isInternalSub) {
+            if(this.isNationalCloud || VersioningHelper.isV2Subscription(subscriptionId)) {
                 this.diagRoleVersion = this.routeToLiberation;
             }
             else {
@@ -189,10 +188,6 @@ export class ArmService {
     deleteResource<T>(resourceUri: string, apiVersion?: string, invalidateCache: boolean = false): Observable<any> {
         const url = this.createUrl(resourceUri, apiVersion);
         return this._http.delete(url, { headers: this.getHeaders() }).pipe(
-            // map((response: Response) => {
-            //     let body = response.text();
-            //     return body && body.length > 0 ? response.json() : "";
-            // }),
             catchError(this.handleError)
         );
     }

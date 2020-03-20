@@ -221,7 +221,6 @@ export class OnboardingFlowComponent implements OnInit {
         this.localDevUrl = response;
         this.localDevText = "Download Local Development Package";
         this.localDevIcon = "fa fa-download";
-        // window.open(response);
 
         var element = document.createElement('a');
         element.setAttribute('href', response);
@@ -303,6 +302,21 @@ export class OnboardingFlowComponent implements OnInit {
           this.publishButtonDisabled = true;
           this.publishingPackage = null;
           this.buildOutput.push("========== Build: 0 succeeded, 1 failed ==========");
+        }
+
+        if (this.queryResponse.runtimeLogOutput) {
+          this.queryResponse.runtimeLogOutput.forEach(element => {
+            if (element.exception) {
+              this.buildOutput.push(element.timeStamp + ": " +
+                element.message + ": " +
+                element.exception.ClassName + ": " +
+                element.exception.Message + "\r\n" +
+                element.exception.StackTraceString);
+            }
+            else {
+              this.buildOutput.push(element.timeStamp + ": " + element.message);
+            }
+          });
         }
 
         this.publishButtonDisabled = (

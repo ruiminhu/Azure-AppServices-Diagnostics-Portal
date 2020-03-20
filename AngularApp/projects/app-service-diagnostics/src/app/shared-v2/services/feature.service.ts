@@ -23,7 +23,6 @@ export class FeatureService {
   protected isLegacy:boolean;
   constructor(protected _diagnosticApiService: DiagnosticService, protected _contentService: ContentService, protected _router: Router, protected _authService: AuthService,
     protected _logger: LoggingV2Service, protected _siteService: SiteService, protected _categoryService: CategoryService, protected _activatedRoute: ActivatedRoute,protected _portalActionService:PortalActionService,protected versionTestService:VersionTestService) {
-    // this.isLegacy = this.versionTestService.getIsLegcy();
     this.versionTestService.isLegacySub.subscribe(isLegacy => this.isLegacy = isLegacy)
     this._categoryService.categories.subscribe(categories => this.categories = categories);
     this._authService.getStartupInfo().subscribe(startupInfo => {
@@ -47,7 +46,6 @@ export class FeatureService {
                   } else {
                     this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Detector);
                   }
-                  // this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Detector);
                 })
               });
             } else {
@@ -63,7 +61,6 @@ export class FeatureService {
                   } else {
                     this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Analysis);
                   }
-                  // this.navigatTo(startupInfo,categoryId,detector.id,DetectorType.Analysis);
                 })
               });
             }

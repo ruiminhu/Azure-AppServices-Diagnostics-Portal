@@ -13,6 +13,7 @@ import { Site } from '../shared/models/site';
 })
 export class VersionTestService {
     public isLegacySub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
+    public isExternalSub: boolean = true; 
     public isWindowsWebApp: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true); 
     // If overrideUseLegacy is not set, we still use the logic to return true for windows web app, return false for other resource types
     // If overrideUseLegacy is set, this will take precedence of our existing logic:
@@ -24,11 +25,11 @@ export class VersionTestService {
             const resourceType = this._authService.resourceType;
             const resourceId = startupInfo.resourceId;
             const subId = resourceId.split('/')[2];
-            const isExternalSub = DemoSubscriptions.betaSubscriptions.findIndex(item => item.toLowerCase() === subId.toLowerCase()) === -1;
+            this.isExternalSub = DemoSubscriptions.betaSubscriptions.findIndex(item => item.toLowerCase() === subId.toLowerCase()) === -1;
             this._siteService.currentSite.subscribe(site => {
                 this.overrideUseLegacy.subscribe(overrideValue => {
                     const isWebAppResource = this.isWindowsWebAppResource(site, resourceType);
-                    const shouldUseLegacy = overrideValue !== 0 ? overrideValue === 1 : (isExternalSub||!isWebAppResource);
+                    const shouldUseLegacy = overrideValue !== 0 ? overrideValue === 1 : (this.isExternalSub||!isWebAppResource);
                     this.isLegacySub.next(shouldUseLegacy);
                     this.isWindowsWebApp.next(isWebAppResource);
                 });

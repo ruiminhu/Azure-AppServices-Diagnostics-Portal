@@ -29,6 +29,7 @@ import { SubscriptionPropertiesService } from '../../../shared/services/subscrip
 export class HomeComponent implements OnInit {
     useLegacy: boolean = true;
     isWindowsWebApp: boolean = true;
+    isExternalSub: boolean = true;
     resourceName: string;
     categories: Category[];
     searchValue = '';
@@ -61,8 +62,17 @@ export class HomeComponent implements OnInit {
         private versionTestService: VersionTestService, private subscriptionPropertiesService: SubscriptionPropertiesService) {
 
         this.subscriptionId = this._activatedRoute.snapshot.params['subscriptionid'];
+        this.isExternalSub = this.versionTestService.isExternalSub;
         this.versionTestService.isLegacySub.subscribe(isLegacy => this.useLegacy = isLegacy);
         this.versionTestService.isWindowsWebApp.subscribe(isWebAppResource => this.isWindowsWebApp = isWebAppResource);
+        
+        let initialViewLoaded = this.isWindowsWebApp && !this.isExternalSub ? "new" : "old";
+        let eventProps = {
+            subscriptionId: this.subscriptionId,
+            resourceName: this.resourceName,
+            intialView: initialViewLoaded,
+        };
+        this.logService.logEvent('DiagnosticsViewLoaded',eventProps);
 
         if (_resourceService.armResourceConfig && _resourceService.armResourceConfig.homePageText
             && _resourceService.armResourceConfig.homePageText.title && _resourceService.armResourceConfig.homePageText.title.length > 1
@@ -135,6 +145,12 @@ export class HomeComponent implements OnInit {
     switchView() {
         this.useLegacy = !this.useLegacy;
         this.versionTestService.setLegacyFlag(this.useLegacy === true ? 1 : 2);
+        let eventProps = {
+            subscriptionId: this.subscriptionId,
+            resourceName: this.resourceName,
+            switchToView: this.useLegacy.toString(),
+        };
+        this.logService.logEvent('SwitchView',eventProps);
     }
 
     ngOnInit() {

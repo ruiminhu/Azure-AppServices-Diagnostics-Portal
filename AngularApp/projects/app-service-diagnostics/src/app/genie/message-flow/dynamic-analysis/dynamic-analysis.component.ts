@@ -16,7 +16,7 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
 
     @Input() keyword: string = "";
     @Input() resourceId: string = "";
-    @Input() targetedScore: number = 0;
+    @Input() targetedScore: number = 0.5;
     @Input() documentResultCount: string = "3";
     @Output() onViewUpdate = new EventEmitter();
     @Output() onComplete = new EventEmitter<{ status: boolean, data?: any }>();

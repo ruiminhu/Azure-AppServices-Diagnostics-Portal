@@ -96,7 +96,6 @@ export class AutohealingComponent implements OnInit {
       let endIndex = customActionParams.indexOf(".", startIndex);
       if (endIndex > 0) {
         storageAccountName = customActionParams.substring(startIndex, endIndex);
-        console.log(storageAccountName);
       }
     }
     return storageAccountName;

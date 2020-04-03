@@ -101,6 +101,10 @@ export class CategorySummaryComponent implements OnInit {
             this.resourceName = this._activatedRoute.snapshot.params.resourcename;
             this._portalActionService.updateDiagnoseCategoryBladeTitle(`${this.resourceName} - ` + this.categoryName);
         });
+
+        this._activatedRoute.url.subscribe(url => {
+            console.log('category-summary activated',this._activatedRoute.firstChild.component);
+        });
     }
 
     navigateTo(path: string) {

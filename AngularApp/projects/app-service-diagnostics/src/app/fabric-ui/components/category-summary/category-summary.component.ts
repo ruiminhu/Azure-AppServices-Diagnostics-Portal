@@ -22,7 +22,7 @@ import { Globals } from '../../../globals';
     styleUrls: ['./category-summary.component.scss'],
     providers: [CategoryChatStateService]
 })
-export class CategorySummaryComponent implements OnInit {
+export class CategorySummaryComponent implements OnInit, OnChanges {
     showChoiceGroup: boolean = true;
     currentRoutePath: string[];
     allProblemCategories: Category[] = [];
@@ -51,6 +51,7 @@ export class CategorySummaryComponent implements OnInit {
     routedComponent: any;
 
     refreshSubscriptionObject: any;
+    childRoutedComponent: any;
 
     setFocusOnCallpsibleButton() {
         document.getElementById("collapse-genie-button").focus();
@@ -82,6 +83,7 @@ export class CategorySummaryComponent implements OnInit {
             if (refresh)
             {
                 this.routedComponent.refresh();
+          //      this.childRoutedComponent.refresh();
             }
         });
     }
@@ -91,6 +93,11 @@ export class CategorySummaryComponent implements OnInit {
         , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals, private detectorCommandService: DetectorCommandService) {
     }
 
+    ngOnChanges()
+    {
+        console.warn("Call ngOnChanges on detectorId:", this._activatedRoute.url);
+    }
+ 
     ngOnInit() {
         this.categoryService.categories.subscribe(categories => {
           let decodedCategoryName = this._activatedRoute.snapshot.params.category.toLowerCase();
@@ -100,6 +107,26 @@ export class CategorySummaryComponent implements OnInit {
 
             this.resourceName = this._activatedRoute.snapshot.params.resourcename;
             this._portalActionService.updateDiagnoseCategoryBladeTitle(`${this.resourceName} - ` + this.categoryName);
+        });
+
+        this._route.events.pipe().subscribe(event => {
+            console.log("Navigation event", event);
+        });
+
+        console.warn("Call ngOnInit on detectorId:", this._activatedRoute.url);
+
+        this._route.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
+            console.log("In category Summary Navigation End,", event);
+            console.log("In current activatd router",   this._activatedRoute, this._activatedRoute.firstChild.component);
+            this.childRoutedComponent = this._activatedRoute.firstChild.component;
+            const childComponentInstance: any = this._activatedRoute.firstChild.component;
+            childComponentInstance.refresh.apply(this);
+        });
+
+        this._activatedRoute.url.subscribe(url => {
+            console.warn("category summary",url, this._activatedRoute.firstChild.component);
+            const childComponentInstance: any = this._activatedRoute.firstChild.component;
+            childComponentInstance.refresh.apply(this);
         });
     }
 

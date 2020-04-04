@@ -56,6 +56,7 @@ export class DetectorContainerComponent implements OnInit {
 
     this.detectorSubject.subscribe(detector => {
       if (detector && detector !== "searchResultsAnalysis") {
+        console.log("In detector view, got new detector name:", detector);
         this.detectorName = detector;
         this.refresh(false);
         this.startSubscribingToRefresh();

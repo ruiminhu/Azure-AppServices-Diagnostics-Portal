@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnChanges } from '@angular/core';
 import { MessageProcessor } from '../../../supportbot/message-processor.service';
 import { ActivatedRoute, Router, NavigationExtras, NavigationEnd, Scroll, ChildActivationEnd } from '@angular/router';
 import { CategoryService } from '../../../shared-v2/services/category.service';
@@ -109,9 +109,9 @@ export class CategorySummaryComponent implements OnInit, OnChanges {
             this._portalActionService.updateDiagnoseCategoryBladeTitle(`${this.resourceName} - ` + this.categoryName);
         });
 
-        this._route.events.pipe().subscribe(event => {
-            console.log("Navigation event", event);
-        });
+        // this._route.events.pipe().subscribe(event => {
+        //     console.log("Navigation event", event);
+        // });
 
         console.warn("Call ngOnInit on detectorId:", this._activatedRoute.url);
 
@@ -123,11 +123,18 @@ export class CategorySummaryComponent implements OnInit, OnChanges {
             childComponentInstance.refresh.apply(this);
         });
 
-        this._activatedRoute.url.subscribe(url => {
-            console.warn("category summary",url, this._activatedRoute.firstChild.component);
+        this._activatedRoute.firstChild.url.subscribe(url => {
+            console.warn("_activatedRoute.firstChild.url",url, this._activatedRoute.firstChild.url);
             const childComponentInstance: any = this._activatedRoute.firstChild.component;
             childComponentInstance.refresh.apply(this);
         });
+
+        
+        // this._activatedRoute.url.subscribe(url => {
+        //     console.warn("_activatedRoute.url", url, this._activatedRoute.url);
+        //     const childComponentInstance: any = this._activatedRoute.firstChild.component;
+        //     childComponentInstance.refresh.apply(this);
+        // });
     }
 
     navigateTo(path: string) {

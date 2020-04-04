@@ -11,7 +11,7 @@ import { FeatureService } from '../../../shared-v2/services/feature.service';
 import { Tile } from '../../../shared/components/tile-list/tile-list.component';
 import { Feature } from '../../../shared-v2/models/features';
 import { AuthService } from '../../../startup/services/auth.service';
-import { DiagnosticService, DetectorMetaData, DetectorType } from 'diagnostic-data';
+import { DiagnosticService, DetectorMetaData, DetectorType, DetectorCommandService } from 'diagnostic-data';
 import { filter, tap } from 'rxjs/operators';
 import { PortalActionService } from '../../../shared/services/portal-action.service';
 import { Globals } from '../../../globals';
@@ -48,6 +48,10 @@ export class CategorySummaryComponent implements OnInit {
     selectedCategoryIndex = "1";
 
     openPanel: boolean = false;
+    routedComponent: any;
+
+    refreshSubscriptionObject: any;
+    childRoutedComponent: any;
 
     setFocusOnCallpsibleButton() {
         document.getElementById("collapse-genie-button").focus();
@@ -65,11 +69,30 @@ export class CategorySummaryComponent implements OnInit {
         const categoryIndex = event.option.key;
         this.selectedCategoryIndex = categoryIndex;
       }
+
+    public onRouterOutletActivate(componentRef : any) {
+        if (this.refreshSubscriptionObject)
+        {
+            this.refreshSubscriptionObject.unsubscribe();
+        }
+
+        this.detectorCommandService.resetRefresBehaviorSubject();
+        this.routedComponent = componentRef;
+
+        this.refreshSubscriptionObject = this.detectorCommandService.update.subscribe(refresh => {
+            if (refresh)
+            {
+                this.routedComponent.refresh();
+          //      this.childRoutedComponent.refresh();
+            }
+        });
+    }
+    
     constructor(protected _diagnosticApiService: DiagnosticService, private _route: Router, private _injector: Injector, private _activatedRoute: ActivatedRoute, private categoryService: CategoryService,
         private _chatState: CategoryChatStateService, private _genericApiService: GenericApiService
-        , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals) {
+        , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals, private detectorCommandService: DetectorCommandService) {
     }
-
+ 
     ngOnInit() {
         this.categoryService.categories.subscribe(categories => {
           let decodedCategoryName = this._activatedRoute.snapshot.params.category.toLowerCase();
@@ -80,6 +103,26 @@ export class CategorySummaryComponent implements OnInit {
             this.resourceName = this._activatedRoute.snapshot.params.resourcename;
             this._portalActionService.updateDiagnoseCategoryBladeTitle(`${this.resourceName} - ` + this.categoryName);
         });
+
+        // this._route.events.pipe().subscribe(event => {
+        //     console.log("Navigation event", event);
+        // });
+
+        // console.warn("Call ngOnInit on detectorId:", this._activatedRoute.url);
+
+        // this._route.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
+        //     console.log("In category Summary Navigation End,", event);
+        //     console.log("In current activatd router",   this._activatedRoute, this._activatedRoute.firstChild.component);
+        //     this.childRoutedComponent = this._activatedRoute.firstChild.component;
+        //     const childComponentInstance: any = this._activatedRoute.firstChild.component;
+        //     childComponentInstance.refresh.apply(this);
+        // });
+
+        // this._activatedRoute.url.subscribe(url => {
+        //     console.warn("category summary",url, this._activatedRoute.firstChild.component);
+        //     const childComponentInstance: any = this._activatedRoute.firstChild.component;
+        //     childComponentInstance.refresh.apply(this);
+        // });
     }
 
     navigateTo(path: string) {
@@ -90,4 +133,11 @@ export class CategorySummaryComponent implements OnInit {
         };
         this._route.navigate(path.split('/'), navigationExtras);
     }
+
+    ngOnDestroy() {
+        if (this.refreshSubscriptionObject)
+        {
+            this.refreshSubscriptionObject.unsubscribe();
+        }
+      }
 }

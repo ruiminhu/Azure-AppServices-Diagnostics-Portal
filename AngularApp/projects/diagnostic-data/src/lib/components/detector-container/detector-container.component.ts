@@ -20,6 +20,7 @@ export class DetectorContainerComponent implements OnInit {
 
    detectorName: string;
    detectorRefreshSubscription: any;
+   refreshInstanceIdSubscription: any;
 
   @Input() detectorSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
@@ -45,7 +46,12 @@ export class DetectorContainerComponent implements OnInit {
     
     this.detectorRefreshSubscription = this.detectorControlService.update.subscribe(isValidUpdate => {
       if (isValidUpdate && this.detectorName) {
-          this.refresh(true);
+        this.refreshInstanceIdSubscription = this.detectorControlService._refreshInstanceId.subscribe((instanceId) => {
+            if (instanceId.toLowerCase() === this.detectorName.toLowerCase())
+            {
+              this.refresh(true);
+            }
+        });
       }
     });
 
@@ -106,6 +112,10 @@ export class DetectorContainerComponent implements OnInit {
   ngOnDestroy(): void {
     if (this.detectorRefreshSubscription) {
         this.detectorRefreshSubscription.unsubscribe();
+    }
+    if (this.refreshInstanceIdSubscription)
+    {
+      this.refreshInstanceIdSubscription.unsubscribe();
     }
   }
 }

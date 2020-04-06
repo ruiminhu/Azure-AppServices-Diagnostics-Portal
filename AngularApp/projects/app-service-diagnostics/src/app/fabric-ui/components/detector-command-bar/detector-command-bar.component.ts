@@ -22,7 +22,9 @@ export class DetectorCommandBarComponent {
   }
 
   refreshPage() {
-    let instanceId = this._route.firstChild.snapshot.url[0].toString() === "overview" ? this._route.snapshot.params["category"] : this._route.firstChild.snapshot.params["detectorName"];
+    let childRouteSnapshot = this._route.firstChild.snapshot;
+    let childRouteType = childRouteSnapshot.url[0].toString();
+    let instanceId = childRouteType === "overview" ? this._route.snapshot.params["category"] : childRouteType === "detectors" ? childRouteSnapshot.params["detectorName"] : childRouteSnapshot.params["analysisId"] ;
     if (instanceId)
     {
       this.detectorControlService.refresh(instanceId);

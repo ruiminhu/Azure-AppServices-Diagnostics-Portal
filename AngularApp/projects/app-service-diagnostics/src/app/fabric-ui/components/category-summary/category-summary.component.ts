@@ -50,7 +50,7 @@ export class CategorySummaryComponent implements OnInit {
     openPanel: boolean = false;
     routedComponent: any;
 
-    refreshSubscriptionObject: any;
+    refreshSubscriptionObject: any = {};
 
     setFocusOnCallpsibleButton() {
         document.getElementById("collapse-genie-button").focus();
@@ -70,25 +70,61 @@ export class CategorySummaryComponent implements OnInit {
       }
 
     public onRouterOutletActivate(componentRef : any) {
-        if (this.refreshSubscriptionObject)
+
+        // for (const id of Object.keys(data)) {
+        //     if (data.hasOwnProperty(id)) {
+        //         this.eventPropertiesLocalCopy[id] = String(data[id]);
+        //     }
+        // }
+
+        let instanceId = componentRef.categoryId ?  componentRef.categoryId : componentRef.detector;
+        if (instanceId)
         {
-            this.refreshSubscriptionObject.unsubscribe();
-        }
-
-        this.detectorCommandService.resetRefresBehaviorSubject();
-        this.routedComponent = componentRef;
-
-        this.refreshSubscriptionObject = this.detectorCommandService.update.subscribe(refresh => {
-            if (refresh)
+            if (this.refreshSubscriptionObject.hasOwnProperty(instanceId))
             {
-                this.routedComponent.refresh();
+                this.refreshSubscriptionObject[instanceId].unsubscribe();
             }
-        });
+            // else
+            // {
+                // this.detectorCommandService.resetRefresBehaviorSubject();
+                // this.routedComponent = componentRef;
+                this.refreshSubscriptionObject[instanceId] =  this.detectorCommandService.update.subscribe(refresh => {
+                    if (refresh)
+                    {
+                        console.log("refreshSubscriptionObject", this.refreshSubscriptionObject);
+                        componentRef.refresh();
+                    }
+                });
+            //}
+        }
+      
+
+        // this.detectorCommandService.resetRefresBehaviorSubject();
+        // this.routedComponent = componentRef;
+
+        // this.refreshSubscriptionObject = this.detectorCommandService.update.subscribe(refresh => {
+        //     if (refresh)
+        //     {
+        //         this.routedComponent.refresh();
+        //     }
+        // });
+    }
+
+
+    public onRouterOutletDeactivate(componentRef : any) {
+        let instanceId = componentRef.categoryId ?  componentRef.categoryId : componentRef.detector;
+        if (instanceId)
+        {
+            if (this.refreshSubscriptionObject.hasOwnProperty(instanceId))
+            {
+                this.refreshSubscriptionObject[instanceId].unsubscribe();
+            }
+        }
     }
     
     constructor(protected _diagnosticApiService: DiagnosticService, private _route: Router, private _injector: Injector, private _activatedRoute: ActivatedRoute, private categoryService: CategoryService,
         private _chatState: CategoryChatStateService, private _genericApiService: GenericApiService
-        , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals, private detectorCommandService: DetectorCommandService) {
+        , private _featureService: FeatureService, protected _authService: AuthService, private _portalActionService: PortalActionService, private globals: Globals, private detectorCommandService: DetectorCommandService, private injector: Injector) {
     }
 
     ngOnInit() {
@@ -104,7 +140,27 @@ export class CategorySummaryComponent implements OnInit {
 
         this._activatedRoute.url.subscribe(url => {
             console.log('category-summary activated',this._activatedRoute.firstChild.component);
+            console.log("In current activatd router",   this._activatedRoute, this._activatedRoute.firstChild.component);
+          //  this.childRoutedComponent = this._activatedRoute.firstChild.component;
+             const childComponentInstance: any = this._activatedRoute.firstChild.component;
+            if (childComponentInstance)
+            {    
+                console.log("childComponentInstance not null");
+                console.log(childComponentInstance);
+           //     const childRoutedComponent = this.injector.get(childComponentInstance);
+            //    childRoutedComponent.refresh();
+         //       childComponentInstance.refresh.apply(this);
+            }
         });
+
+        // this._activatedRoute.firstChild.url.subscribe(url => {
+        //     console.log('category-summary activated by firstchild url',this._activatedRoute.firstChild.component);
+        //     const childComponentInstance: any = this._activatedRoute.firstChild.component;
+        //     if (childComponentInstance)
+        //     {
+        //         childComponentInstance.refresh.apply(this);
+        //     }
+        // });
     }
 
     navigateTo(path: string) {

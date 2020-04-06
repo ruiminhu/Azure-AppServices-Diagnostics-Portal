@@ -43,15 +43,14 @@ export class CategoryOverviewComponent implements OnInit, Refreshable{
     }
 
     constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _categoryService: CategoryService, private globals: Globals) {
-    }
-
-    ngOnInit() {
         let categoryParam = this._activatedRoute.parent.snapshot.params.category.toLowerCase();
         this._categoryService.categories.subscribe(categories => {
             this.category = categories.find(category => categoryParam === category.id.toLowerCase() || category.name.replace(/\s/g, '').toLowerCase() === categoryParam);
+            this.categoryId = this.category.id
         });
+    }
 
-        this.categoryId = this.category.id
+    ngOnInit() {
     }
 
     refresh() {

@@ -5,7 +5,7 @@
         "searchBarPlaceHolder": "Search for common problems, tools and more"
     },
 
-    "matchRegEx": "/Microsoft.SignalRService/Signalr/",
+    "matchRegEx": "/Microsoft.SignalRService/SignalR/",
     "searchSuffix": "signalr",
     "azureServiceName": "Azure SignalR Services",
     "armApiVersion": "2020-05-01",

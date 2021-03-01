@@ -19,7 +19,7 @@
     },
     "categories": [
         {
-            "id": "availabilityandperformance",
+            "id": "AvailabilityAndPerformanceSignalR",
             "name": "Availability And Performance",
             "description": "Investigate issues with your azure signalr service. Find out the common causes and investigate in detail. ",
             "keywords": [ "Config Sever", "App Health", "Availability", "sdk" ],
@@ -29,7 +29,7 @@
             "overviewDetectorId": "AvailabilityAndPerformanceOverview"
         },
         {
-            "id": "resourcesusage",
+            "id": "ResourcesUsageSignalR",
             "name": "Resources Usage",
             "description": "Are you trying to figure out your resource usage? You can see your resource usage here. ",
             "keywords": [ "Resources", "connection count", "message count" ],

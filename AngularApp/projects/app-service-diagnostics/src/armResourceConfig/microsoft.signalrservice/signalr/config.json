@@ -22,7 +22,7 @@
             "id": "AvailabilityAndPerformanceSignalR",
             "name": "Availability And Performance",
             "description": "Find out SignalR Service common issues and related suggestions. ",
-            "keywords": [ "Availability", "Maintenance", "Deployment", "SKU", "SDK" ],
+            "keywords": [ "Error Rate", "Maintenance", "Deployment", "SKU", "SDK" ],
             "color": "rgb(186, 211, 245)",
             "createFlowForCategory": false,
             "chatEnabled": false,

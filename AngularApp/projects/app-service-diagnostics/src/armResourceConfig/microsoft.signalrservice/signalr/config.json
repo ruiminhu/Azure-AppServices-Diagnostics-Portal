@@ -21,7 +21,7 @@
         {
             "id": "AvailabilityAndPerformanceSignalR",
             "name": "Availability And Performance",
-            "description": "Find out SignalR Service common issues and related suggestions. ",
+            "description": "Investigate common issues impacting the health of your SignalR Service. ",
             "keywords": [ "Error Rate", "Maintenance", "Deployment", "SKU", "SDK" ],
             "color": "rgb(186, 211, 245)",
             "createFlowForCategory": false,
@@ -31,7 +31,7 @@
         {
             "id": "ResourcesUsageSignalR",
             "name": "Resources Usage",
-            "description": "Check your resource usage here. ",
+            "description": "Find out the resource usage on your SignalR Service.",
             "keywords": [ "Resources", "Connection Count", "Message Count" ],
             "color": "rgb(249, 213, 180)",
             "createFlowForCategory": false,
